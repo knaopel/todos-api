@@ -63,67 +63,71 @@ RSpec.describe 'Items API' do
     end
   end
 
-  # # Test suite for PUT /todos/:todo_id/items
-  # describe 'POST /todos/:todo_id/items' do
-  #   let(:valid_attributes) { { name: 'Visit Narnia', done: false } }
+  # Test suite for PUT /todos/:todo_id/items
+  describe 'POST /todos/:todo_id/items' do
+    let(:valid_attributes) { { name: 'Visit Narnia', done: false }.to_json }
 
-  #   context 'when request attributes are valid' do
-  #     before { post "/todos/#{todo_id}/items", params: valid_attributes }
+    context 'when request attributes are valid' do
+      before do
+        post "/todos/#{todo_id}/items", params: valid_attributes, headers: headers
+      end
 
-  #     it 'returns status code 201' do
-  #       expect(response).to have_http_status(201)
-  #     end
-  #   end
+      it 'returns status code 201' do
+        expect(response).to have_http_status(201)
+      end
+    end
 
-  #   context 'when an invalid request' do
-  #     before { post "/todos/#{todo_id}/items", params: {} }
+    context 'when an invalid request' do
+      before { post "/todos/#{todo_id}/items", params: {}, headers: headers }
 
-  #     it 'returns status code 422' do
-  #       expect(response).to have_http_status(422)
-  #     end
+      it 'returns status code 422' do
+        expect(response).to have_http_status(422)
+      end
 
-  #     it 'returns a failure message' do
-  #       expect(response.body).to match(/Validation failed: Name can't be blank/)
-  #     end
-  #   end
-  # end
+      it 'returns a failure message' do
+        expect(response.body).to match(/Validation failed: Name can't be blank/)
+      end
+    end
+  end
 
-  # # Test suite for PUT /todos/:todo_id/items/:id
-  # describe 'PUT /todos/:todo_id/items/:id' do
-  #   let(:valid_attributes) { { name: 'Mozart' } }
+  # Test suite for PUT /todos/:todo_id/items/:id
+  describe 'PUT /todos/:todo_id/items/:id' do
+    let(:valid_attributes) { { name: 'Mozart' }.to_json }
 
-  #   before { put "/todos/#{todo_id}/items/#{id}", params: valid_attributes }
+    before do
+      put "/todos/#{todo_id}/items/#{id}", params: valid_attributes, headers:headers
+    end
 
-  #   context 'when item exists' do
-  #     it 'returns status code 204' do
-  #       expect(response).to have_http_status(204)
-  #     end
+    context 'when item exists' do
+      it 'returns status code 204' do
+        expect(response).to have_http_status(204)
+      end
 
-  #     it 'updates the item' do
-  #       updated_item = Item.find(id)
-  #       expect(updated_item.name).to match(/Mozart/)
-  #     end
-  #   end
+      it 'updates the item' do
+        updated_item = Item.find(id)
+        expect(updated_item.name).to match(/Mozart/)
+      end
+    end
 
-  #   context 'when the item does not exist' do
-  #     let(:id) { 0 }
+    context 'when the item does not exist' do
+      let(:id) { 0 }
 
-  #     it 'returns status code 404' do
-  #       expect(response).to have_http_status(404)
-  #     end
+      it 'returns status code 404' do
+        expect(response).to have_http_status(404)
+      end
 
-  #     it 'returns a not found message' do
-  #       expect(response.body).to match(/Couldn't find Item/)
-  #     end
-  #   end
-  # end
+      it 'returns a not found message' do
+        expect(response.body).to match(/Couldn't find Item/)
+      end
+    end
+  end
 
-  # # Test suite for DELETE /todos/:id
-  # describe 'DELETE /todos/:id' do
-  #   before { delete "/todos/#{todo_id}/items/#{id}" }
+  # Test suite for DELETE /todos/:id
+  describe 'DELETE /todos/:id' do
+    before { delete "/todos/#{todo_id}/items/#{id}", params: {}, headers: headers }
 
-  #   it 'returns status code 204' do
-  #     expect(response).to have_http_status(204)
-  #   end
-  # end
+    it 'returns status code 204' do
+      expect(response).to have_http_status(204)
+    end
+  end
 end
