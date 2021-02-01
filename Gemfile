@@ -18,6 +18,8 @@ gem 'bcrypt', '~> 3.1.7'
 
 gem 'jwt'
 gem 'active_model_serializers', '~> 0.10.0'
+gem 'will_paginate', '~> 3.1.0'
+gem 'faker'
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
@@ -44,7 +46,6 @@ end
 group :test do
   gem 'factory_bot_rails'
   gem 'shoulda-matchers'
-  gem 'faker'
   gem 'database_cleaner'
 end
 
