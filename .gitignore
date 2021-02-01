@@ -12,6 +12,9 @@
 */db/*.sqlite3
 */db/*.sqlite3-*
 
+# Ignore PostgresSQL files
+/tmp/db
+
 # Ignore all logfiles and tempfiles.
 */log/*
 */tmp/*
