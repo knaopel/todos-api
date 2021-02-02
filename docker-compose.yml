@@ -3,15 +3,25 @@ services:
   db:
     image: postgres
     volumes:
-      - ./tmp/db:/var/lib/postgresel/data
+      - ./tmp/db:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: dev!P@55word
   web-api:
     build: web-api/
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 5000 -b '0.0.0.0'"
     volumes: 
       - ./web-api:/myapp
     ports:
-      - "3000:3000"
+      - 5000:5000
+    depends_on:
+      - db
+  front-end:
+    build: front-end/
+    volumes:
+      - ./front-end:/myapp
+    ports:
+      - 3000:3000
     # depends_on:
-    #   - db
+    #   - web-api
+# volumes:
+#   postgres_data:
