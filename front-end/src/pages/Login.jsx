@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Avatar, Button, CircularProgress, Container, CssBaseline, Grid, Link, TextField, Typography, withStyles } from '@material-ui/core';
 import { LockOutlined as LockOutlinedIcon } from '@material-ui/icons';
-import { axios } from 'axios';
+import axios from 'axios';
 
 const styles = (theme) => ({
   paper: {
@@ -51,6 +51,28 @@ class Login extends Component {
     }
   }
 
+  componentDidMount() {
+    // fetch('http://localhost:5000/auth/login', {
+    //   method: 'POST',
+    //   // mode: 'cors',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify({ email: 'ash@contoso.it', password: 'foobar' })
+    // })
+    //   .then(res => res.json())
+    //   .then(
+    //     data => {
+    //       console.log(data);
+    //     },
+    //     (err) => {
+    //       this.setState({
+    //         error: err
+    //       });
+    //     }
+    //   )
+  }
+
   handleChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value
@@ -64,21 +86,36 @@ class Login extends Component {
       email: this.state.email,
       password: this.state.password
     };
-    axios
-      .post('/login', userData)
-      .then((response) => {
-        localStorage.setItem('AuthToken', `Bearer ${response.data.token}`);
+
+    fetch('http://localhost:5000/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(userData)
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data);
+        localStorage.setItem('AuthToken', `${data.auth_token}`);
         this.setState({
           loading: false
-        });
-        this.props.history.push('/');
+        })
       })
-      .catch((error) => {
-        this.setState({
-          errors: error.response.data,
-          loading: false
-        });
-      })
+
+    // axios
+    //   .post('http://localhost:5000/auth/login', userData)
+    //   .then((response) => {
+    //     localStorage.setItem('AuthToken', `${response.data.token}`);
+    //     this.setState({
+    //       loading: false
+    //     });
+    //     this.props.history.push('/');
+    //   })
+    //   .catch((error) => {
+    //     this.setState({
+    //       errors: error.response.data,
+    //       loading: false
+    //     });
+    //   })
   }
 
   render() {
@@ -114,7 +151,7 @@ class Login extends Component {
               margin="normal"
               required
               fullWidth
-              name="email"
+              name="password"
               label="Password"
               type="password"
               id="password"
