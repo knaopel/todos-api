@@ -34,7 +34,7 @@ module V1
     private
     def todo_params
       # whitelist params
-      params.permit(:title)
+      params.permit(:title, :body)
     end
 
     def set_todo
