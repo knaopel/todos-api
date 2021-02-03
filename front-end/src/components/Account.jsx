@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import React, { Component } from 'react';
 import { authMiddleware } from '../util/auth';
 
+const API_URI = 'http://localhost:5000';
 const styles = (theme) => ({
   content: {
     flexGrow: 1,
@@ -69,14 +70,14 @@ class Account extends Component {
   componentWillMount = () => {
     authMiddleware(this.props.history);
     const authToken = localStorage.getItem('AuthToken');
-    axios.defaults.headers.common = { Autorization: `${authToken}` };
+    axios.defaults.headers.common = { Authorization: `${authToken}` };
     axios
-      .get('http://localhost:5000/')
+      .get(`${API_URI}/user`)
       .then(resp => {
         console.log(resp.data);
         this.setState({
-          name: 'Kurt Opel',
-          email: 'kurt@kurtopel.com',
+          name: resp.data.name,
+          email: resp.data.email,
           uiLoading: false
         });
       })
@@ -112,7 +113,7 @@ class Account extends Component {
       email: this.state.email
     };
     axios
-      .get('http://localhost:5000/')
+      .put(`${API_URI}/user`, formRequest)
       .then(() => {
         this.setState({ buttonLoading: false });
       })

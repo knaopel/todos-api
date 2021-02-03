@@ -10,6 +10,7 @@ Rails.application.routes.draw do
 
   scope module: :v1, constraints: ApiVersion.new('v1', true) do
     get 'user', to: 'users#show'
+    put 'user', to: 'users#update'
     resources :todos do
       resources :items
     end      

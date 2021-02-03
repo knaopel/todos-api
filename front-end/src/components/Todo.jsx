@@ -9,68 +9,68 @@ import { authMiddleware } from '../util/auth';
 const API_URI = 'http://localhost:5000';
 
 const styles = (theme) => ({
-	content: {
-		flexGrow: 1,
-		padding: theme.spacing(3)
-	},
-	appBar: {
-		position: 'relative'
-	},
-	title: {
-		marginLeft: theme.spacing(2),
-		flex: 1
-	},
-	submitButton: {
-		display: 'block',
-		color: 'white',
-		textAlign: 'center',
-		position: 'absolute',
-		top: 14,
-		right: 10
-	},
-	floatingButton: {
-		position: 'fixed',
-		bottom: 0,
-		right: 0
-	},
-	form: {
-		width: '98%',
-		marginLeft: 13,
-		marginTop: theme.spacing(3)
-	},
-	toolbar: theme.mixins.toolbar,
-	root: {
-		minWidth: 470
-	},
-	bullet: {
-		display: 'inline-block',
-		margin: '0 2px',
-		transform: 'scale(0.8)'
-	},
-	pos: {
-		marginBottom: 12
-	},
-	uiProgess: {
-		position: 'fixed',
-		zIndex: '1000',
-		height: '31px',
-		width: '31px',
-		left: '50%',
-		top: '35%'
-	},
-	dialogeStyle: {
-		maxWidth: '50%'
-	},
-	viewRoot: {
-		margin: 0,
-		padding: theme.spacing(2)
-	},
-	closeButton: {
-		position: 'absolute',
-		right: theme.spacing(1),
-		top: theme.spacing(1),
-		color: theme.palette.grey[500]
-	}
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3)
+  },
+  appBar: {
+    position: 'relative'
+  },
+  title: {
+    marginLeft: theme.spacing(2),
+    flex: 1
+  },
+  submitButton: {
+    display: 'block',
+    color: 'white',
+    textAlign: 'center',
+    position: 'absolute',
+    top: 14,
+    right: 10
+  },
+  floatingButton: {
+    position: 'fixed',
+    bottom: 0,
+    right: 0
+  },
+  form: {
+    width: '98%',
+    marginLeft: 13,
+    marginTop: theme.spacing(3)
+  },
+  toolbar: theme.mixins.toolbar,
+  root: {
+    minWidth: 470
+  },
+  bullet: {
+    display: 'inline-block',
+    margin: '0 2px',
+    transform: 'scale(0.8)'
+  },
+  pos: {
+    marginBottom: 12
+  },
+  uiProgess: {
+    position: 'fixed',
+    zIndex: '1000',
+    height: '31px',
+    width: '31px',
+    left: '50%',
+    top: '35%'
+  },
+  dialogeStyle: {
+    maxWidth: '50%'
+  },
+  viewRoot: {
+    margin: 0,
+    padding: theme.spacing(2)
+  },
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+    color: theme.palette.grey[500]
+  }
 });
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -109,7 +109,7 @@ class Todo extends Component {
     const authToken = localStorage.getItem('AuthToken');
     axios.defaults.headers.common = { Authorization: `${authToken}` }
     axios
-      .get('http://localhost:5000/todos')
+      .get(`${API_URI}/todos`)
       .then(resp => {
         console.log(resp.data)
         this.setState({
@@ -140,6 +140,7 @@ class Todo extends Component {
   handleEditClickOpen(data) {
     this.setState({
       title: data.todo.title,
+      body: data.todo.body,
       todoId: data.todo.id,
       buttonType: 'Edit',
       open: true
@@ -148,6 +149,7 @@ class Todo extends Component {
   handleViewOpen(data) {
     this.setState({
       title: data.todo.title,
+      body: data.todo.body,
       viewOpen: true
     })
   }
@@ -191,7 +193,8 @@ class Todo extends Component {
       authMiddleware(this.props.history);
       event.preventDefault();
       const userTodo = {
-        title: this.state.title
+        title: this.state.title,
+        body: this.state.body
       }
       let options = {};
       if (this.state.buttonType === 'Edit') {
@@ -288,6 +291,24 @@ class Todo extends Component {
                     onChange={this.handleChange}
                   />
                 </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="todoDetails"
+                    label="Todo Details"
+                    name="body"
+                    autoComplete="todoDetails"
+                    multiline
+                    rows={25}
+                    rowsMax={25}
+                    helperText={errors.body}
+                    value={this.state.body}
+                    error={errors.body ? true : false}
+                    onChange={this.handleChange}
+                  />
+                </Grid>
               </Grid>
             </form>
           </Dialog>
@@ -303,7 +324,7 @@ class Todo extends Component {
                       {dayjs(todo.created_at).fromNow()}
                     </Typography>
                     <Typography variant="body2" component="p">
-                      {todo.items[0]?.name}
+                      {todo.body}
                     </Typography>
                   </CardContent>
                   <CardActions>
@@ -324,7 +345,7 @@ class Todo extends Component {
           </Grid>
           <Dialog
             onClose={handleViewClose}
-            aria-labeledby="customized-dialog-title"
+            aria-labelledby="customized-dialog-title"
             open={viewOpen}
             fullWidth
             classes={{ paperFullWidth: classes.dialogeStyle }}
