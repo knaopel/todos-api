@@ -7,6 +7,8 @@ import Todo from '../components/Todo';
 import { authMiddleware } from '../util/auth';
 
 const drawerWidth = 240;
+const API_URI = 'http://localhost:5000';
+
 
 const styles = (theme) => ({
   root: {
@@ -77,11 +79,11 @@ export class Home extends Component {
     const authToken = localStorage.getItem('AuthToken');
     axios.defaults.headers.common = { Authorization: `${authToken}` }
     axios
-      .get('http://localhost:5000/')
+      .get(`${API_URI}/user`)
       .then(resp => {
         console.log(resp.data);
         this.setState({
-          name: 'Kurt Opel',
+          name: resp.data.name,
           uiLoading: false
         })
       })

@@ -3,6 +3,8 @@ import { Avatar, Button, CircularProgress, Container, CssBaseline, Grid, Link, T
 import { LockOutlined as LockOutlinedIcon } from '@material-ui/icons';
 import axios from 'axios';
 
+const API_URI = 'http://localhost:5000';
+
 const styles = (theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -51,27 +53,7 @@ class Login extends Component {
     }
   }
 
-  componentDidMount() {
-    // fetch('http://localhost:5000/auth/login', {
-    //   method: 'POST',
-    //   // mode: 'cors',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify({ email: 'ash@contoso.it', password: 'foobar' })
-    // })
-    //   .then(res => res.json())
-    //   .then(
-    //     data => {
-    //       console.log(data);
-    //     },
-    //     (err) => {
-    //       this.setState({
-    //         error: err
-    //       });
-    //     }
-    //   )
-  }
+  componentDidMount() { }
 
   handleChange = (event) => {
     this.setState({
@@ -87,35 +69,23 @@ class Login extends Component {
       password: this.state.password
     };
 
-    fetch('http://localhost:5000/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(userData)
-    })
-      .then(res => res.json())
-      .then(data => {
-        console.log(data);
-        localStorage.setItem('AuthToken', `${data.auth_token}`);
+    axios
+      .post(`${API_URI}/auth/login`, userData)
+      .then(response => {
+        // console.log(response.data);
+        localStorage.setItem('AuthToken', `${response.data.auth_token}`);
         this.setState({
           loading: false
-        })
+        });
+        this.props.history.push('/');
       })
-
-    // axios
-    //   .post('http://localhost:5000/auth/login', userData)
-    //   .then((response) => {
-    //     localStorage.setItem('AuthToken', `${response.data.token}`);
-    //     this.setState({
-    //       loading: false
-    //     });
-    //     this.props.history.push('/');
-    //   })
-    //   .catch((error) => {
-    //     this.setState({
-    //       errors: error.response.data,
-    //       loading: false
-    //     });
-    //   })
+      .catch(error => {
+        console.log(error)
+        this.setState({
+          errors: error.response.data,
+          loading: false
+        });
+      });
   }
 
   render() {
