@@ -4,6 +4,8 @@ import './App.css';
 import Signup from './pages/Signup';
 import Home from './pages/Home';
 import { createMuiTheme, ThemeProvider as MuiThemeProvider } from '@material-ui/core';
+import PartnerLogins from './pages/PartnerLogins';
+import PartnerLogin from './pages/PartnerLogin';
 
 const theme = createMuiTheme({
   palette: {
@@ -25,6 +27,8 @@ function App() {
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={Signup} />
             <Route exact path="/" component={Home} />
+            <Route path="/partnerlogin/:provider" component={PartnerLogin} />
+            <Route path="/partnerlogin" component={PartnerLogins} />
           </Switch>
         </div>
       </Router>

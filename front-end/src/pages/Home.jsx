@@ -1,6 +1,7 @@
 import { AppBar, Avatar, CircularProgress, CssBaseline, Divider, Drawer, List, ListItem, ListItemIcon, Toolbar, Typography, withStyles } from '@material-ui/core';
 import { Notes as NotesIcon, AccountBox as AccountBoxIcon, ExitToApp as ExitToAppIcon } from '@material-ui/icons'
 import axios from 'axios';
+import md5 from 'md5';
 import React, { Component } from 'react'
 import Account from '../components/Account';
 import Todo from '../components/Todo';
@@ -63,6 +64,13 @@ export class Home extends Component {
     this.props.history.push('/login');
   }
 
+  buildAvatarUrl(email) {
+    const fomattedEmail = ('' + email).trim().toLowerCase();
+    const hash = md5(fomattedEmail);
+    const src = `//www.gravatar.com/avatar/${hash}.jpg`;
+    return src;
+  }
+
   constructor(props) {
     super(props)
 
@@ -84,6 +92,7 @@ export class Home extends Component {
         console.log(resp.data);
         this.setState({
           name: resp.data.name,
+          email: resp.data.email,
           uiLoading: false
         })
       })
@@ -124,7 +133,7 @@ export class Home extends Component {
             <div className={classes.toolbar} />
             <Divider />
             <center>
-              <Avatar className={classes.avatar} />
+              <Avatar className={classes.avatar} src={this.buildAvatarUrl(this.state.email)} />
               <p>
                 {' '} {this.state.name}
               </p>

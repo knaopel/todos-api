@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Avatar, Button, CircularProgress, Container, CssBaseline, Grid, Link, TextField, Typography, withStyles } from '@material-ui/core';
 import { LockOutlined as LockOutlinedIcon } from '@material-ui/icons';
 import axios from 'axios';
+// import MsIcon from '../auth_microsoft.svg';
 
 const API_URI = 'http://localhost:5000';
 
@@ -46,14 +47,14 @@ class Login extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.UI.errors) {
-      this.setState({
-        errors: nextProps.UI.errors
-      });
+    if ("errors" in nextProps.UI) {
+      if (nextProps.UI.errors) {
+        this.setState({
+          errors: nextProps.UI.errors
+        });
+      }
     }
   }
-
-  componentDidMount() { }
 
   handleChange = (event) => {
     this.setState({
@@ -142,16 +143,30 @@ class Login extends Component {
               Sign In
               {loading && <CircularProgress size={30} className={classes.progress} />}
             </Button>
+            {/* <Button
+              href="/partnerlogin/microsoft"
+              fullWidth
+              variant="contained"
+              color="white"
+              startIcon={<SvgIcon>
+                <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                  <rect id="Rectangle" fill="#F54F0D" x="0" y="0" width="8" height="8"></rect>
+                  <rect id="Rectangle" fill="#00A2F2" x="0" y="9" width="8" height="9"></rect>
+                  <rect id="Rectangle" fill="#7DBC00" x="9" y="0" width="9" height="8"></rect>
+                  <rect id="Rectangle" fill="#FFBA00" x="9" y="9" width="9" height="9"></rect>
+                </g>
+              </SvgIcon>}
+            >Sign in with Microsoft</Button> */}
             <Grid container>
               <Grid item>
                 <Link href="signup" variant="body2">
-                  {"Don't have and account? Sign Up"}
+                  {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
             </Grid>
-            {errors.general && (
+            {errors.message && (
               <Typography variant="body2" className={classes.customError}>
-                {errors.general}
+                {errors.message}
               </Typography>
             )}
           </form>

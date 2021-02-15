@@ -1,9 +1,10 @@
 import { Button, Card, CardActions, CardContent, CircularProgress, Divider, Grid, TextField, Typography, withStyles } from '@material-ui/core';
-import { CloudUpload as CloudUploadIcon } from '@material-ui/icons';
+// import { CloudUpload as CloudUploadIcon } from '@material-ui/icons';
 import axios from 'axios';
 import clsx from 'clsx';
 import React, { Component } from 'react';
 import { authMiddleware } from '../util/auth';
+import HoneyTable from './HoneyTable';
 
 const API_URI = 'http://localhost:5000';
 const styles = (theme) => ({
@@ -147,7 +148,7 @@ class Account extends Component {
                   <Typography className={classes.locationText} gutterBottom variant="h4">
                     {this.state.name}
                   </Typography>
-                  <Button
+                  {/* <Button
                     variant="outlined"
                     color="primary"
                     type="submit"
@@ -157,16 +158,16 @@ class Account extends Component {
                     onClick={this.profilePictureHandler}
                   >
                     Upload Photo
-                  </Button>
-                  <input type="file" onChange={this.handleImageChange} />
-                  {this.state.imageError ? (
+                  </Button> */}
+                  {/* <input type="file" onChange={this.handleImageChange} /> */}
+                  {/* {this.state.imageError ? (
                     <div className={classes.customError}>
                       {' '}
                       Wrong Image Format || Supported Format are PNG and JPG
                     </div>
                   ) : (
                       false
-                    )}
+                    )} */}
                 </div>
               </div>
               <div className={classes.progress} />
@@ -222,6 +223,12 @@ class Account extends Component {
             Save Details
             {this.state.buttonLoading && <CircularProgress size={30} className={classes.progress} />}
           </Button>
+          <Button
+            color="primary"
+            variant="contained"
+            className={classes.submitButton}
+          >Add Honey</Button>
+          <HoneyTable />
         </main>
       )
     }

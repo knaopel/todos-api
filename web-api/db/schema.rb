@@ -10,10 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_03_162018) do
+ActiveRecord::Schema.define(version: 2021_02_15_192455) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "follows", force: :cascade do |t|
+    t.integer "following_id", null: false
+    t.integer "follower_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["follower_id"], name: "index_follows_on_follower_id"
+    t.index ["following_id", "follower_id"], name: "index_follows_on_following_id_and_follower_id", unique: true
+    t.index ["following_id"], name: "index_follows_on_following_id"
+  end
 
   create_table "items", force: :cascade do |t|
     t.string "name"
@@ -38,6 +48,8 @@ ActiveRecord::Schema.define(version: 2021_02_03_162018) do
     t.string "password_digest"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "followers_count", default: 0, null: false
+    t.integer "followings_count", default: 0, null: false
   end
 
   add_foreign_key "items", "todos"
