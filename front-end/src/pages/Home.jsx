@@ -77,6 +77,7 @@ export class Home extends Component {
     this.state = {
       render: false,
       name: '',
+      authToken: '',
       uiLoading: true,
       imageLoading: false
     }
@@ -85,6 +86,7 @@ export class Home extends Component {
   componentWillMount = () => {
     authMiddleware(this.props.history);
     const authToken = localStorage.getItem('AuthToken');
+    this.setState({authToken:authToken});
     axios.defaults.headers.common = { Authorization: `${authToken}` }
     axios
       .get(`${API_URI}/user`)
@@ -160,7 +162,7 @@ export class Home extends Component {
               </ListItem>
             </List>
           </Drawer>
-          <div>{this.state.render ? <Account /> : <Todo />}</div>
+          <div>{this.state.render ? <Account authToken={this.state.authToken} /> : <Todo />}</div>
         </div>
       )
     }

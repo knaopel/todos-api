@@ -22,6 +22,7 @@ module V1
 
     def set_user
       @user = {
+        id: @current_user.id
         name: @current_user.name,
         email: @current_user.email
       }

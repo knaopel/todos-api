@@ -58,6 +58,7 @@ const styles = (theme) => ({
 class Account extends Component {
   constructor(props) {
     super(props)
+    this.authToken = props.authToken;
 
     this.state = {
       name: '',
@@ -68,10 +69,8 @@ class Account extends Component {
     };
   }
 
-  componentWillMount = () => {
-    authMiddleware(this.props.history);
-    const authToken = localStorage.getItem('AuthToken');
-    axios.defaults.headers.common = { Authorization: `${authToken}` };
+  componentDidMount = () => {
+    axios.defaults.headers.common = { Authorization: `${this.props.authToken}` };
     axios
       .get(`${API_URI}/user`)
       .then(resp => {
@@ -223,12 +222,7 @@ class Account extends Component {
             Save Details
             {this.state.buttonLoading && <CircularProgress size={30} className={classes.progress} />}
           </Button>
-          <Button
-            color="primary"
-            variant="contained"
-            className={classes.submitButton}
-          >Add Honey</Button>
-          <HoneyTable />
+          <HoneyTable authToken={this.authToken} />
         </main>
       )
     }
