@@ -17,6 +17,15 @@ Rails.application.routes.draw do
     delete 'user/unfollow', to: 'users/follows#destroy', as: :unfollow
     post 'user/exists', to: 'users/follows#check_follower', as: :exists
 
+    # Honeys
+    get 'honeys', to: 'honeys#index'
+    post 'honeys/exists', to: 'honeys#check_honey'
+    post 'honeys', to: 'honeys#create'
+    delete 'honeys/:id', to: 'honeys#destroy'
+
+    # Dewers
+    get 'dewers', to: 'dewers#index'
+
     resources :todos do
       resources :items
     end      

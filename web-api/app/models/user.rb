@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   include Followable
+  include Honeyable
   # encrypt password
   has_secure_password
 
