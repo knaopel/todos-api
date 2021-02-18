@@ -99,7 +99,7 @@ export class Home extends Component {
         })
       })
       .catch(err => {
-        if (err.response.status === 403) {
+        if (err.response.status === 401) {
           this.props.history.push('/login');
         }
         console.log(err);
