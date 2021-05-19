@@ -17,6 +17,15 @@ module ControllerSpecHelper
     }
   end
 
+  # return valid v1 headers
+  def valid_v1_headers
+    {
+      "Authorization" => token_generator(user.id),
+      "Content-Type" => "application/json",
+      "Accept" => "application/vnd.todos.v1+json",
+    }
+  end
+
   # return invalid headers
   def invalid_headers
     {
