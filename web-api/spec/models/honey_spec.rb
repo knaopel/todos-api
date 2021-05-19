@@ -1,5 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Honey, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  # Association Test
+  it { should belong_to(:honey) }
+  it { should belong_to(:dewer) }
 end
