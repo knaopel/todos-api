@@ -10,8 +10,7 @@ RSpec.describe "V1::Users", type: :request do
   describe "GET /user" do
     before do
       post '/signup', params: user_attributes.to_json, headers: valid_headers
-      resp_body = JSON.parse(response.body)
-      headers["Authorization"] = resp_body["auth_token"]
+      headers["Authorization"] = json["auth_token"]
     end
     it "returns http success" do
       get "/user", headers: headers
