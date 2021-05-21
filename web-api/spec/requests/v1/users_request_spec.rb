@@ -4,7 +4,7 @@ RSpec.describe "V1::Users", type: :request do
   let(:user) { build(:user) }
   let(:headers) { valid_v1_headers.except('Authorization') }
   let(:user_attributes) do
-    attributes_for(:user, password_confirmation: user.password)
+    attributes_for(:user, password: user.password, password_confirmation: user.password)
   end
 
   describe "GET /user" do

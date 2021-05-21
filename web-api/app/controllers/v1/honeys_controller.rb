@@ -24,7 +24,7 @@ class V1::HoneysController < ApplicationController
         if current_user.add_honey(@user.id)
           json_response(current_user.honeys)
         else
-          json_response({error:"Counld not add honey"}, 500)
+          json_response({error:"Could not add honey"}, 500)
         end
       end
     else
