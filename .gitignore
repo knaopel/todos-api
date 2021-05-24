@@ -37,3 +37,4 @@ front-end/.eslintcache
 
 # Ignore .env files
 .env
+web-api/localsetup.sh

@@ -27,7 +27,6 @@ RSpec.describe "Honeys", type: :request do
         expect(response).to have_http_status(:ok)
       end
       it 'returns array of honeys with user2' do
-        debugger
         expect(json.count).to eq(1)
         expect(json[0]["email"]).to eq(user2.email)
       end
