@@ -62,9 +62,27 @@ RSpec.describe "Honeys API", type: :request do
     end
   end
 
+  # Honey POST honeys exists test suite
   describe 'POST /honeys/exists' do
-    
+    it 'returns true when user is found' do
+      honey_params = { email: user2.email }.to_json
+      post '/honeys/exists', params: honey_params, headers: headers
+      expect(response).to have_http_status(:ok)
+      expect(json).not_to be_empty
+      expect(json["exists"]).to be_truthy
+    end
+
+    it 'returns false when user is not found' do
+      fake_email = Faker::Internet.email
+      honey_params = { email: fake_email }.to_json
+      post '/honeys/exists', params: honey_params, headers: headers
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(json).not_to be_empty
+      expect(json["exists"]).to be_falsy
+      expect(json["searched_for_email"]).to eq(fake_email)
+    end
   end
+
   describe 'DELETE /honeys/:id' do
     
   end

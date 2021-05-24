@@ -11,7 +11,7 @@ class V1::HoneysController < ApplicationController
     if @user
       json_response({exists: true})
     else
-      json_response({exists: false,searched_for_email: email}, 422)
+      json_response({exists: false, searched_for_email: @email}, 422)
     end
   end
 
@@ -42,7 +42,7 @@ class V1::HoneysController < ApplicationController
   private
 
   def set_user
-    email = params[:email]
-    @user = User.find_by_email(email)
+    @email = params[:email]
+    @user = User.find_by_email(@email)
   end
 end
