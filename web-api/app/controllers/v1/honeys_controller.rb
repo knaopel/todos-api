@@ -18,7 +18,7 @@ class V1::HoneysController < ApplicationController
   # POST /honeys
   def create
     if @user
-      if current_user.is_honey?(@user.id)
+      if current_user.id == @user.id or current_user.is_honey?(@user.id)
         json_response(current_user.honeys, 422)
       else
         if current_user.add_honey(@user.id)
