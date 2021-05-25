@@ -84,6 +84,25 @@ RSpec.describe "Honeys API", type: :request do
   end
 
   describe 'DELETE /honeys/:id' do
-    
+    context 'when the honey is found' do
+      before do
+        user.add_honey(user2.id)
+        @honeys_count = user.honeys.count
+        delete "/honeys/#{user2.id}", headers: headers
+      end
+      it 'has no content' do
+        expect(response).to have_http_status(:no_content)
+      end
+      it 'the honey is removed' do
+        expect(user.honeys.count).to eq(@honeys_count - 1)
+      end
+    end
+
+    context 'when the honey is not found' do
+      before { delete "/honeys/#{Faker::Number.number}", headers: headers }
+      it 'returns "not found" status' do
+        expect(response).to have_http_status(:not_found) 
+      end
+    end
   end
 end

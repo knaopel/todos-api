@@ -34,8 +34,12 @@ class V1::HoneysController < ApplicationController
 
   # DELETE /honeys/:id
   def destroy
-    if current_user.unhoney(params[:id])
+    honey_id = params[:id].to_i
+    if has_honey?(honey_id)
+      current_user.unhoney(honey_id)
       head :no_content
+    else
+      json_response({error: "user not found"}, :not_found)
     end
   end
 
@@ -44,5 +48,14 @@ class V1::HoneysController < ApplicationController
   def set_user
     @email = params[:email]
     @user = User.find_by_email(@email)
+  end
+
+  def has_honey?(honey_id)
+    current_user.honeys.each do |h|
+      if h.id == honey_id
+        return true
+      end
+    end
+    return false
   end
 end
