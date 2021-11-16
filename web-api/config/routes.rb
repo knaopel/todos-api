@@ -11,10 +11,6 @@ Rails.application.routes.draw do
   scope module: :v1, constraints: ApiVersion.new('v1', true) do
     get 'user', to: 'users#show'
     put 'user', to: 'users#update'
-    get 'user/following', to: 'users/follows#index', as: :following
-    get 'user/followers', to: 'users/follows#index2', as: :followers
-    post 'user/follow', to: 'users/follows#create', as: :follow
-    delete 'user/unfollow', to: 'users/follows#destroy', as: :unfollow
     post 'user/exists', to: 'users/follows#check_follower', as: :exists
 
     # Honeys

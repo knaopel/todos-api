@@ -1,5 +1,4 @@
 class User < ApplicationRecord
-  include Followable
   include Honeyable
   # encrypt password
   has_secure_password
@@ -9,7 +8,7 @@ class User < ApplicationRecord
   end
 
   # Model associations
-  has_many :todos, foreign_key: :created_by
+  has_many :todos
 
   # Validations
   validates_presence_of :name, :password_digest
