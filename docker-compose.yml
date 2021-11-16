@@ -1,11 +1,14 @@
 version: "3.9"
 services:
   db:
-    image: postgres
+    image: postgres:14
     volumes:
-      - ./tmp/db:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: dev!P@55word
+    networks:
+      - net_back
+
   web-api:
     build: web-api/
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 5000 -b '0.0.0.0'"
@@ -14,10 +17,14 @@ services:
     environment:
       DB_HOSTNAME: db
       DB_USERNAME: postgres
+      DB_PASSWORD: dev!P@55word
     ports:
-      - 5000:5000
+      - "5000:5000"
+    networks:
+      - net_back
     depends_on:
       - db
+
   front-end:
     build: front-end/
     volumes:
@@ -26,5 +33,7 @@ services:
       - 3000:3000
     # depends_on:
     #   - web-api
-# volumes:
-#   postgres_data:
+volumes:
+  postgres_data:
+networks:
+  net_back:
