@@ -1,39 +1,137 @@
-import React, { Component } from 'react';
-import { Avatar, Button, CircularProgress, Container, CssBaseline, Grid, Link, TextField, Typography, withStyles } from '@material-ui/core';
-import { LockOutlined as LockOutlinedIcon } from '@material-ui/icons';
-import axios from 'axios';
+import React, { useState } from "react";
+import {
+  Avatar,
+  Button,
+  CircularProgress,
+  Container,
+  CssBaseline,
+  FormControlLabel,
+  FormGroup,
+  Grid,
+  Link,
+  TextField,
+  Typography,
+  withStyles,
+} from "@mui/material";
+import { LockOutlined as LockOutlinedIcon } from "@mui/icons-material";
+import axios from "axios";
+import { Box } from "@mui/system";
 // import MsIcon from '../auth_microsoft.svg';
 
-const API_URI = 'http://localhost:5000';
+const API_URI = "http://localhost:5000";
 
-const styles = (theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main
-  },
-  form: {
-    width: '100%',
-    marginTop: theme.spacing(1)
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2)
-  },
-  customError: {
-    color: 'red',
-    fontSize: '0.8rem',
-    marginTop: 10
-  },
-  progess: {
-    position: 'absolute'
-  }
-});
+const Login = ({ history }) => {
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+    const userData = {
+      email,
+      password,
+    };
+
+    const resp = await axios.post(`${API_URI}/auth/login`, userData);
+    localStorage.setItem("AuthToken", resp.data.token);
+    setLoading(false);
+    history.push("/");
+  };
+
+  const handleChange = (event) => {
+    switch (event.target.name) {
+      case "email":
+        setEmail(event.target.value);
+        break;
+      case "password":
+        setPassword(event.target.value);
+        break;
+      default:
+        break;
+    }
+  };
+  return (
+    <Container>
+      <Avatar>
+        <LockOutlinedIcon />
+      </Avatar>
+      <Typography component="h1" variant="h5">
+        Login
+      </Typography>
+      <Box
+        component="form"
+        sx={{ "& .MuiTextField-root": { m: 1, width: "25ch" } }}
+        noValidate
+        autoComplete="off"
+      >
+        <div>
+          <TextField
+            variant="outlined"
+            fullWidth
+            required
+            id="email"
+            name="email"
+            label="Email Address"
+            value={email}
+            onChange={handleChange}
+          />
+          <TextField
+            variant="outlined"
+            fullWidth
+            required
+            id="password"
+            name="password"
+            label="Password"
+            type="password"
+            value={password}
+            onChange={handleChange}
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            onClick={handleSubmit}
+            disabled={loading || !Boolean(email.length) || !Boolean(password.length)}
+          >
+            Sign in
+          </Button>
+        </div>
+        <FormGroup>{/* <FormControlLabel /> */}</FormGroup>
+      </Box>
+    </Container>
+  );
+};
+
+// const styles = (theme) => ({
+//   paper: {
+//     marginTop: theme.spacing(8),
+//     display: 'flex',
+//     flexDirection: 'column',
+//     alignItems: 'center'
+//   },
+//   avatar: {
+//     margin: theme.spacing(1),
+//     backgroundColor: theme.palette.secondary.main
+//   },
+//   form: {
+//     width: '100%',
+//     marginTop: theme.spacing(1)
+//   },
+//   submit: {
+//     margin: theme.spacing(3, 0, 2)
+//   },
+//   customError: {
+//     color: 'red',
+//     fontSize: '0.8rem',
+//     marginTop: 10
+//   },
+//   progess: {
+//     position: 'absolute'
+//   }
+// });
+/*
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -142,21 +240,8 @@ class Login extends Component {
             >
               Sign In
               {loading && <CircularProgress size={30} className={classes.progress} />}
-            </Button>
-            {/* <Button
-              href="/partnerlogin/microsoft"
-              fullWidth
-              variant="contained"
-              color="white"
-              startIcon={<SvgIcon>
-                <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                  <rect id="Rectangle" fill="#F54F0D" x="0" y="0" width="8" height="8"></rect>
-                  <rect id="Rectangle" fill="#00A2F2" x="0" y="9" width="8" height="9"></rect>
-                  <rect id="Rectangle" fill="#7DBC00" x="9" y="0" width="9" height="8"></rect>
-                  <rect id="Rectangle" fill="#FFBA00" x="9" y="9" width="9" height="9"></rect>
-                </g>
-              </SvgIcon>}
-            >Sign in with Microsoft</Button> */}
+    </Button>
+
             <Grid container>
               <Grid item>
                 <Link href="signup" variant="body2">
@@ -175,5 +260,5 @@ class Login extends Component {
     )
   }
 }
-
-export default withStyles(styles)(Login);
+*/
+export default Login;
