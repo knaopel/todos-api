@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import {
   Avatar,
   Box,
-  Button,
   Checkbox,
-  CircularProgress,
   Container,
   createTheme,
   CssBaseline,
@@ -20,24 +18,8 @@ import { LockOutlined as LockOutlinedIcon } from "@mui/icons-material";
 import axios from "axios";
 import { useAuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router";
-
-const Copyright = (props) => {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://kurtopel.com">
-        Kurt Opel Development
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-};
+import constants from "../util/constants";
+import { Copyright } from "../components";
 
 const theme = createTheme();
 const API_URI = process.env.REACT_APP_API_URL;
@@ -48,6 +30,7 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { setToken } = useAuthContext();
+  const { authTokenName } = constants;
   const navigate = useNavigate();
 
   const handleChange = ({ target }) => {
@@ -78,7 +61,9 @@ const Signup = () => {
       .post(`${API_URI}/signup`, param)
       .then((resp) => {
         const { data } = resp;
-        setToken(data.auth_token);
+        const { auth_token } = data;
+        setToken(auth_token);
+        localStorage.setItem(authTokenName, auth_token);
         setIsLoading(false);
         navigate("/");
       })

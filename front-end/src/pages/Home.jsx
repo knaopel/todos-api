@@ -33,68 +33,33 @@ import React, { useEffect, useState } from "react";
 import { useAuthContext } from "../contexts/AuthContext";
 import axios from "axios";
 import PublicHome from "../components/PublicHome";
+import constants from "../util/constants";
 // import Account from '../components/Account';
 // import Todo from '../components/Todo';
 // import { authMiddleware } from '../util/auth';
 
-// const drawerWidth = 240;
-// const API_URI = 'http://localhost:5000';
-
-// const styles = (theme) => ({
-//   root: {
-//     display: 'flex'
-//   },
-//   appBar: {
-//     zIndex: theme.zIndex.drawer + 1
-//   },
-//   drawer: {
-//     width: drawerWidth,
-//     flexShrink: 0
-//   },
-//   drawerPaper: {
-//     width: drawerWidth
-//   },
-//   content: {
-//     flexGrow: 1,
-//     padding: theme.spacing(3)
-//   },
-//   avatar: {
-//     height: 110,
-//     width: 100,
-//     flexShrink: 0,
-//     flexGrow: 0,
-//     marginTop: 20
-//   },
-//   uiProgess: {
-//     position: 'fixed',
-//     zIndex: '1000',
-//     height: '31px',
-//     width: '31px',
-//     left: '50%',
-//     top: '35%'
-//   },
-//   toolbar: theme.mixins.toolbar
-// });
-
 const API_URL = process.env.REACT_APP_API_URL;
 
 const Home = () => {
-  const { token, user, setUser } = useAuthContext();
+  const { token, user, setUser, setToken } = useAuthContext();
   const [isLoading, setIsLoading] = useState(false);
-  // const [auth, setAuth] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const { authTokenName } = constants;
 
   useEffect(() => {
-    axios
-      .get(`${API_URL}/user`, { headers: { Authorization: token } })
-      .then((res) => {
-        setUser(res.data);
-      });
-  }, []);
+    if (!token) {
+      const storToken = localStorage.getItem(authTokenName);
+      if (storToken) setToken(storToken);
+    }
+    if (!user.email) {
+      axios
+        .get(`${API_URL}/user`, { headers: { Authorization: token } })
+        .then((res) => {
+          setUser(res.data);
+        });
+    }
+  }, [user]);
 
-  // const handleChange = () => {
-  //   setAuth(!auth);
-  // };
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -104,24 +69,18 @@ const Home = () => {
     setAnchorEl(null);
   };
 
+  const handleLogout = () => {
+    setToken(null);
+    localStorage.removeItem(authTokenName);
+    handleClose();
+  };
+
   if (isLoading === true) {
     return <CircularProgress size={150} />;
   }
   return (
     <Container>
       <Box sx={{ flexGrow: 1 }}>
-        {/* <FormGroup>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={auth}
-                onChange={handleChange}
-                aria-label="login-switch"
-              />
-            }
-            label={auth ? "Login" : "Logout"}
-          />
-        </FormGroup> */}
         <AppBar position="static">
           <Toolbar>
             {token && (
@@ -170,6 +129,7 @@ const Home = () => {
                   >
                     <MenuItem onClick={handleClose}>Profile</MenuItem>
                     <MenuItem onClick={handleClose}>My Account</MenuItem>
+                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
                   </Menu>
                 </div>
               </>

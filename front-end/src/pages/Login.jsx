@@ -12,12 +12,14 @@ import axios from "axios";
 import { Box } from "@mui/system";
 import { useAuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router";
+import constants from "../util/constants";
 // import MsIcon from '../auth_microsoft.svg';
 
 const API_URI = "http://localhost:5000";
 
 const Login = () => {
-  const { setToken, setUser } = useAuthContext();
+  const {authTokenName} = constants;
+  const { setToken } = useAuthContext();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
@@ -34,7 +36,7 @@ const Login = () => {
       const resp = await axios.post(`${API_URI}/auth/login`, userData);
       const token = resp.data.auth_token;
       setToken(token);
-      localStorage.setItem("AuthToken", token);
+      localStorage.setItem(authTokenName, token);
       setLoading(false);
       navigate("/");
     } catch {
