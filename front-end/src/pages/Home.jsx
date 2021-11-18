@@ -51,7 +51,7 @@ const Home = () => {
       const storToken = localStorage.getItem(authTokenName);
       if (storToken) setToken(storToken);
     }
-    if (!user.email) {
+    if (!user.email && token) {
       axios
         .get(`${API_URL}/user`, { headers: { Authorization: token } })
         .then((res) => {

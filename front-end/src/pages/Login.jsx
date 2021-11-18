@@ -1,39 +1,22 @@
 import React, { useState } from "react";
-import {
-  Avatar,
-  Button,
-  Container,
-  FormGroup,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { LockOutlined as LockOutlinedIcon } from "@mui/icons-material";
 import axios from "axios";
-import { Box } from "@mui/system";
 import { useAuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router";
 import constants from "../util/constants";
-// import MsIcon from '../auth_microsoft.svg';
+import { CredentialForm } from "../components";
 
-const API_URI = "http://localhost:5000";
+const API_URI = process.env.REACT_APP_API_URL;
 
 const Login = () => {
-  const {authTokenName} = constants;
+  const { authTokenName } = constants;
   const { setToken } = useAuthContext();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async (param) => {
     setLoading(true);
-    const userData = {
-      email,
-      password,
-    };
     try {
-      const resp = await axios.post(`${API_URI}/auth/login`, userData);
+      const resp = await axios.post(`${API_URI}/auth/login`, param);
       const token = resp.data.auth_token;
       setToken(token);
       localStorage.setItem(authTokenName, token);
@@ -44,71 +27,7 @@ const Login = () => {
     }
   };
 
-  const handleChange = (event) => {
-    switch (event.target.name) {
-      case "email":
-        setEmail(event.target.value);
-        break;
-      case "password":
-        setPassword(event.target.value);
-        break;
-      default:
-        break;
-    }
-  };
-  return (
-    <Container>
-      <Avatar>
-        <LockOutlinedIcon />
-      </Avatar>
-      <Typography component="h1" variant="h5">
-        Login
-      </Typography>
-      <Box
-        component="form"
-        sx={{ "& .MuiTextField-root": { m: 1, width: "25ch" } }}
-        noValidate
-        autoComplete="off"
-      >
-        <div>
-          <TextField
-            variant="outlined"
-            fullWidth
-            required
-            id="email"
-            name="email"
-            label="Email Address"
-            value={email}
-            onChange={handleChange}
-          />
-          <TextField
-            variant="outlined"
-            fullWidth
-            required
-            id="password"
-            name="password"
-            label="Password"
-            type="password"
-            value={password}
-            onChange={handleChange}
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            onClick={handleSubmit}
-            disabled={
-              loading || !Boolean(email.length) || !Boolean(password.length)
-            }
-          >
-            Sign in
-          </Button>
-        </div>
-        <FormGroup>{/* <FormControlLabel /> */}</FormGroup>
-      </Box>
-    </Container>
-  );
+  return <CredentialForm processForm={handleSubmit} isLoading={loading} />;
 };
 
 // const styles = (theme) => ({
