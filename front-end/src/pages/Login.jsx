@@ -2,25 +2,23 @@ import React, { useState } from "react";
 import {
   Avatar,
   Button,
-  CircularProgress,
   Container,
-  CssBaseline,
-  FormControlLabel,
   FormGroup,
-  Grid,
-  Link,
   TextField,
   Typography,
-  withStyles,
 } from "@mui/material";
 import { LockOutlined as LockOutlinedIcon } from "@mui/icons-material";
 import axios from "axios";
 import { Box } from "@mui/system";
+import { useAuthContext } from "../contexts/AuthContext";
+import { useNavigate } from "react-router";
 // import MsIcon from '../auth_microsoft.svg';
 
 const API_URI = "http://localhost:5000";
 
-const Login = ({ history }) => {
+const Login = () => {
+  const { setToken, setUser } = useAuthContext();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -32,11 +30,16 @@ const Login = ({ history }) => {
       email,
       password,
     };
-
-    const resp = await axios.post(`${API_URI}/auth/login`, userData);
-    localStorage.setItem("AuthToken", resp.data.token);
-    setLoading(false);
-    history.push("/");
+    try {
+      const resp = await axios.post(`${API_URI}/auth/login`, userData);
+      const token = resp.data.auth_token;
+      setToken(token);
+      localStorage.setItem("AuthToken", token);
+      setLoading(false);
+      navigate("/");
+    } catch {
+      setLoading(false);
+    }
   };
 
   const handleChange = (event) => {
@@ -93,7 +96,9 @@ const Login = ({ history }) => {
             variant="contained"
             color="primary"
             onClick={handleSubmit}
-            disabled={loading || !Boolean(email.length) || !Boolean(password.length)}
+            disabled={
+              loading || !Boolean(email.length) || !Boolean(password.length)
+            }
           >
             Sign in
           </Button>

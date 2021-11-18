@@ -3,6 +3,7 @@ import {
   Avatar,
   Box,
   CircularProgress,
+  Container,
   CssBaseline,
   Divider,
   Drawer,
@@ -28,7 +29,10 @@ import {
 } from "@mui/icons-material";
 // import axios from 'axios';
 import md5 from "md5";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useAuthContext } from "../contexts/AuthContext";
+import axios from "axios";
+import PublicHome from "../components/PublicHome";
 // import Account from '../components/Account';
 // import Todo from '../components/Todo';
 // import { authMiddleware } from '../util/auth';
@@ -72,14 +76,25 @@ import React, { useState } from "react";
 //   toolbar: theme.mixins.toolbar
 // });
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 const Home = () => {
+  const { token, user, setUser } = useAuthContext();
   const [isLoading, setIsLoading] = useState(false);
-  const [auth, setAuth] = useState(false);
+  // const [auth, setAuth] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const handleChange = () => {
-    setAuth(!auth);
-  };
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/user`, { headers: { Authorization: token } })
+      .then((res) => {
+        setUser(res.data);
+      });
+  }, []);
+
+  // const handleChange = () => {
+  //   setAuth(!auth);
+  // };
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -93,9 +108,9 @@ const Home = () => {
     return <CircularProgress size={150} />;
   }
   return (
-    <>
+    <Container>
       <Box sx={{ flexGrow: 1 }}>
-        <FormGroup>
+        {/* <FormGroup>
           <FormControlLabel
             control={
               <Switch
@@ -106,49 +121,62 @@ const Home = () => {
             }
             label={auth ? "Login" : "Logout"}
           />
-        </FormGroup>
+        </FormGroup> */}
         <AppBar position="static">
           <Toolbar>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2 }}
+            {token && (
+              <IconButton
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                sx={{ mr: 2 }}
+              >
+                <MenuIcon />
+              </IconButton>
+            )}
+            <Typography
+              variant="h6"
+              component="div"
+              sx={{ flexGrow: 1 }}
+              align="center"
             >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Honey Dew
             </Typography>
-            {auth && (
-              <div>
-                <IconButton
-                  size="large"
-                  aria-label="account of current user"
-                  aria-controls="menu-appbar"
-                  aria-haspopup="true"
-                  onClick={handleMenu}
-                  color="inherit"
-                >
-                  <AccountCircle />
-                </IconButton>
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={anchorEl}
-                  anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                  keepMounted
-                  transformOrigin={{ vertical: "top", horizontal: "right" }}
-                  open={Boolean(anchorEl)}
-                  onClose={handleClose}
-                >
-                  <MenuItem onClick={handleClose}>Profile</MenuItem>
-                  <MenuItem onClick={handleClose}>My Account</MenuItem>
-                </Menu>
-              </div>
+            {token && (
+              <>
+                <Typography variant="body1" component="div">
+                  {user?.email}
+                </Typography>
+                <div>
+                  <IconButton
+                    size="large"
+                    aria-label="account of current user"
+                    aria-controls="menu-appbar"
+                    aria-haspopup="true"
+                    onClick={handleMenu}
+                    color="inherit"
+                  >
+                    <AccountCircle />
+                  </IconButton>
+                  <Menu
+                    id="menu-appbar"
+                    anchorEl={anchorEl}
+                    anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                    keepMounted
+                    transformOrigin={{ vertical: "top", horizontal: "right" }}
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                  >
+                    <MenuItem onClick={handleClose}>Profile</MenuItem>
+                    <MenuItem onClick={handleClose}>My Account</MenuItem>
+                  </Menu>
+                </div>
+              </>
             )}
           </Toolbar>
         </AppBar>
+        {!token && <PublicHome />}
       </Box>
       {/* <Drawer variant="permanent">
         <Divider />
@@ -173,7 +201,7 @@ const Home = () => {
           </ListItem>
         </List>
       </Drawer> */}
-    </>
+    </Container>
   );
 };
 
