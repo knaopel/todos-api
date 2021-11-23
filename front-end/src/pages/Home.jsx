@@ -30,29 +30,24 @@ import {
 import md5 from "md5";
 import React, { useEffect, useState } from "react";
 import { useAuthContext } from "../contexts/AuthContext";
-import axios from "axios";
-import PublicHome from "../components/PublicHome";
-import constants from "../util/constants";
-import { Header, Todos } from "../components";
+import { PublicHome, Todos } from "../components";
+import TodoService from "../services/todo-service";
 // import Account from '../components/Account';
-// import Todo from '../components/Todo';
 // import { authMiddleware } from '../util/auth';
-
-const API_URL = process.env.REACT_APP_API_URL;
 
 const Home = () => {
   const { token } = useAuthContext();
   const [isLoading, setIsLoading] = useState(false);
   const [todos, setTodos] = useState([]);
-  const { authTokenName } = constants;
 
   useEffect(() => {
     if (token) {
+      const todoSvc = new TodoService(token);
       setIsLoading(true);
-      axios
-        .get(`${API_URL}/todos`, { headers: { Authorization: token } })
-        .then((resp) => {
-          setTodos(resp.data);
+      todoSvc
+        .getTodos()
+        .then((data) => {
+          setTodos(data);
           setIsLoading(false);
         })
         .catch((err) => {
