@@ -1,13 +1,14 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import React from "react";
+import React, { useState } from "react";
 import {
-  Container,
+  Box,
   CssBaseline,
   ThemeProvider,
+  Toolbar,
 } from "@mui/material";
 import { AuthProvider } from "./contexts/AuthContext";
 import { Login, Home, Signup } from "./pages";
-import { Copyright } from "./components";
+import { Copyright, Header } from "./components";
 import theme from "./util/theme";
 
 import "./App.css";
@@ -18,20 +19,28 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
 const App = () => {
+  const [open, setOpen] = useState(false);
+  const toggleDrawer = () => {
+    setOpen(!open);
+  };
   return (
     <AuthProvider>
       <ThemeProvider theme={theme}>
-        <Container component="main" maxWidth="s">
+        <Box sx={{ display: "flex", p: "1em" }}>
           <CssBaseline />
-          <Router>
-            <Routes>
-              <Route exact path="/" element={<Home />} />
-              <Route exact path="/login" element={<Login />} />
-              <Route exact path="/signup" element={<Signup />} />
-            </Routes>
-          </Router>
-          <Copyright sx={{ mt: 5 }} />
-        </Container>
+          <Header />
+          <Box component="main" sx={{ flexGrow: 1 }}>
+            <Toolbar />
+            <Router>
+              <Routes>
+                <Route exact path="/" element={<Home />} />
+                <Route exact path="/login" element={<Login />} />
+                <Route exact path="/signup" element={<Signup />} />
+              </Routes>
+            </Router>
+            <Copyright sx={{ mt: 5 }} />
+          </Box>
+        </Box>
       </ThemeProvider>
     </AuthProvider>
   );

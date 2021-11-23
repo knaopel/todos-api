@@ -1,1 +1,2 @@
-export default { authTokenName: "bzk-Auth-token" };
+const contants = { authTokenName: "bzk-Auth-token" };
+export default contants;

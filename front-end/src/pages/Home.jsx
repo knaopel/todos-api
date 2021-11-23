@@ -9,6 +9,7 @@ import {
   Drawer,
   FormControlLabel,
   FormGroup,
+  Grid,
   IconButton,
   List,
   ListItem,
@@ -18,7 +19,6 @@ import {
   Switch,
   Toolbar,
   Typography,
-  withStyles,
 } from "@mui/material";
 import {
   Menu as MenuIcon,
@@ -27,13 +27,13 @@ import {
   ExitToApp as ExitToAppIcon,
   AccountCircle,
 } from "@mui/icons-material";
-// import axios from 'axios';
 import md5 from "md5";
 import React, { useEffect, useState } from "react";
 import { useAuthContext } from "../contexts/AuthContext";
 import axios from "axios";
 import PublicHome from "../components/PublicHome";
 import constants from "../util/constants";
+import { Header, Todos } from "../components";
 // import Account from '../components/Account';
 // import Todo from '../components/Todo';
 // import { authMiddleware } from '../util/auth';
@@ -41,127 +41,65 @@ import constants from "../util/constants";
 const API_URL = process.env.REACT_APP_API_URL;
 
 const Home = () => {
-  const { token, user, setUser, setToken } = useAuthContext();
+  const { token } = useAuthContext();
   const [isLoading, setIsLoading] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [todos, setTodos] = useState([]);
   const { authTokenName } = constants;
 
   useEffect(() => {
-    if (!token) {
-      const storToken = localStorage.getItem(authTokenName);
-      if (storToken) setToken(storToken);
-    }
-    if (!user.email && token) {
+    if (token) {
+      setIsLoading(true);
       axios
-        .get(`${API_URL}/user`, { headers: { Authorization: token } })
-        .then((res) => {
-          setUser(res.data);
+        .get(`${API_URL}/todos`, { headers: { Authorization: token } })
+        .then((resp) => {
+          setTodos(resp.data);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setIsLoading(false);
         });
     }
-  }, [user]);
-
-
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleLogout = () => {
-    setToken(null);
-    localStorage.removeItem(authTokenName);
-    handleClose();
-  };
+  }, [token]);
 
   if (isLoading === true) {
     return <CircularProgress size={150} />;
   }
+  if (!token) {
+    return <PublicHome />;
+  }
   return (
-    <Container>
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static">
-          <Toolbar>
-            {token && (
-              <IconButton
-                size="large"
-                edge="start"
-                color="inherit"
-                aria-label="menu"
-                sx={{ mr: 2 }}
-              >
-                <MenuIcon />
-              </IconButton>
-            )}
-            <Typography
-              variant="h6"
-              component="div"
-              sx={{ flexGrow: 1 }}
-              align="center"
-            >
-              Honey Dew
-            </Typography>
-            {token && (
-              <>
-                <Typography variant="body1" component="div">
-                  {user?.email}
-                </Typography>
-                <div>
-                  <IconButton
-                    size="large"
-                    aria-label="account of current user"
-                    aria-controls="menu-appbar"
-                    aria-haspopup="true"
-                    onClick={handleMenu}
-                    color="inherit"
-                  >
-                    <AccountCircle />
-                  </IconButton>
-                  <Menu
-                    id="menu-appbar"
-                    anchorEl={anchorEl}
-                    anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                    keepMounted
-                    transformOrigin={{ vertical: "top", horizontal: "right" }}
-                    open={Boolean(anchorEl)}
-                    onClose={handleClose}
-                  >
-                    <MenuItem onClick={handleClose}>Profile</MenuItem>
-                    <MenuItem onClick={handleClose}>My Account</MenuItem>
-                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
-                  </Menu>
-                </div>
-              </>
-            )}
-          </Toolbar>
-        </AppBar>
-        {!token && <PublicHome />}
-      </Box>
-      {/* <Drawer variant="permanent">
-        <Divider />
-        <Avatar />
-        <Typography variant="body1">Kurt Opel</Typography>
-        <Divider />
-        <List>
-          <ListItem button key="Todo">
-            <ListItemIcon>
-              <NotesIcon />
-            </ListItemIcon>
-          </ListItem>
-          <ListItem button key="Account">
-            <ListItemIcon>
-              <AccountBoxIcon />
-            </ListItemIcon>
-          </ListItem>
-          <ListItem button key="Logout">
-            <ListItemIcon>
-              <ExitToAppIcon />
-            </ListItemIcon>
-          </ListItem>
-        </List>
-      </Drawer> */}
-    </Container>
+    <Box sx={{ flexGrow: 1 }}>
+      <Todos data={todos} />
+      <Grid container spacing={2}>
+        <Grid item>
+          <Typography>TODO: Add a todo, etc...</Typography>
+        </Grid>
+      </Grid>
+    </Box>
+    // <Drawer variant="permanent">
+    //   <Divider />
+    //   <Avatar />
+    //   <Typography variant="body1">Kurt Opel</Typography>
+    //   <Divider />
+    //   <List>
+    //     <ListItem button key="Todo">
+    //       <ListItemIcon>
+    //         <NotesIcon />
+    //       </ListItemIcon>
+    //     </ListItem>
+    //     <ListItem button key="Account">
+    //       <ListItemIcon>
+    //         <AccountBoxIcon />
+    //       </ListItemIcon>
+    //     </ListItem>
+    //     <ListItem button key="Logout">
+    //       <ListItemIcon>
+    //         <ExitToAppIcon />
+    //       </ListItemIcon>
+    //     </ListItem>
+    //   </List>
+    // </Drawer>
   );
 };
 

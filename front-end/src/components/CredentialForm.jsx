@@ -1,8 +1,6 @@
 import {
   Avatar,
   Box,
-  Checkbox,
-  FormControlLabel,
   Grid,
   Link,
   TextField,
