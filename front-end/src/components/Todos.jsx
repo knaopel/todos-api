@@ -8,7 +8,7 @@ const Todos = ({ data }) => {
   return (
     <Grid container spacing={2}>
       {data.map((todo) => (
-        <TodoItem todo={todo} />
+        <TodoItem key={todo.id} todo={todo} />
       ))}
     </Grid>
   );

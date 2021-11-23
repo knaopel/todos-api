@@ -8,12 +8,10 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useAuthContext } from "../contexts/AuthContext";
 import contants from "../util/constants";
-
-const API_URL = process.env.REACT_APP_API_URL;
+import UserService from "../services/user-service";
 
 const Header = () => {
   const { token, setToken, user, setUser } = useAuthContext();
@@ -27,11 +25,12 @@ const Header = () => {
       if (storToken) setToken(storToken);
     }
     if (token && !user.email) {
+      const userSvc = new UserService(token);
       setIsLoading(true);
-      axios
-        .get(`${API_URL}/user`, { headers: { Authorization: token } })
-        .then((resp) => {
-          setUser(resp.data);
+      userSvc
+        .getUser()
+        .then((data) => {
+          setUser(data);
           setIsLoading(false);
         })
         .catch((err) => {

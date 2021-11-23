@@ -1,13 +1,7 @@
 import axios from 'axios';
 import BaseService from './base-service';
 
-// const API_URL = process.env.REACT_APP_API_URL;
-
 class TodoService extends BaseService {
-  // eslint-disable-next-line no-useless-constructor
-  constructor(token) {
-    super(token);
-  }
 
   getTodos() {
     return new Promise((resolve, reject) => {

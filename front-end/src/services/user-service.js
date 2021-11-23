@@ -2,6 +2,7 @@ import axios from 'axios';
 import BaseService from './base-service';
 
 class UserService extends BaseService {
+
   getUser() {
     return new Promise((resolve, reject) => {
       axios
