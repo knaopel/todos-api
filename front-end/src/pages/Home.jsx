@@ -32,6 +32,7 @@ import React, { useEffect, useState } from "react";
 import { useAuthContext } from "../contexts/AuthContext";
 import { PublicHome, Todos } from "../components";
 import TodoService from "../services/todo-service";
+import { Link } from "react-router-dom";
 // import Account from '../components/Account';
 // import { authMiddleware } from '../util/auth';
 
@@ -68,6 +69,7 @@ const Home = () => {
       <Todos data={todos} />
       <Grid container spacing={2}>
         <Grid item>
+          <Link to="/todos/new">Add A new HoneyDew</Link>
           <Typography>TODO: Add a todo, etc...</Typography>
         </Grid>
       </Grid>
