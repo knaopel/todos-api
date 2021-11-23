@@ -6,7 +6,9 @@ import TodoService from "../services/todo-service";
 
 const TodoForm = ({ edit, view, id }) => {
   const { token, user } = useAuthContext();
-  const pageTitle = edit ? "Edit Todo" : "View Todo";
+  let pageTitle = "Add Todo";
+  if (edit) pageTitle = "Edit Todo";
+  else if (id) pageTitle = "View Todo";
   const [todo, setTodo] = useState({ title: "", body: "" });
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
@@ -25,6 +27,23 @@ const TodoForm = ({ edit, view, id }) => {
     const updatedTodo = { ...todo };
     updatedTodo[target.name] = target.value;
     setTodo(updatedTodo);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setIsLoading(true);
+    const todoSvc = new TodoService(token);
+    let svcMethod = todoSvc.createTodo;
+    if (edit) svcMethod = todoSvc.updateTodo;
+    svcMethod(todo)
+      .then((data) => {
+        console.log(data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+      });
   };
   return (
     <Box
@@ -72,15 +91,15 @@ const TodoForm = ({ edit, view, id }) => {
           fullWidth
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
-          onClick={() => console.log("handleSubmit()")}
+          onClick={handleSubmit}
           disabled={false}
         >
           {id ? "Update" : "Add Todo"}
         </LoadingButton>
       </Box>
-      {view && <div>Viewing #{id}</div>}
+      {/* {view && <div>Viewing #{id}</div>}
       {edit && <div>Editing #{id}</div>}
-      {!edit && !view && <div>Adding</div>}
+      {!edit && !view && <div>Adding</div>} */}
     </Box>
   );
 };
