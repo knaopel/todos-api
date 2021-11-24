@@ -57,6 +57,11 @@ class TodoService extends BaseService {
     });
   }
 
+  completeTodo(todo) {
+    todo.is_completed = true;
+    return this.updateTodo(todo);
+  }
+
   deleteTodo(id) {
     return new Promise((resolve, reject) => {
       axios

@@ -33,9 +33,9 @@ const TodoForm = ({ edit, view, id }) => {
     event.preventDefault();
     setIsLoading(true);
     const todoSvc = new TodoService(token);
-    let svcMethod = todoSvc.createTodo;
-    if (edit) svcMethod = todoSvc.updateTodo;
-    svcMethod(todo)
+    let svcMethod = 'createTodo';
+    if (edit) svcMethod = 'updateTodo';
+    todoSvc[svcMethod](todo)
       .then((data) => {
         console.log(data);
         setIsLoading(false);
