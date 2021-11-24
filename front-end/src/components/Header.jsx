@@ -1,6 +1,7 @@
-import { AccountCircle, Menu as MenuIcon } from "@mui/icons-material";
+import { Menu as MenuIcon } from "@mui/icons-material";
 import {
   AppBar,
+  Avatar,
   CircularProgress,
   IconButton,
   Menu,
@@ -12,6 +13,7 @@ import { useEffect, useState } from "react";
 import { useAuthContext } from "../contexts/AuthContext";
 import contants from "../util/constants";
 import UserService from "../services/user-service";
+import md5 from 'md5';
 
 const Header = () => {
   const { token, setToken, user, setUser } = useAuthContext();
@@ -39,6 +41,12 @@ const Header = () => {
         });
     }
   }, [user, setUser, token, setToken, authTokenName]);
+
+  const buildAvatarUrl = email => {
+    const formattedEmail = ('' + email).trim().toLowerCase();
+    const hash = md5(formattedEmail);
+    return `//www.gravatar.com/avatar/${hash}.jpg`;
+  };
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -94,7 +102,7 @@ const Header = () => {
                 onClick={handleMenu}
                 color="inherit"
               >
-                <AccountCircle />
+                <Avatar src={buildAvatarUrl(user?.email)} />
               </IconButton>
               <Menu
                 id="menu-appbar"
