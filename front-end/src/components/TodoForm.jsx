@@ -1,11 +1,13 @@
 import { LoadingButton } from "@mui/lab";
 import { Box, Grid, Link, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useNavigate } from 'react-router';
 import { useAuthContext } from "../contexts/AuthContext";
 import TodoService from "../services/todo-service";
 
 const TodoForm = ({ edit, view, id }) => {
   const { token, user } = useAuthContext();
+  const navigate = useNavigate();
   let pageTitle = "Add Todo";
   if (edit) pageTitle = "Edit Todo";
   else if (id) pageTitle = "View Todo";
@@ -39,6 +41,7 @@ const TodoForm = ({ edit, view, id }) => {
       .then((data) => {
         console.log(data);
         setIsLoading(false);
+        navigate('/');
       })
       .catch((err) => {
         console.log(err);

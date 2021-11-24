@@ -10,18 +10,38 @@ import {
   Check as CheckIcon,
   Edit as EditIcon,
 } from "@mui/icons-material";
+import { useNavigate } from 'react-router';
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import React from "react";
+import React, { useState } from "react";
+import TodoService from '../services/todo-service';
+import { useAuthContext } from '../contexts/AuthContext';
 
 dayjs.extend(relativeTime);
 
 const TodoItem = ({ todo }) => {
-  // const handleChange = (event) => {
-  //   this.setState({
-  //     [event.target.name]: event.target.value,
-  //   });
-  // };
+  const [isLoading, setIsLoading] = useState(false);
+  const { token } = useAuthContext();
+  const navigate = useNavigate();
+
+  const handleEdit = event => {
+    const { id } = todo;
+    navigate(`/todos/${id}/edit`);
+  };
+
+  const handleComplete = () => {
+    setIsLoading(true);
+    const todoSvc = new TodoService(token);
+    todoSvc
+      .completeTodo(todo)
+      .then(data => {
+        console.log(data);
+        setIsLoading(false);
+      }).catch(err => {
+        console(err);
+        setIsLoading(false);
+      });
+  };
 
   return (
     <Grid key={todo.id} item xs={12} sm={6}>
@@ -43,7 +63,8 @@ const TodoItem = ({ todo }) => {
             size="small"
             color="secondary"
             title="Complete"
-            onClick={() => console.log("TODO: complete this action", todo)}
+            onClick={handleComplete}
+            disabled={isLoading}
           >
             <CheckIcon />
           </Button>
@@ -52,7 +73,7 @@ const TodoItem = ({ todo }) => {
             size="small"
             color="secondary"
             title="Edit"
-            onClick={() => console.log("TODO: Complete this action", todo)}
+            onClick={handleEdit}
           >
             <EditIcon />
           </Button>
