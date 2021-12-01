@@ -8,3 +8,4 @@ import TodoForm from "./TodoForm";
 import Todos from "./Todos";
 
 export { Copyright, CredentialForm, Header, PublicHome, TodoForm, Todos };
+export * from './PrivateRoute';

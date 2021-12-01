@@ -5,15 +5,16 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useAuthContext } from "../contexts/AuthContext";
+// import { useAuthContext } from "../contexts/AuthContext";
 import { PublicHome, Todos } from "../components";
 import TodoService from "../services/todo-service";
 import { Link } from "react-router-dom";
+import authStore from '../stores/authStore';
 
 const Home = () => {
-  const { token } = useAuthContext();
   const [isLoading, setIsLoading] = useState(false);
   const [todos, setTodos] = useState([]);
+  const [token] = useState(authStore.getToken());
 
   useEffect(() => {
     if (token) {

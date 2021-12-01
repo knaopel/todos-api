@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useAuthContext } from "../contexts/AuthContext";
+// import { useAuthContext } from "../contexts/AuthContext";
+import * as authActions from '../actions/authActions';
 import { useNavigate } from "react-router";
 import constants from "../util/constants";
 import { CredentialForm } from "../components";
@@ -9,16 +10,16 @@ const API_URI = process.env.REACT_APP_API_URL;
 
 const Login = () => {
   const { authTokenName } = constants;
-  const { setToken } = useAuthContext();
+  // const { setToken } = useAuthContext();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (param) => {
     setLoading(true);
     try {
-      const resp = await axios.post(`${API_URI}/auth/login`, param);
-      const token = resp.data.auth_token;
-      setToken(token);
+      const { data } = await axios.post(`${API_URI}/auth/login`, param);
+      const token = data.auth_token;
+      authActions.setUserToken(token);
       localStorage.setItem(authTokenName, token);
       setLoading(false);
       navigate("/");
