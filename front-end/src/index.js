@@ -1,18 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { Provider as ReduxProvider } from 'react-redux';
+import App from './components/App';
+import configureStore from './redux/configureStore';
 
-import { configureFakeBackend, store } from './helpers';
-import { App2 } from './App2/App2';
+// import { configureFakeBackend, store } from './helpers';
+// import { App2 } from './App2/App2';
 // import reportWebVitals from './reportWebVitals';
 
+const store = configureStore();
 // setup fake backend
-configureFakeBackend();
+// configureFakeBackend();
 
 ReactDOM.render(
-  <Provider store={store}>
-    <App2 />
-  </Provider>,
+  <ReduxProvider store={store}>
+    <Router>
+      <App />
+    </Router>
+  </ReduxProvider>,
   document.getElementById('app')
 );
 
