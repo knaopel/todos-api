@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
   # namespace :v1 do
   #   get 'users/show'
   # end
@@ -24,9 +23,11 @@ Rails.application.routes.draw do
 
     resources :todos do
       resources :items
-    end      
+    end
   end
 
+  resources :authors
+  resources :courses      
 
   post 'auth/login', to: 'authentication#authenticate'
   post 'signup', to: 'users#create'
