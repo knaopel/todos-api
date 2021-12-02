@@ -4,7 +4,6 @@ import { loadCourses, saveCourse } from '../../redux/actions/courseActions';
 import { loadAuthors } from '../../redux/actions/authorActions';
 import PropTypes from 'prop-types';
 import CourseForm from './CourseForm';
-// import { newCourse } from "../../../tools/mockData";
 import Spinner from '../common/Spinner';
 import { toast } from 'react-toastify';
 
@@ -15,7 +14,7 @@ const newCourse = {
   category: '',
 };
 
-export const ManageCoursePage = ({
+const ManageCoursePage = ({
   courses,
   authors,
   loadAuthors,
@@ -42,7 +41,7 @@ export const ManageCoursePage = ({
         alert('Loading authors failed' + error);
       });
     }
-  }, [props.course]);
+  }, [props.course, authors.length, courses.length, loadAuthors, loadCourses]);
 
   function handleChange(event) {
     const { name, value } = event.target;
