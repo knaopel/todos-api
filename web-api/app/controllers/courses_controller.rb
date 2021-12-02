@@ -15,7 +15,10 @@ class CoursesController < ApplicationController
 
   # POST /courses
   def create
-    @course = Course.create!(course_params)
+    @course = Course.new(course_params)
+    slug = @course.title.gsub(/[^a-z0-9_]+/i, "-").gsub(/^-|-$/, "").downcase
+    @course.slug = slug
+    @course.save
     json_response(@course, :created)
   end
 
