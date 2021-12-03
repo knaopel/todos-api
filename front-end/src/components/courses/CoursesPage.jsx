@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { loadCourses, deleteCourse } from '../../redux/actions/courseActions';
 import { loadAuthors } from '../../redux/actions/authorActions';
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import Spinner from '../common/Spinner';
 import { toast } from 'react-toastify';
 import CourseList from './CourseList';
@@ -39,7 +39,7 @@ const CoursesPage = ({
 
   return (
     <>
-      {redirectToAddCoursePage && <Redirect to='/courses/new' />}
+      {redirectToAddCoursePage && <Navigate to='/courses/new' />}
       <h2>Courses</h2>
       {loading ? (
         <Spinner />

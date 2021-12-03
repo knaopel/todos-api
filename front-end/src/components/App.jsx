@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Header from './common/Header';
 import AboutPage from './about/AboutPage';
 import HomePage from './home/HomePage';
@@ -10,13 +10,13 @@ import { ToastContainer } from 'react-toastify';
 const App = () => (
   <div className='container-fluid'>
     <Header />
-    <Switch>
-      <Route exact path='/' component={HomePage} />
-      <Route path='/about' component={AboutPage} />
-      <Route path='/courses/new' component={ManageCoursePage} />
-      <Route path='/courses/:slug' component={ManageCoursePage} />
-      <Route path='/courses' component={CoursesPage} />
-    </Switch>
+    <Routes>
+      <Route exact path='/' element={<HomePage />} />
+      <Route path='/about' element={<AboutPage />} />
+      <Route path='/courses/new' element={<ManageCoursePage />} />
+      <Route path='/courses/:slug' element={<ManageCoursePage />} />
+      <Route path='/courses' element={<CoursesPage />} />
+    </Routes>
     <ToastContainer autoClose={3000} hideProgressBar />
   </div>
 );
