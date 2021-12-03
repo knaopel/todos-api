@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { loadCourses, saveCourse } from '../../redux/actions/courseActions';
+import {
+  loadCourses,
+  saveCourse,
+} from '../../redux/actions/courseActions';
 import { loadAuthors } from '../../redux/actions/authorActions';
 import PropTypes from 'prop-types';
 import CourseForm from './CourseForm';
 import Spinner from '../common/Spinner';
 import { toast } from 'react-toastify';
+import { useParams } from 'react-router';
 
 const newCourse = {
   id: null,
@@ -15,17 +19,19 @@ const newCourse = {
 };
 
 const ManageCoursePage = ({
-  courses,
   authors,
+  courses,
   loadAuthors,
   loadCourses,
+  apiCallsInProgress,
   saveCourse,
   history,
   ...props
 }) => {
-  const [course, setCourse] = useState({ ...props.course });
+  const [course, setCourse] = useState(newCourse);
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
+  const { slug } = useParams();
 
   useEffect(() => {
     if (courses.length === 0) {
@@ -33,7 +39,12 @@ const ManageCoursePage = ({
         alert('Loading courses failed' + error);
       });
     } else {
-      setCourse({ ...props.course });
+      const getCourseBySlug = slug => {
+        return courses.find(course => course.slug === slug);
+      };
+      const currentCourse =
+        slug && courses.length > 0 ? getCourseBySlug(slug) : newCourse;
+      setCourse(currentCourse);
     }
 
     if (authors.length === 0) {
@@ -41,7 +52,14 @@ const ManageCoursePage = ({
         alert('Loading authors failed' + error);
       });
     }
-  }, [props.course, authors.length, courses.length, loadAuthors, loadCourses]);
+  }, [
+    courses,
+    courses.length,
+    authors.length,
+    slug,
+    loadCourses,
+    loadAuthors,
+  ]);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -79,7 +97,7 @@ const ManageCoursePage = ({
       });
   }
 
-  return authors.length === 0 || courses.length === 0 ? (
+  return apiCallsInProgress > 0 ? (
     <Spinner />
   ) : (
     <CourseForm
@@ -94,7 +112,6 @@ const ManageCoursePage = ({
 };
 
 ManageCoursePage.propTypes = {
-  course: PropTypes.object.isRequired,
   authors: PropTypes.array.isRequired,
   courses: PropTypes.array.isRequired,
   loadCourses: PropTypes.func.isRequired,
@@ -108,14 +125,9 @@ export function getCourseBySlug(courses, slug) {
 }
 
 function mapStateToProps(state, ownProps) {
-  const slug = ownProps?.match?.params?.slug;
-  const course =
-    slug && state.courses.length > 0
-      ? getCourseBySlug(state.courses, slug)
-      : newCourse;
   return {
-    course,
     courses: state.courses,
+    apiCallsInProgress: state.apiCallsInProgress,
     authors: state.authors,
   };
 }

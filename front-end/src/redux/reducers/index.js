@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import apiCallsInProgress from './apiStatusReducer';
 import authors from './authorReducer'
-import courses from './courseReducer';
+import courses from './coursesReducer';
 import todos from './todoReducer';
 
 const rootReducer = combineReducers({
