@@ -1,6 +1,6 @@
 class CoursesController < ApplicationController
  skip_before_action :authorize_request
- before_action :set_course, only: [:show, :update, :destroy]
+ before_action :set_course, only: [:update, :destroy]
 
   #  GET /courses
   def index
@@ -10,7 +10,13 @@ class CoursesController < ApplicationController
 
   # GET /courses/:id
   def show
-    json_response(@course)
+    id = params[:id]
+    if id.match(/^(\d)+$/)
+      course = Course.find(id)
+    else
+      course = Course.find_by(slug: params[:id])
+    end
+    json_response(course)
   end
 
   # POST /courses
