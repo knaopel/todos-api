@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import {
-  loadCourses,
-  saveCourse,
-} from '../../redux/actions/courseActions';
+import { loadCourses, saveCourse } from '../../redux/actions/courseActions';
 import { loadAuthors } from '../../redux/actions/authorActions';
 import PropTypes from 'prop-types';
 import CourseForm from './CourseForm';
 import Spinner from '../common/Spinner';
 import { toast } from 'react-toastify';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 
 const newCourse = {
   id: null,
@@ -25,13 +22,12 @@ const ManageCoursePage = ({
   loadCourses,
   apiCallsInProgress,
   saveCourse,
-  history,
-  ...props
 }) => {
   const [course, setCourse] = useState(newCourse);
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
   const { slug } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (courses.length === 0) {
@@ -52,14 +48,7 @@ const ManageCoursePage = ({
         alert('Loading authors failed' + error);
       });
     }
-  }, [
-    courses,
-    courses.length,
-    authors.length,
-    slug,
-    loadCourses,
-    loadAuthors,
-  ]);
+  }, [courses, courses.length, authors.length, slug, loadCourses, loadAuthors]);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -89,7 +78,7 @@ const ManageCoursePage = ({
     saveCourse(course)
       .then(() => {
         toast.success('Course saved.');
-        history.push('/courses');
+        navigate('/courses');
       })
       .catch(error => {
         setSaving(false);
@@ -117,7 +106,6 @@ ManageCoursePage.propTypes = {
   loadCourses: PropTypes.func.isRequired,
   loadAuthors: PropTypes.func.isRequired,
   saveCourse: PropTypes.func.isRequired,
-  history: PropTypes.object.isRequired,
 };
 
 export function getCourseBySlug(courses, slug) {
