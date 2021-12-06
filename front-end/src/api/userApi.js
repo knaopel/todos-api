@@ -16,7 +16,7 @@ export function saveTodo(todo) {
 }
 
 export function deleteTodo(todoId) {
-  return fetch(basUrl + todoId, { method: 'DELETE' })
+  return fetch(baseUrl + todoId, { method: 'DELETE' })
     .then(handleResponse)
     .catch(handleError);
 }

@@ -8,7 +8,7 @@ export function login(username, password) {
     body: JSON.stringify({ username, password }),
   };
 
-  return fetch(`${baseUrl}/users/authenticate`)
+  return fetch(`${baseUrl}/users/authenticate`, requestOptions)
     .then(handleResponse)
     .catch(handleError);
 }
