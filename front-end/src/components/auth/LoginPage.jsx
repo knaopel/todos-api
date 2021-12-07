@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import {useNavigate} from 'react-router'
 import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
 import { loginUser } from '../../redux/actions/authActions';
@@ -8,6 +9,8 @@ const LoginPage = ({ token, loginUser }) => {
   const [credentials, setCredentials] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({});
   const [loggingIn, setLoggingIn] = useState(false);
+  const navigate = useNavigate();
+  
 
   function handleChange({ target }) {
     const { name, value } = target;
@@ -36,6 +39,7 @@ const LoginPage = ({ token, loginUser }) => {
       .then(() => {
         toast.success('User logged in!');
         setLoggingIn(false);
+        navigate('/todos');
       })
       .catch(error => {
         setLoggingIn(false);
