@@ -4,6 +4,7 @@ import user from './authReducer';
 import authors from './authorReducer';
 import courses from './coursesReducer';
 import todos from './todoReducer';
+// import user from './userReducer'
 
 const rootReducer = combineReducers({
   authors,

@@ -1,6 +1,17 @@
 import { handleError, handleResponse } from './apiUtils';
-const baseUrl = process.env.REACT_APP_API_URL + '/user/';
+import axios from 'axios';
+const baseUrl = process.env.REACT_APP_API_URL;
 const KEY_NAME = 'user';
+
+const getHeaders = auth_token => {
+  return {
+    Authorization: auth_token,
+  };
+};
+
+export function login(email, password) {
+  return axios.post(`${baseUrl}/auth/login`, { email, password });
+}
 
 export const getLocalUser = () => {
   return new Promise(resolve => {
@@ -16,6 +27,10 @@ export const setLocalUser = user => {
     localStorage.setItem(KEY_NAME, userStr);
     resolve(user);
   });
+};
+
+export const getUser = auth_token => {
+  return axios.get(baseUrl, { headers: getHeaders(auth_token) });
 };
 
 export function getTodos() {

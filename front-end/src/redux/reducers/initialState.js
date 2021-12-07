@@ -3,6 +3,8 @@ export default {
   authors: [],
   courses: [],
   todos: [],
-  user: {},
+  user: {
+    auth_token: null,
+  },
   apiCallsInProgress: 0,
 };
