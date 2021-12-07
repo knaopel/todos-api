@@ -6,6 +6,7 @@ import HomePage from './home/HomePage';
 import CoursesPage from './courses/CoursesPage';
 import ManageCoursePage from './courses/ManageCoursePage';
 import { ToastContainer } from 'react-toastify';
+import LoginPage from './auth/LoginPage';
 
 const App = () => (
   <div className='container-fluid'>
@@ -13,6 +14,7 @@ const App = () => (
     <Routes>
       <Route exact path='/' element={<HomePage />} />
       <Route path='/about' element={<AboutPage />} />
+      <Route path='/login' element={<LoginPage />} />
       <Route path='/courses/new' element={<ManageCoursePage />} />
       <Route path='/courses/:slug' element={<ManageCoursePage />} />
       <Route path='/courses' element={<CoursesPage />} />

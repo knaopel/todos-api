@@ -11,6 +11,14 @@ const Header = () => {
         Home
       </NavLink>
       {' | '}
+      <NavLink to='/login' style={({ isActive }) => activeStyle(isActive)}>
+        Login
+      </NavLink>
+      {' | '}
+      <NavLink to='/todos' style={({ isActive }) => activeStyle(isActive)}>
+        Todos
+      </NavLink>
+      {' | '}
       <NavLink to='/courses' style={({ isActive }) => activeStyle(isActive)}>
         Courses
       </NavLink>
