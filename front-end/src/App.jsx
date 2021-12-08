@@ -20,31 +20,29 @@ const App = () => {
     setOpen(!open);
   };
   return (
-    // <AuthProvider>
     <ThemeProvider theme={theme}>
       <Box sx={{ display: 'flex', p: '1em' }}>
         <CssBaseline />
-           <Header /> 
-        {/*  <Box component='main' sx={{ flexGrow: 1 }}>
-            <Toolbar />
-            <Router>
-              <Routes>
-                <Route exact path='/' element={<Home />} />
-                <Route exact path='login' element={<Login />} />
-                <Route exact path='signup' element={<Signup />} />
-                <Route path='todos'>
-                  <Route path='new' element={<Todo />} />
-                  <Route path=':id' element={<Todo view />} />
-                  <Route path=':id/edit' element={<Todo edit />} />
-                  <Route path='' element={<div>Nothing to see here</div>} />
-                </Route>
-              </Routes>
-            </Router>
-            <Copyright sx={{ mt: 5 }} />
-          </Box> */}
+        <Header />
+        <Box component='main' sx={{ flexGrow: 1 }}>
+          <Toolbar />
+          <Router>
+            <Routes>
+              <Route exact path='/' element={<Home />} />
+              <Route exact path='login' element={<Login />} />
+              {/* <Route exact path='signup' element={<Signup />} />
+              <Route path='todos'>
+                <Route path='new' element={<Todo />} />
+                <Route path=':id' element={<Todo view />} />
+                <Route path=':id/edit' element={<Todo edit />} />
+                <Route path='' element={<div>Nothing to see here</div>} />
+              </Route> */}
+            </Routes>
+          </Router>
+          <Copyright sx={{ mt: 5 }} />
+        </Box>
       </Box>
     </ThemeProvider>
-    // </AuthProvider>
   );
 };
 

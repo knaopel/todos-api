@@ -15,9 +15,7 @@ const store = configureStore();
 
 ReactDOM.render(
   <ReduxProvider store={store}>
-    <Router>
-      <App />
-    </Router>
+    <App />
   </ReduxProvider>,
   document.getElementById('app')
 );

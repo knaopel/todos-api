@@ -10,7 +10,10 @@ const getHeaders = auth_token => {
 };
 
 export function login(email, password) {
-  return axios.post(`${baseUrl}/auth/login`, { email, password });
+  return axios
+    .post(`${baseUrl}/auth/login`, { email, password })
+    .then(handleAxiosResponse)
+    .catch(handleError);
 }
 
 export const getLocalUser = () => {

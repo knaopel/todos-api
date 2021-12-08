@@ -1,15 +1,17 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { connect } from 'react-redux';
+// import axios from "axios";
 // import { useAuthContext } from "../contexts/AuthContext";
-import * as authActions from '../actions/authActions';
+// import * as authActions from '../actions/authActions';
 import { useNavigate } from "react-router";
-import constants from "../util/constants";
+// import constants from "../util/constants";
+import { loginUser } from '../redux/actions/userActions';
 import { CredentialForm } from "../components";
 
-const API_URI = process.env.REACT_APP_API_URL;
+// const API_URI = process.env.REACT_APP_API_URL;
 
-const Login = () => {
-  const { authTokenName } = constants;
+const Login = ({ loginUser }) => {
+  // const { authTokenName } = constants;
   // const { setToken } = useAuthContext();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -17,10 +19,11 @@ const Login = () => {
   const handleSubmit = async (param) => {
     setLoading(true);
     try {
-      const { data } = await axios.post(`${API_URI}/auth/login`, param);
-      const token = data.auth_token;
-      authActions.setUserToken(token);
-      localStorage.setItem(authTokenName, token);
+      const user = await loginUser(param.email, param.password);
+      // const { data } = await axios.post(`${API_URI}/auth/login`, param);
+      // const token = data.auth_token;
+      // authActions.setUserToken(token);
+      // localStorage.setItem(authTokenName, token);
       setLoading(false);
       navigate("/");
     } catch {
@@ -188,4 +191,8 @@ class Login extends Component {
   }
 }
 */
-export default Login;
+
+const mapDispatchToProps = {
+  loginUser
+};
+export default connect(null, mapDispatchToProps)(Login);

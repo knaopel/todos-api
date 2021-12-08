@@ -8,7 +8,8 @@ import Header from './Header';
 // import Todos from './Todos';
 // import App from './App';
 
-// export { App, Copyright, CredentialForm, Header, PublicHome, TodoForm, Todos };
+export * from './Copyright';
 export * from './CredentialForm';
 export * from './PrivateRoute';
+export * from './PublicHome';
 export { Header };

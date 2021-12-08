@@ -4,7 +4,7 @@ export default {
   courses: [],
   todos: [],
   user: {
-    auth_token: null,
+    // auth_token: null,
   },
   apiCallsInProgress: 0,
 };
