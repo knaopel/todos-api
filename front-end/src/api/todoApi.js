@@ -1,22 +1,25 @@
-import { handleError, handleResponse } from './apiUtils';
+import axios from 'axios';
+import { getHeaders, handleAxiosResponse, handleError } from './apiUtils';
 const baseUrl = process.env.REACT_APP_API_URL + '/todos/';
 
 export function getTodos() {
-  return fetch(baseUrl).then(handleResponse).catch(handleError);
-}
-
-export function saveTodo(todo) {
-  return fetch(baseUrl + (todo.id || ''), {
-    method: todo.id ? 'PUT' : 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(todo),
-  })
-    .then(handleResponse)
+  return axios.get(baseUrl)
+    .then(handleAxiosResponse)
     .catch(handleError);
 }
 
-export function deleteTodo(todoId) {
-  return fetch(baseUrl + todoId, { method: 'DELETE' })
-    .then(handleResponse)
+export function saveTodo(todo, auth_token) {
+  return axios(baseUrl + (todo.id || ''), {
+    method: todo.id ? 'PUT' : 'POST',
+    headers: getHeaders(auth_token),
+    data: todo,
+  })
+    .then(handleAxiosResponse)
+    .catch(handleError);
+}
+
+export function deleteTodo(todoId, auth_token) {
+  return axios.delete(baseUrl + todoId, { headers: getHeaders(auth_token) })
+    .then(handleAxiosResponse)
     .catch(handleError);
 }

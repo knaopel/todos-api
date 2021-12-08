@@ -1,13 +1,7 @@
-import { handleAxiosResponse, handleError, handleResponse } from './apiUtils';
+import { getHeaders, handleAxiosResponse, handleError, handleResponse } from './apiUtils';
 import axios from 'axios';
 const baseUrl = process.env.REACT_APP_API_URL;
 const KEY_NAME = 'user';
-
-const getHeaders = auth_token => {
-  return {
-    Authorization: auth_token,
-  };
-};
 
 export function login(email, password) {
   return axios
@@ -59,20 +53,4 @@ export const loadUser = auth_token => {
 
 export function getTodos() {
   return fetch(baseUrl).then(handleResponse).catch(handleError);
-}
-
-export function saveTodo(todo) {
-  return fetch(baseUrl + (todo.id || ''), {
-    method: todo.id ? 'PUT' : 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(todo),
-  })
-    .then(handleResponse)
-    .catch(handleError);
-}
-
-export function deleteTodo(todoId) {
-  return fetch(baseUrl + todoId, { method: 'DELETE' })
-    .then(handleResponse)
-    .catch(handleError);
 }

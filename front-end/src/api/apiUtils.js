@@ -18,6 +18,14 @@ export function handleError(error) {
   throw error;
 }
 
+export const getHeaders = auth_token => {
+  return {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    Authorization: auth_token,
+  };
+};
+
 export const handleAxiosResponse = response => {
   switch (response.status) {
     case 200:
