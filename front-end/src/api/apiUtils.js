@@ -18,9 +18,10 @@ export function handleError(error) {
   throw error;
 }
 
-export const handleAxiosResponse = response =>{
-  switch(response.status){
+export const handleAxiosResponse = response => {
+  switch (response.status) {
     case 200:
-    return response.data;
+    default:
+      return response.data;
   }
-}
+};

@@ -41,7 +41,13 @@ export function loginUser(email, password) {
 
 export function logoutUser() {
   return function (dispatch) {
-    dispatch(logoutComplete());
+    return userApi.removeLocalUser
+      .then(msg => {
+        dispatch(logoutComplete());
+      })
+      .catch(error => {
+        throw error;
+      });
   };
 }
 

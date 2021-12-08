@@ -29,6 +29,17 @@ export const setLocalUser = user => {
   });
 };
 
+export const removeLocalUser = () => {
+  return new Promise((resolve, reject) => {
+    try {
+      localStorage.removeItem(KEY_NAME);
+      resolve('local user removed');
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
 export const loadUser = auth_token => {
   return axios
     .get(`${baseUrl}/user`, { headers: getHeaders(auth_token) })

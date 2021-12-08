@@ -17,10 +17,10 @@ import {
   logoutUser,
 } from '../redux/actions/userActions';
 import md5 from 'md5';
-import { useNavigate } from 'react-router';
+// import { useNavigate } from 'react-router';
 
 const Header = ({ user, getLocalUser, loadUser, logoutUser }) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [userLoading, setUserLoading] = useState(false);
 
@@ -56,8 +56,9 @@ const Header = ({ user, getLocalUser, loadUser, logoutUser }) => {
   };
 
   const handleLogout = () => {
-    logoutUser();
-    handleClose();
+    logoutUser().then(() => {
+      handleClose();
+    });
   };
 
   return (
