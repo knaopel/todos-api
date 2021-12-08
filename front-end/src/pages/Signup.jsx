@@ -1,31 +1,22 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { useAuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router";
-import constants from "../util/constants";
+import { signupUser } from '../redux/actions/userActions';
 import { CredentialForm } from "../components";
+import { connect } from 'react-redux';
 
-const API_URI = process.env.REACT_APP_API_URL;
-
-const Signup = () => {
+const Signup = ({ signupUser }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const { setToken } = useAuthContext();
-  const { authTokenName } = constants;
   const navigate = useNavigate();
 
   const handleSubmit = (params) => {
     setIsLoading(true);
-    axios
-      .post(`${API_URI}/signup`, params)
-      .then((resp) => {
-        const { data } = resp;
-        const { auth_token } = data;
-        setToken(auth_token);
-        localStorage.setItem(authTokenName, auth_token);
+    signupUser(params)
+      .then(user => {
         setIsLoading(false);
-        navigate("/");
+        navigate('/');
       })
-      .catch((err) => {
+      .catch(err => {
+
         setIsLoading(false);
         console.log(err);
       });
@@ -39,4 +30,4 @@ const Signup = () => {
     />
   );
 };
-export default Signup;
+export default connect(null, { signupUser })(Signup);

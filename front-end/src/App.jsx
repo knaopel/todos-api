@@ -1,10 +1,9 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import React, { useState } from 'react';
 import { Box, CssBaseline, ThemeProvider, Toolbar } from '@mui/material';
-// import { AuthProvider } from './contexts/AuthContext';
 import { Login, Home, Signup, Todo } from './pages';
 import { Copyright, Header } from './components';
-// import Header from './components/Header';
+
 import theme from './util/theme';
 
 import './App.css';
@@ -30,8 +29,8 @@ const App = () => {
             <Routes>
               <Route exact path='/' element={<Home />} />
               <Route exact path='login' element={<Login />} />
-              {/* <Route exact path='signup' element={<Signup />} />
-              <Route path='todos'>
+              <Route exact path='signup' element={<Signup />} />
+              {/*<Route path='todos'>
                 <Route path='new' element={<Todo />} />
                 <Route path=':id' element={<Todo view />} />
                 <Route path=':id/edit' element={<Todo edit />} />
