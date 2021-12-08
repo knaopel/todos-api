@@ -3,22 +3,24 @@ import * as userApi from '../../api/userApi';
 import { apiCallError, beginApiCall } from './apiStatusActions';
 
 // dispatches
+export function logoutComplete() {
+  return { type: types.USER_LOGOUT_COMPLETE };
+}
 export function loginSuccess(user) {
-  return { type: types.AUTH_LOGIN_SUCESS, user };
+  return { type: types.USER_LOGIN_SUCCESS, user };
 }
 
 export function getLocalUserComplete(user) {
-  return { type: types.AUTH_GET_LOCAL_USER_COMPLETE, user };
+  return { type: types.USER_GET_LOCAL_COMPLETE, user };
 }
 
-export const setLocalUser = user => {
-  return { type: types.AUTH_SET_LOCAL_USER, user };
+export const setLocalUserComplete = user => {
+  return { type: types.USER_SET_LOCAL_COMPLETE, user };
 };
 
 export function loadUserSuccess(user) {
-  return { type: types.USER_GET_SUCCESS, user };
+  return { type: types.USER_LOAD_SUCCESS, user };
 }
-
 
 // actions
 export function loginUser(email, password) {
@@ -37,6 +39,12 @@ export function loginUser(email, password) {
   };
 }
 
+export function logoutUser() {
+  return function (dispatch) {
+    dispatch(logoutComplete());
+  };
+}
+
 export function getLocalUser() {
   return function (dispatch) {
     return userApi.getLocalUser().then(user => {
@@ -45,11 +53,19 @@ export function getLocalUser() {
   };
 }
 
-export function loadUser() {
+export function setLocalUser(user) {
+  return function (dispatch) {
+    return userApi.setLocalUser(user).then(user => {
+      dispatch(setLocalUserComplete(user));
+    });
+  };
+}
+
+export function loadUser(auth_token) {
   return function (dispatch) {
     dispatch(beginApiCall());
     return userApi
-      .getUser()
+      .loadUser(auth_token)
       .then(user => {
         dispatch(loadUserSuccess(user));
       })

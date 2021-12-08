@@ -1,4 +1,4 @@
-import { handleError, handleResponse } from './apiUtils';
+import { handleAxiosResponse, handleError, handleResponse } from './apiUtils';
 import axios from 'axios';
 const baseUrl = process.env.REACT_APP_API_URL;
 const KEY_NAME = 'user';
@@ -29,8 +29,11 @@ export const setLocalUser = user => {
   });
 };
 
-export const getUser = auth_token => {
-  return axios.get(baseUrl, { headers: getHeaders(auth_token) });
+export const loadUser = auth_token => {
+  return axios
+    .get(`${baseUrl}/user`, { headers: getHeaders(auth_token) })
+    .then(handleAxiosResponse)
+    .catch(handleError);
 };
 
 export function getTodos() {

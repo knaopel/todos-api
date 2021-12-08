@@ -17,3 +17,10 @@ export function handleError(error) {
   console.error('API call failed.', error);
   throw error;
 }
+
+export const handleAxiosResponse = response =>{
+  switch(response.status){
+    case 200:
+    return response.data;
+  }
+}

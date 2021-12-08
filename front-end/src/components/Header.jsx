@@ -11,44 +11,35 @@ import {
   Typography,
 } from '@mui/material';
 import { connect } from 'react-redux';
-// import { useAuthContext } from "../contexts/AuthContext";
-// import contants from "../util/constants";
-// import UserService from "../services/user-service";
-import { getLocalUser } from '../redux/actions/authActions';
+import {
+  getLocalUser,
+  loadUser,
+  logoutUser,
+} from '../redux/actions/userActions';
 import md5 from 'md5';
 import { useNavigate } from 'react-router';
 
-const Header = ({ user, getLocalUser }) => {
+const Header = ({ user, getLocalUser, loadUser, logoutUser }) => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  // const { authTokenName } = contants;
+  const [userLoading, setUserLoading] = useState(false);
 
   useEffect(() => {
     if (!user?.auth_token) {
       const fetchLocalUser = async () => {
         await getLocalUser();
-        if (!user?.auth_token) {
-          navigate('/login');
-        }
       };
       fetchLocalUser();
     }
-    if (user.auth_token && !user.name) {
-    //   const userSvc = new UserService(token);
-    //   setIsLoading(true);
-    //   userSvc
-    //     .getUser()
-    //     .then(data => {
-    //       setUser(data);
-    //       setIsLoading(false);
-    //     })
-    //     .catch(err => {
-    //       console.log(err);
-    //       setIsLoading(false);
-    //     });
+    if (user.auth_token && !user.name && !userLoading) {
+      setUserLoading(true);
+      loadUser(user.auth_token)
+        .then(() => setUserLoading(false))
+        .catch(error => {
+          alert('Loading user failed.' + error);
+        });
     }
-  }, [user, getLocalUser, navigate]);
+  }, [user, getLocalUser, loadUser, userLoading]);
 
   const buildAvatarUrl = email => {
     const formattedEmail = ('' + email).trim().toLowerCase();
@@ -65,8 +56,7 @@ const Header = ({ user, getLocalUser }) => {
   };
 
   const handleLogout = () => {
-    // setToken(null);
-    // localStorage.removeItem(authTokenName);
+    logoutUser();
     handleClose();
   };
 
@@ -94,7 +84,7 @@ const Header = ({ user, getLocalUser }) => {
         </Typography>
         {user?.auth_token && (
           <>
-            {isLoading ? (
+            {userLoading ? (
               <CircularProgress />
             ) : (
               <Typography variant='body1' component='div'>
@@ -141,6 +131,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
   getLocalUser,
+  loadUser,
+  logoutUser,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);
