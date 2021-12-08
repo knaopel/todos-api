@@ -2,7 +2,11 @@ import * as types from './actionTypes';
 import * as todoApi from '../../api/todoApi';
 import { apiCallError, beginApiCall } from './apiStatusActions';
 
-export function loadTodoSuccess(todos) {
+
+export const loadTodosInit = () => {
+  return { type: types.TODOS_LOAD_INIT };
+};
+export function loadTodosSuccess(todos) {
   return { type: types.TODOS_LOAD_SUCCESS, todos };
 }
 
@@ -18,13 +22,14 @@ export function deleteTodoOptimistic(todo) {
   return { type: types.TODO_DELETE_OPTIMISTIC, todo };
 }
 
-export function loadTodos() {
+export function loadTodos(auth_token) {
   return function (dispatch) {
     dispatch(beginApiCall());
+    dispatch(loadTodosInit());
     return todoApi
-      .getTodos()
+      .getTodos(auth_token)
       .then(todos => {
-        dispatch(loadTodoSuccess(todos));
+        dispatch(loadTodosSuccess(todos));
       })
       .catch(error => {
         dispatch(apiCallError(error));

@@ -12,4 +12,6 @@ export * from './Copyright';
 export * from './CredentialForm';
 export * from './PrivateRoute';
 export * from './PublicHome';
+export * from './TodoItem';
+export * from './Todos';
 export { Header };

@@ -2,9 +2,7 @@
 export default {
   authors: [],
   courses: [],
-  todos: [],
-  user: {
-    // auth_token: null,
-  },
+  todos: { items: [], isLoaded: false, isLoading: false },
+  user: {},
   apiCallsInProgress: 0,
 };

@@ -5,34 +5,21 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-// import { useAuthContext } from "../contexts/AuthContext";
-import { PublicHome, Todos } from "../components";
-// import TodoService from "../services/todo-service";
 import { Link } from "react-router-dom";
 import { connect } from 'react-redux';
-// import authStore from '../stores/authStore';
 
-const Home = ({ user }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [todos, setTodos] = useState([]);
-  // const [token] = useState(authStore.getToken());
+import { PublicHome, Todos } from "../components";
+import { loadTodos } from '../redux/actions/todoActions';
 
-  // useEffect(() => {
-  //   if (token) {
-  //     const todoSvc = new TodoService(token);
-  //     setIsLoading(true);
-  //     todoSvc
-  //       .getTodos()
-  //       .then((data) => {
-  //         setTodos(data);
-  //         setIsLoading(false);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //         setIsLoading(false);
-  //       });
-  //   }
-  // }, [token]);
+const Home = ({ user, todos, isLoading, loadTodos }) => {
+  useEffect(() => {
+    if (user.auth_token && todos.items.length === 0 && !todos.isLoaded && !todos.isLoading) {
+      console.log(user);
+      loadTodos(user.auth_token).catch(err => {
+        alert('Error fetching Todos. ' + err);
+      });
+    }
+  }, [user, todos, loadTodos, isLoading]);
 
   if (isLoading === true) {
     return <CircularProgress size={150} />;
@@ -42,7 +29,7 @@ const Home = ({ user }) => {
   }
   return (
     <Box sx={{ flexGrow: 1 }}>
-      {/* <Todos data={todos} /> */}
+      <Todos data={todos?.items} />
       <Grid container spacing={2}>
         <Grid item>
           <Link to="/todos/new">Add A new HoneyDew</Link>
@@ -55,8 +42,10 @@ const Home = ({ user }) => {
 
 const mapStateToProps = state => {
   return {
-    user: state.user
+    user: state.user,
+    todos: state.todos,
+    isLoading: state.apiCallsInProgress > 0
   };
 };
 
-export default connect(mapStateToProps)(Home);
+export default connect(mapStateToProps, { loadTodos })(Home);

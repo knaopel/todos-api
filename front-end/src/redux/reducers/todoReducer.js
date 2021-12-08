@@ -4,15 +4,17 @@ import initialState from './initialState';
 export default function todoReducer(state = initialState.todos, action) {
   switch (action.type) {
     case types.TODO_CREATE_SUCCESS:
-      return [...state, { ...action.course }];
+      return { ...state, items: [...state.items, { ...action.todo }] };
     case types.TODO_UPDATE_SUCCESS:
-      return state.map(todo =>
+      return state.items.map(todo =>
         todo.id === action.todo.id ? action.todo : todo
       );
+    case types.TODOS_LOAD_INIT:
+      return { ...state, isLoaded: false, isLoading: true };
     case types.TODOS_LOAD_SUCCESS:
-      return action.todos;
+      return { items: action.todos, isLoaded: true, isLoading: false };
     case types.TODO_DELETE_OPTIMISTIC:
-      return state.filter(todo => todo.id !== action.todo.id);
+      return state.items.filter(todo => todo.id !== action.todo.id);
     default:
       return state;
   }
