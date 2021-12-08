@@ -16,6 +16,13 @@ export function login(email, password) {
     .catch(handleError);
 }
 
+export const signupUser = params => {
+  return axios
+    .post(`${baseUrl}/signup`, params)
+    .then(handleAxiosResponse)
+    .catch(handleError);
+};
+
 export const getLocalUser = () => {
   return new Promise(resolve => {
     const userStr = localStorage.getItem(KEY_NAME);

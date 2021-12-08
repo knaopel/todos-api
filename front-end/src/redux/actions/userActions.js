@@ -10,6 +10,10 @@ export function loginSuccess(user) {
   return { type: types.USER_LOGIN_SUCCESS, user };
 }
 
+export function signupSuccess(user) {
+  return { type: types.USER_SIGNUP_SUCCESS, user };
+}
+
 export function getLocalUserComplete(user) {
   return { type: types.USER_GET_LOCAL_COMPLETE, user };
 }
@@ -39,9 +43,26 @@ export function loginUser(email, password) {
   };
 }
 
+export function signupUser(params) {
+  const { email, name } = params;
+  return function (dispatch) {
+    dispatch(beginApiCall());
+    return userApi
+      .signupUser(params)
+      .then(user => {
+        dispatch(signupSuccess(user));
+        dispatch(setLocalUser({ ...user, email, name }));
+      })
+      .catch(error => {
+        dispatch(apiCallError(error));
+        throw error;
+      });
+  };
+}
+
 export function logoutUser() {
   return function (dispatch) {
-    return userApi.removeLocalUser
+    return userApi.removeLocalUser()
       .then(msg => {
         dispatch(logoutComplete());
       })
