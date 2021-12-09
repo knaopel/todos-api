@@ -21,9 +21,13 @@ Rails.application.routes.draw do
     # Dewers
     get 'dewers', to: 'dewers#index'
 
+    get 'todos/all', to: 'todos#all'
+    get 'todos/complete', to: 'todos#complete'
+
     resources :todos do
       resources :items
     end
+
   end
 
   resources :authors

@@ -6,6 +6,9 @@ import { apiCallError, beginApiCall } from './apiStatusActions';
 export const loadTodosInit = () => {
   return { type: types.TODOS_LOAD_INIT };
 };
+export const completeTodoComplete = (todo) => {
+  return { type: types.TODO_COMPLETE_COMPLETE, todo };
+};
 export function loadTodosSuccess(todos) {
   return { type: types.TODOS_LOAD_SUCCESS, todos };
 }
@@ -38,11 +41,11 @@ export function loadTodos(auth_token) {
   };
 }
 
-export function saveTodo(todo) {
-  return function (dispatch, getState) {
+export function saveTodo(todo, auth_token) {
+  return function (dispatch) {
     dispatch(beginApiCall());
     return todoApi
-      .saveTodo(todo)
+      .saveTodo(todo, auth_token)
       .then(savedTodo => {
         todo.id
           ? dispatch(updateTodoSuccess(savedTodo))
@@ -55,9 +58,22 @@ export function saveTodo(todo) {
   };
 }
 
-export function deletTodo(todo) {
+export const completeTodo = (todo, auth_token) => {
+  return function (dispatch) {
+    return todoApi
+      .completeTodo(todo, auth_token)
+      .then(todo => {
+        dispatch(completeTodoComplete(todo));
+      })
+      .catch(error => {
+        throw error;
+      });
+  };
+};
+
+export function deleteTodo(todo, auth_token) {
   return function (dispatch) {
     dispatch(deleteTodoOptimistic(todo));
-    return todoApi.deleteTodo(todo.id);
+    return todoApi.deleteTodo(todo.id, auth_token);
   };
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Menu as MenuIcon } from '@mui/icons-material';
+// import { Menu as MenuIcon } from '@mui/icons-material';
 import {
   AppBar,
   Avatar,
@@ -17,10 +17,8 @@ import {
   logoutUser,
 } from '../redux/actions/userActions';
 import md5 from 'md5';
-// import { useNavigate } from 'react-router';
 
 const Header = ({ user, getLocalUser, loadUser, logoutUser }) => {
-  // const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [userLoading, setUserLoading] = useState(false);
 
@@ -64,7 +62,7 @@ const Header = ({ user, getLocalUser, loadUser, logoutUser }) => {
   return (
     <AppBar position='absolute'>
       <Toolbar>
-        {user?.auth_token && (
+        {/* {user?.auth_token && (
           <IconButton
             size='large'
             edge='start'
@@ -74,7 +72,7 @@ const Header = ({ user, getLocalUser, loadUser, logoutUser }) => {
           >
             <MenuIcon />
           </IconButton>
-        )}
+        )} */}
         <Typography
           variant='h6'
           component='div'
@@ -112,8 +110,8 @@ const Header = ({ user, getLocalUser, loadUser, logoutUser }) => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My Account</MenuItem>
+                {/* <MenuItem onClick={handleClose}>Profile</MenuItem> */}
+                {/* <MenuItem onClick={handleClose}>My Account</MenuItem> */}
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
             </div>

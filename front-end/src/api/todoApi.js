@@ -18,6 +18,10 @@ export function saveTodo(todo, auth_token) {
     .catch(handleError);
 }
 
+export const completeTodo = (todo, auth_token) => {
+  return saveTodo({ ...todo, is_completed: true }, auth_token);
+};
+
 export function deleteTodo(todoId, auth_token) {
   return axios.delete(baseUrl + todoId, { headers: getHeaders(auth_token) })
     .then(handleAxiosResponse)

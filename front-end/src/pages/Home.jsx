@@ -4,22 +4,29 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { connect } from 'react-redux';
 
 import { PublicHome, Todos } from "../components";
-import { loadTodos } from '../redux/actions/todoActions';
+import { completeTodo, loadTodos } from '../redux/actions/todoActions';
 
-const Home = ({ user, todos, isLoading, loadTodos }) => {
+const Home = ({ user, todos, isLoading, loadTodos, completeTodo }) => {
+  const navigate = useNavigate();
   useEffect(() => {
-    if (user.auth_token && todos.items.length === 0 && !todos.isLoaded && !todos.isLoading) {
-      console.log(user);
+    if (user.auth_token && !todos.isLoaded && !todos.isLoading) {
       loadTodos(user.auth_token).catch(err => {
         alert('Error fetching Todos. ' + err);
+        if (err.match(/401/)) {
+          navigate('/login');
+        }
       });
     }
-  }, [user, todos, loadTodos, isLoading]);
+  }, [navigate, user, todos, loadTodos, isLoading]);
+
+  const handleComplete = (todo) => {
+    return completeTodo(todo, user.auth_token);
+  };
 
   if (isLoading === true) {
     return <CircularProgress size={150} />;
@@ -29,7 +36,7 @@ const Home = ({ user, todos, isLoading, loadTodos }) => {
   }
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Todos data={todos?.items} />
+      <Todos data={todos?.items} completeTodo={handleComplete} />
       <Grid container spacing={2}>
         <Grid item>
           <Link to="/todos/new">Add A new HoneyDew</Link>
@@ -48,4 +55,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, { loadTodos })(Home);
+export default connect(mapStateToProps, { completeTodo, loadTodos })(Home);

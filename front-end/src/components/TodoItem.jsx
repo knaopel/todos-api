@@ -14,14 +14,11 @@ import { useNavigate } from 'react-router';
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import React, { useState } from "react";
-import TodoService from '../services/todo-service';
-import { useAuthContext } from '../contexts/AuthContext';
 
 dayjs.extend(relativeTime);
 
-export const TodoItem = ({ todo }) => {
+export const TodoItem = ({ todo, completeTodo }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const { token } = useAuthContext();
   const navigate = useNavigate();
 
   const handleEdit = event => {
@@ -31,14 +28,12 @@ export const TodoItem = ({ todo }) => {
 
   const handleComplete = () => {
     setIsLoading(true);
-    const todoSvc = new TodoService(token);
-    todoSvc
-      .completeTodo(todo)
-      .then(data => {
-        console.log(data);
+    completeTodo(todo)
+      .then(() => {
         setIsLoading(false);
-      }).catch(err => {
-        console(err);
+      })
+      .catch(err => {
+        console.log(err);
         setIsLoading(false);
       });
   };
@@ -58,17 +53,15 @@ export const TodoItem = ({ todo }) => {
           </Typography>
         </CardContent>
         <CardActions>
-          {/* TODO: Complete this action */}
           <Button
             size="small"
             color="secondary"
             title="Complete"
             onClick={handleComplete}
-            disabled={isLoading}
+            disabled={isLoading || todo.is_complete}
           >
             <CheckIcon />
           </Button>
-          {/* TODO: Complete this action */}
           <Button
             size="small"
             color="secondary"

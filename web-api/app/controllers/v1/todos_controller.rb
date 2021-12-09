@@ -4,7 +4,20 @@ module V1
 
     # GET /todos
     def index
-      @todos = current_user.todos.paginate(page: params[:page], per_page: 20)
+      @todos = current_user.todos.where(is_completed: false)
+      # @todos = current_user.todos.paginate(page: params[:page], per_page: 50)
+      json_response(@todos)
+    end
+
+    # GET /todos/all
+    def all
+      @todos = current_user.todos.all
+      json_response(@todos)
+    end
+
+    # GET /todos/complete
+    def complete
+      @todos = current_user.todos.where(is_completed:true)
       json_response(@todos)
     end
 
@@ -22,7 +35,7 @@ module V1
     # PUT /todos/:id
     def update
       @todo.update(todo_params)
-      head :no_content
+      json_response(@todo, :accepted)
     end
 
     # DELETE /todos/:id
