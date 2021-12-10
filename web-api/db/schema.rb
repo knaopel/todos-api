@@ -10,26 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_02_135433) do
+ActiveRecord::Schema.define(version: 2021_11_24_150039) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "authors", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "courses", force: :cascade do |t|
-    t.string "title"
-    t.string "slug"
-    t.string "category"
-    t.bigint "author_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["author_id"], name: "index_courses_on_author_id"
-  end
 
   create_table "honeys", force: :cascade do |t|
     t.integer "honey_id", null: false
@@ -70,7 +54,6 @@ ActiveRecord::Schema.define(version: 2021_12_02_135433) do
     t.integer "dewers_count", default: 0, null: false
   end
 
-  add_foreign_key "courses", "authors"
   add_foreign_key "items", "todos"
   add_foreign_key "todos", "users"
 end
