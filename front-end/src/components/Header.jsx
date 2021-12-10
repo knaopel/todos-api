@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 // import { Menu as MenuIcon } from '@mui/icons-material';
 import {
   AppBar,
@@ -19,6 +20,7 @@ import {
 import md5 from 'md5';
 
 const Header = ({ user, getLocalUser, loadUser, logoutUser }) => {
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [userLoading, setUserLoading] = useState(false);
 
@@ -51,6 +53,10 @@ const Header = ({ user, getLocalUser, loadUser, logoutUser }) => {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleNavigate = path => {
+    navigate(path);
   };
 
   const handleLogout = () => {
@@ -110,7 +116,7 @@ const Header = ({ user, getLocalUser, loadUser, logoutUser }) => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                {/* <MenuItem onClick={handleClose}>Profile</MenuItem> */}
+                <MenuItem onClick={() => handleNavigate('/profile')}>Profile</MenuItem>
                 {/* <MenuItem onClick={handleClose}>My Account</MenuItem> */}
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
