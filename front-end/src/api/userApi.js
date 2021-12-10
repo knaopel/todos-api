@@ -51,6 +51,13 @@ export const loadUser = auth_token => {
     .catch(handleError);
 };
 
+export const saveUser = (user, auth_token) => {
+  return axios
+    .put(`${baseUrl}/user`, { headers: getHeaders(auth_token), data: user })
+    .then(handleAxiosResponse)
+    .catch(handleError);
+};
+
 export function getTodos() {
   return fetch(baseUrl).then(handleResponse).catch(handleError);
 }

@@ -9,6 +9,9 @@ const Todo = ({ edit, view, todos, user, loading, loadTodos, saveTodo }) => {
   const [todo, setTodo] = useState({ title: '', body: '' });
   const navigate = useNavigate();
   useEffect(() => {
+    // if (!user.auth_token) {
+    // navigate('/login');
+    // } else 
     if (user.auth_token && !todos.isLoaded && !todos.isLoading) {
       loadTodos(user.auth_token)
         .catch(err => {

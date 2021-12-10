@@ -12,25 +12,20 @@ import {
   Typography,
 } from '@mui/material';
 import { connect } from 'react-redux';
+
+// app specific imports
+import { buildAvatarUrl } from '../util';
 import {
-  getLocalUser,
   loadUser,
   logoutUser,
 } from '../redux/actions/userActions';
-import md5 from 'md5';
 
-const Header = ({ user, getLocalUser, loadUser, logoutUser }) => {
+const Header = ({ user, loadUser, logoutUser }) => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [userLoading, setUserLoading] = useState(false);
 
   useEffect(() => {
-    if (!user?.auth_token) {
-      const fetchLocalUser = async () => {
-        await getLocalUser();
-      };
-      fetchLocalUser();
-    }
     if (user.auth_token && !user.name && !userLoading) {
       setUserLoading(true);
       loadUser(user.auth_token)
@@ -39,13 +34,7 @@ const Header = ({ user, getLocalUser, loadUser, logoutUser }) => {
           alert('Loading user failed.' + error);
         });
     }
-  }, [user, getLocalUser, loadUser, userLoading]);
-
-  const buildAvatarUrl = email => {
-    const formattedEmail = ('' + email).trim().toLowerCase();
-    const hash = md5(formattedEmail);
-    return `//www.gravatar.com/avatar/${hash}.jpg`;
-  };
+  }, [user, loadUser, userLoading]);
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -56,6 +45,7 @@ const Header = ({ user, getLocalUser, loadUser, logoutUser }) => {
   };
 
   const handleNavigate = path => {
+    handleClose();
     navigate(path);
   };
 
@@ -135,7 +125,6 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-  getLocalUser,
   loadUser,
   logoutUser,
 };

@@ -10,6 +10,10 @@ export function loginSuccess(user) {
   return { type: types.USER_LOGIN_SUCCESS, user };
 }
 
+export const updateUserSuccess = user => {
+  return { type: types.USER_UPDATE_SUCCESS, user };
+};
+
 export function signupSuccess(user) {
   return { type: types.USER_SIGNUP_SUCCESS, user };
 }
@@ -56,6 +60,23 @@ export function signupUser(params) {
       .catch(error => {
         dispatch(apiCallError(error));
         throw error;
+      });
+  };
+}
+
+export function updateUser(user, auth_token) {
+  const { email, name } = user;
+  return (dispatch) => {
+    dispatch(beginApiCall());
+    return userApi
+      .saveUser(user, auth_token)
+      .then(user => {
+        dispatch(updateUserSuccess(user));
+        dispatch(setLocalUser({ ...user, email, name }));
+      })
+      .catch(err => {
+        dispatch(apiCallError(err));
+        throw err;
       });
   };
 }
