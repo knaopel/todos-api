@@ -27,13 +27,13 @@ services:
     depends_on:
       - db
 
-  front-end:
-    build: front-end/
-    container_name: honeydew-web
-    volumes:
-      - ./front-end:/myapp
-    ports:
-      - 3000:3000
+  # front-end:
+  #   build: front-end/
+  #   container_name: honeydew-web
+  #   volumes:
+  #     - ./front-end:/myapp
+  #   ports:
+  #     - 3000:3000
     # depends_on:
     #   - web-api
 volumes:
