@@ -1,6 +1,6 @@
 module V1
   class UsersController < ApplicationController
-    before_action :set_user, only: [:show, :update]
+    before_action :set_user, only: [:show]
 
     # GET /user
     def show
@@ -10,7 +10,8 @@ module V1
      # PUT /user
      def update
       @current_user.update(user_params)
-      head :no_content
+      set_user
+      json_response(@user, :accepted)
     end
 
     private

@@ -16,8 +16,7 @@ const Home = ({ user, todos, isLoading, loadTodos, completeTodo }) => {
   useEffect(() => {
     if (user.auth_token && !todos.isLoaded && !todos.isLoading) {
       loadTodos(user.auth_token).catch(err => {
-        alert('Error fetching Todos. ' + err);
-        if (err.match(/401/)) {
+        if (err.response.status === 401) {
           navigate('/login');
         }
       });
