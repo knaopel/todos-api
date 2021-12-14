@@ -36,6 +36,10 @@ const Header = ({ user, loadUser, logoutUser }) => {
     }
   }, [user, loadUser, userLoading]);
 
+  const handleHomeClick = () => {
+    navigate('/');
+  };
+
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -52,6 +56,7 @@ const Header = ({ user, loadUser, logoutUser }) => {
   const handleLogout = () => {
     logoutUser().then(() => {
       handleClose();
+      navigate('/');
     });
   };
 
@@ -74,6 +79,8 @@ const Header = ({ user, loadUser, logoutUser }) => {
           component='div'
           sx={{ flexGrow: 1 }}
           align='center'
+          onClick={handleHomeClick}
+          className='appName'
         >
           Honey Dew
         </Typography>
@@ -107,7 +114,7 @@ const Header = ({ user, loadUser, logoutUser }) => {
                 onClose={handleClose}
               >
                 <MenuItem onClick={() => handleNavigate('/profile')}>Profile</MenuItem>
-                {/* <MenuItem onClick={handleClose}>My Account</MenuItem> */}
+                <MenuItem onClick={() => handleNavigate('/honeys-dewers')}>Honeys/Dewers</MenuItem>
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
             </div>
