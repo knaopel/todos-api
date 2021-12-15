@@ -7,11 +7,32 @@ module V1
       json_response(@user)
     end
 
+    # POST /user/invite
+    def invite
+      email = params[:email]
+      honey_or_dewer = params[:honey_or_dewer]
+      random_pwd = SecureRandom.hex(8)
+      user = User.create!({ email: email, password: random_pwd, name: "Invited" })
+      user.send_user_invitation(honey_or_dewer, @current_user)
+      json_response({message:'Invited'})      
+    end
+
      # PUT /user
      def update
       @current_user.update(user_params)
       set_user
       json_response(@user, :accepted)
+    end
+
+    # POST /user/exists
+    def check_user
+      email = params[:email]
+      @user = User.find_by_email(email);
+      if @user
+        json_response({exists: true, user: @user})
+      else
+        json_response({exists:false,searched_for_email: email})
+      end
     end
 
     private

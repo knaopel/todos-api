@@ -10,7 +10,10 @@ Rails.application.routes.draw do
   scope module: :v1, constraints: ApiVersion.new('v1', true) do
     get 'user', to: 'users#show'
     put 'user', to: 'users#update'
-    post 'user/exists', to: 'users/follows#check_follower', as: :exists
+    post 'user/new' => 'users#invite'
+    post 'user/exists', to: 'users#check_user'
+    post 'forgot_password' => 'passwords#forgot'
+    post 'reset_password' => 'passwords#reset'
 
     # Honeys
     get 'honeys', to: 'honeys#index'
@@ -32,4 +35,5 @@ Rails.application.routes.draw do
 
   post 'auth/login', to: 'authentication#authenticate'
   post 'signup', to: 'users#create'
+  post 'acceptinvitation' => 'users#accept_invitation'
 end
