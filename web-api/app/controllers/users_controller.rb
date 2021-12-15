@@ -9,7 +9,7 @@ class UsersController < ApplicationController
     json_response(response, :created)
   end
 
-  # POST /accept_invitation/:token
+  # POST /acceptinvitation
   def accept_invitation
     user = User.find_by(password_reset_token: params[:token])
     if user
