@@ -10,6 +10,13 @@ export const getHoneys = auth_token => {
     .catch(handleError);
 };
 
+export const addHoney = (email, auth_token) => {
+  return axios
+    .post(baseUrl, { data: { email }, headers: getHeaders(auth_token) })
+    .then(handleAxiosResponse)
+    .catch(handleError);
+};
+
 export const userExists = (email, auth_token) => {
   return axios
     .post(`${baseUrl}/exists`, { email }, { headers: getHeaders(auth_token) })

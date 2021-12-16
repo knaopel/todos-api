@@ -9,3 +9,10 @@ export const getDewers = auth_token => {
     .then(handleAxiosResponse)
     .catch(handleError);
 };
+
+export const addDewer = (email, auth_token) => {
+  return axios
+    .post(baseUrl, { data: { email }, headers: getHeaders(auth_token) })
+    .then(handleAxiosResponse)
+    .catch(handleError);
+};
