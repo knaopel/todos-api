@@ -32,9 +32,12 @@ const Header = ({ user, loadUser, logoutUser }) => {
         .then(() => setUserLoading(false))
         .catch(error => {
           alert('Loading user failed.' + error);
+          if (error.request.status === 401) {
+            navigate('/login');
+          }
         });
     }
-  }, [user, loadUser, userLoading]);
+  }, [user, loadUser, userLoading, navigate]);
 
   const handleHomeClick = () => {
     navigate('/');
@@ -114,7 +117,7 @@ const Header = ({ user, loadUser, logoutUser }) => {
                 onClose={handleClose}
               >
                 <MenuItem onClick={() => handleNavigate('/profile')}>Profile</MenuItem>
-                <MenuItem onClick={() => handleNavigate('/honeys-dewers')}>Honeys/Dewers</MenuItem>
+                <MenuItem onClick={() => handleNavigate('/honeys_dewers')}>Honeys/Dewers</MenuItem>
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
             </div>

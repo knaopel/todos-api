@@ -51,6 +51,13 @@ export const loadUser = auth_token => {
     .catch(handleError);
 };
 
+export const userExists = (email, auth_token) => {
+  return axios
+    .post(`${baseUrl}/user/exists`, { email }, { headers: getHeaders(auth_token) })
+    .then(handleAxiosResponse)
+    .catch(handleError);
+};
+
 export const saveUser = (user, auth_token) => {
   return axios
     .put(`${baseUrl}/user`, { headers: getHeaders(auth_token), data: user })

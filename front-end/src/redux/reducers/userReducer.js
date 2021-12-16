@@ -12,6 +12,10 @@ export default function userReducer(state = initialState.user, action) {
       return action.user || initialState.user;
     case types.USER_LOAD_SUCCESS:
       return { ...state, ...action.user };
+    case types.HONEYS_LOAD_SUCCESS:
+      return { ...state, honeys: { isLoaded: true, items: action.honeys } };
+    case types.DEWERS_LOAD_SUCCESS:
+      return { ...state, dewers: { isLoaded: true, items: action.dewers } };
     case types.USER_SET_LOCAL_COMPLETE:
     default:
       return state;

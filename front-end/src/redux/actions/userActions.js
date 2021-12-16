@@ -1,5 +1,7 @@
 import * as types from './actionTypes';
 import * as userApi from '../../api/userApi';
+import * as honeysApi from '../../api/honeysApi';
+import * as dewersApi from '../../api/dewersApi';
 import { apiCallError, beginApiCall } from './apiStatusActions';
 
 // dispatches
@@ -29,6 +31,14 @@ export const setLocalUserComplete = user => {
 export function loadUserSuccess(user) {
   return { type: types.USER_LOAD_SUCCESS, user };
 }
+
+export const loadHoneysSuccess = honeys => {
+  return { type: types.HONEYS_LOAD_SUCCESS, honeys };
+};
+
+export const loadDewersSuccess = dewers => {
+  return { type: types.DEWERS_LOAD_SUCCESS, dewers };
+};
 
 // actions
 export function loginUser(email, password) {
@@ -123,3 +133,34 @@ export function loadUser(auth_token) {
       });
   };
 }
+
+export const loadHoneys = auth_token => {
+  return dispatch => {
+    dispatch(beginApiCall());
+    return honeysApi
+      .getHoneys(auth_token)
+      .then(honeys => {
+        dispatch(loadHoneysSuccess(honeys));
+      })
+      .catch(error => {
+        dispatch(apiCallError());
+        throw error;
+      });
+  };
+};
+
+export const loadDewers = auth_token => {
+  return dispatch => {
+    dispatch(beginApiCall());
+    return dewersApi
+      .getDewers(auth_token)
+      .then(dewers => {
+        dispatch(loadDewersSuccess(dewers));
+      })
+      .catch(error => {
+        dispatch(apiCallError());
+        throw error;
+      });
+  };
+};
+

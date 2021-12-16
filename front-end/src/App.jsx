@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Box, CssBaseline, ThemeProvider, Toolbar } from '@mui/material';
-import { Login, Home, Signup, Todo } from './pages';
+import { Login, Home, Signup, Todo, HoneysDewers } from './pages';
 import { Copyright, Header } from './components';
 import { getLocalUser } from './redux/actions/userActions';
 
@@ -44,6 +44,7 @@ const App = ({ user, getLocalUser }) => {
                     <Route path='' element={<div>Nothing to see here</div>} />
                   </Route>
                   <Route path='profile' element={<Profile />} />
+                  <Route path='honeys-dewers' element={<HoneysDewers />} />
                 </>}
             </Routes>
             <Copyright sx={{ mt: 5 }} />
