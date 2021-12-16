@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Box, CssBaseline, ThemeProvider, Toolbar } from '@mui/material';
-import { Login, Home, Signup, Todo, HoneysDewers } from './pages';
+import { Login, Home, Signup, Todo, HoneysDewers, AcceptInvitation } from './pages';
 import { Copyright, Header } from './components';
 import { getLocalUser } from './redux/actions/userActions';
 
@@ -35,6 +35,7 @@ const App = ({ user, getLocalUser }) => {
               <Route exact path='/' element={<Home />} />
               <Route exact path='login' element={<Login />} />
               <Route exact path='signup' element={<Signup />} />
+              <Route path="accept-invitation/:token" element={<AcceptInvitation />} />
               {user.auth_token &&
                 <>
                   <Route path='todos'>

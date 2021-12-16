@@ -13,8 +13,13 @@ module V1
       honey_or_dewer = params[:honey_or_dewer]
       random_pwd = SecureRandom.hex(8)
       user = User.create!({ email: email, password: random_pwd, name: "Invited" })
+      if honey_or_dewer == "Honey"
+        @current_user.add_honey(user.id)
+      elsif honey_or_dewer == "Dewer"
+        @current_user.add_dewer(user.id)
+      end
       user.send_user_invitation(honey_or_dewer, @current_user)
-      json_response({message:'Invited'})      
+      json_response({message:'Invited', user: user})
     end
 
      # PUT /user

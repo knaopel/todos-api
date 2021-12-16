@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   scope module: :v1, constraints: ApiVersion.new('v1', true) do
     get 'user', to: 'users#show'
     put 'user', to: 'users#update'
-    post 'user/new' => 'users#invite'
+    post 'user/invite' => 'users#invite'
     post 'user/exists', to: 'users#check_user'
     post 'forgot_password' => 'passwords#forgot'
     post 'reset_password' => 'passwords#reset'
@@ -23,6 +23,7 @@ Rails.application.routes.draw do
 
     # Dewers
     get 'dewers', to: 'dewers#index'
+    post 'dewers', to: 'dewers#create'
 
     get 'todos/all', to: 'todos#all'
     get 'todos/complete', to: 'todos#complete'

@@ -28,6 +28,10 @@ export const setLocalUserComplete = user => {
   return { type: types.USER_SET_LOCAL_COMPLETE, user };
 };
 
+export const acceptUserInvitationSuccess = user => {
+  return { type: types.USER_ACCEPT_INVITATION_SUCCESS, user };
+};
+
 export function loadUserSuccess(user) {
   return { type: types.USER_LOAD_SUCCESS, user };
 }
@@ -36,8 +40,16 @@ export const loadHoneysSuccess = honeys => {
   return { type: types.HONEYS_LOAD_SUCCESS, honeys };
 };
 
+const addHoneySuccess = honey => {
+  return { type: types.HONEY_ADD_SUCCESS, honey };
+};
+
 export const loadDewersSuccess = dewers => {
   return { type: types.DEWERS_LOAD_SUCCESS, dewers };
+};
+
+const addDewerSuccess = dewer => {
+  return { type: types.DEWER_ADD_SUCCESS, dewer };
 };
 
 // actions
@@ -73,6 +85,23 @@ export function signupUser(params) {
       });
   };
 }
+
+export const acceptUserInvitation = params => {
+  return dispatch => {
+    dispatch(beginApiCall());
+    return userApi
+      .acceptInvitation(params)
+      .then(resp => {
+        const { user } = resp;
+        dispatch(acceptUserInvitationSuccess(user));
+        dispatch(setLocalUser(user));
+      })
+      .catch(error => {
+        dispatch(apiCallError(error));
+        throw error;
+      });
+  };
+};
 
 export function updateUser(user, auth_token) {
   const { email, name } = user;
@@ -149,6 +178,21 @@ export const loadHoneys = auth_token => {
   };
 };
 
+export const addHoney = (email, auth_token) => {
+  return dispatch => {
+    dispatch(beginApiCall());
+    return honeysApi
+      .addHoney(email, auth_token)
+      .then(honey => {
+        dispatch(addHoneySuccess(honey));
+      })
+      .catch(error => {
+        dispatch(apiCallError(error));
+        throw error;
+      });
+  };
+};
+
 export const loadDewers = auth_token => {
   return dispatch => {
     dispatch(beginApiCall());
@@ -164,3 +208,17 @@ export const loadDewers = auth_token => {
   };
 };
 
+export const addDewer = (email, auth_token) => {
+  return dispatch => {
+    dispatch(beginApiCall());
+    return dewersApi
+      .addDewer(email, auth_token)
+      .then(dewer => {
+        dispatch(addDewerSuccess(dewer));
+      })
+      .catch(error => {
+        dispatch(apiCallError(error));
+        throw error;
+      });
+  };
+};
