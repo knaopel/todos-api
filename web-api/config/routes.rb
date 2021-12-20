@@ -8,6 +8,8 @@ Rails.application.routes.draw do
   end
 
   scope module: :v1, constraints: ApiVersion.new('v1', true) do
+    # user
+    post 'signup', to: 'users#create'
     get 'user', to: 'users#show'
     put 'user', to: 'users#update'
     post 'user/invite' => 'users#invite'
@@ -35,6 +37,5 @@ Rails.application.routes.draw do
   end
 
   post 'auth/login', to: 'authentication#authenticate'
-  post 'signup', to: 'users#create'
   post 'acceptinvitation' => 'users#accept_invitation'
 end
