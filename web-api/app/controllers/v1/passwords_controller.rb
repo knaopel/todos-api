@@ -6,15 +6,17 @@ class V1::PasswordsController < ApplicationController
     if user
       user.send_password_reset
     end
-    # json_response(user)
     # this response is sent regardless of whether a user is found for security reasons
     json_response({alert: "If this user exists, we have sent you a password reset email."})
   end
 
   def reset
-    user = User.find_by(password_reset_token: params[:token], email: params[:email])
+    token = params[:token]
+    email = params[:email]
+    password = params[:password]
+    user = User.find_by(password_reset_token: token, email: email)
     if user.present? && user.password_token_valid?
-      if user.reset_password(params[:password])
+      if user.reset_password(password)
         json_response({alert: "Your password has been successfully reset!"})
         session[:user_id] = user.id
       else
