@@ -129,7 +129,43 @@ RSpec.describe 'V1::Users', type: :request do
 
   # User invitation test suite
   describe 'POST /acceptinvitation' do
-    before {}
+    context 'when correct user' do
+      before do
+        valid_invite_attributes['honey_or_dewer'] = 'honey'
+        post '/user/invite',
+             params: valid_invite_attributes.to_json,
+             headers: valid_v1_headers
+        subject_user = User.find_by_email(user_to_invite.email)
+        token = subject_user.password_reset_token
+        attributes = {
+          token: token,
+          name: user_to_invite.name,
+          password: user_to_invite.password,
+        }
+        post '/acceptinvitation',
+             params: attributes.to_json,
+             headers: valid_v1_headers.except('Authorization')
+      end
+      it 'returns http success' do
+        expect(response).to have_http_status(:success)
+      end
+      it 'returns auth_token' do
+        expect(json['auth_token']).not_to be_nil
+      end
+    end
+    context 'when wrong user' do
+      it 'returns http unprocessable_entity status' do
+        params = {
+          token: 'abc123',
+          name: 'William Seymour',
+          password: Faker::Internet.password,
+        }
+        post '/acceptinvitation',
+             params: params.to_json,
+             headers: valid_v1_headers.except('Authorization')
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
   end
 
   # user details test suite

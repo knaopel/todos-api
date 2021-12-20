@@ -13,6 +13,7 @@ Rails.application.routes.draw do
     get 'user', to: 'users#show'
     put 'user', to: 'users#update'
     post 'user/invite' => 'users#invite'
+    post 'acceptinvitation' => 'users#accept_invitation'
     post 'user/exists', to: 'users#check_user'
     post 'forgot_password' => 'passwords#forgot'
     post 'reset_password' => 'passwords#reset'
@@ -33,9 +34,7 @@ Rails.application.routes.draw do
     resources :todos do
       resources :items
     end
-
   end
 
   post 'auth/login', to: 'authentication#authenticate'
-  post 'acceptinvitation' => 'users#accept_invitation'
 end
