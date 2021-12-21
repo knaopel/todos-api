@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'V1::Dewers', type: :request do
   let!(:user) { create(:user) }
+  let(:og_dewers_count) { user.dewers_count }
   let!(:user2) { create(:user) }
   let!(:user3) { create(:user) }
   let(:headers) { valid_headers }
@@ -39,6 +40,7 @@ RSpec.describe 'V1::Dewers', type: :request do
     end
   end
 
+  # Dewers 'Add' suite
   describe 'POST /dewers' do
     context 'when dewer is not found' do
       before do
@@ -56,7 +58,7 @@ RSpec.describe 'V1::Dewers', type: :request do
       end
     end
 
-    context 'when dewer is user' do
+    context 'when dewer is existing user' do
       before do
         @num_dewers = user.dewers_count
         post '/dewers',
@@ -69,6 +71,46 @@ RSpec.describe 'V1::Dewers', type: :request do
       it 'dewers_count is incresed by one' do
         user_subject = User.find(user.id)
         expect(user_subject.dewers_count).to eq(@num_dewers + 1)
+      end
+    end
+
+    context 'when dewer is the same user' do
+      before do
+        post '/dewers',
+             params: { email: user.email }.to_json,
+             headers: valid_v1_headers
+      end
+      it 'returns http unprocessable_entity status' do
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+      it 'returns unchanged dewers_count' do
+        expect(json.size).to eq(og_dewers_count)
+      end
+    end
+  end
+
+  # Dewers delete suite
+  describe 'DELETE /dewers/:id' do
+    context 'when the dewer is found' do
+      before do
+        user.add_dewer(user2.id)
+        @dewers_count = user.dewers.count
+        delete "/dewers/#{user2.id}", headers: valid_v1_headers
+      end
+      it 'has no content' do
+        expect(response).to have_http_status(:no_content)
+      end
+      it 'the dewer is removed' do
+        expect(user.dewers.count).to eq(@dewers_count - 1)
+      end
+    end
+
+    context 'when the dewer is not found' do
+      before do
+        delete "/dewers/#{Faker::Number.number}", headers: valid_v1_headers
+      end
+      it 'returns a "not found" status' do
+        expect(response).to have_http_status(:not_found)
       end
     end
   end

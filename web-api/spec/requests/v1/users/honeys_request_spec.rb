@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Honeys API", type: :request do
+RSpec.describe 'Honeys API', type: :request do
   let!(:user) { create(:user) }
   let(:honeys_count) { user.honeys_count }
   let(:headers) { valid_headers }
@@ -10,15 +10,14 @@ RSpec.describe "Honeys API", type: :request do
   # Honey GET test Suite
   describe 'GET /honeys' do
     before do
-      honey_users.each do |u|
-        user.add_honey(u.id)
-      end
+      honey_users.each { |u| user.add_honey(u.id) }
+
       # debugger
       get '/honeys', headers: headers
     end
-    it 'returns honeys' do
+    it 'returns 5 honeys' do
       expect(json).not_to be_empty
-      expect(json.size).to eq(5)      
+      expect(json.size).to eq(5)
     end
     it 'returns "OK" status code' do
       expect(response).to have_http_status(:ok)
@@ -37,14 +36,15 @@ RSpec.describe "Honeys API", type: :request do
       end
       it 'returns array of honeys with user2' do
         expect(json.count).to eq(1)
-        expect(json[0]["email"]).to eq(user2.email)
+        expect(json[0]['email']).to eq(user2.email)
       end
     end
     context 'when user is not found' do
       before do
         honey_params = { email: Faker::Internet.email }.to_json
+
         # attempt to add fake user as honey
-        post '/honeys', params: honey_params, headers: headers        
+        post '/honeys', params: honey_params, headers: headers
       end
       it 'returns a "unprocessable entity" status' do
         expect(response).to have_http_status(:unprocessable_entity)
@@ -53,8 +53,9 @@ RSpec.describe "Honeys API", type: :request do
     context 'when user is same user' do
       before do
         honey_params = { email: user.email }.to_json
+
         # attempt to add same user as honey
-        post '/honeys', params: honey_params, headers: headers        
+        post '/honeys', params: honey_params, headers: headers
       end
       it 'returns a "unprocessable entity" status' do
         expect(response).to have_http_status(:unprocessable_entity)
@@ -69,7 +70,7 @@ RSpec.describe "Honeys API", type: :request do
       post '/honeys/exists', params: honey_params, headers: headers
       expect(response).to have_http_status(:ok)
       expect(json).not_to be_empty
-      expect(json["exists"]).to be_truthy
+      expect(json['exists']).to be_truthy
     end
 
     it 'returns false when user is not found' do
@@ -78,8 +79,8 @@ RSpec.describe "Honeys API", type: :request do
       post '/honeys/exists', params: honey_params, headers: headers
       expect(response).to have_http_status(:unprocessable_entity)
       expect(json).not_to be_empty
-      expect(json["exists"]).to be_falsy
-      expect(json["searched_for_email"]).to eq(fake_email)
+      expect(json['exists']).to be_falsy
+      expect(json['searched_for_email']).to eq(fake_email)
     end
   end
 
@@ -101,7 +102,7 @@ RSpec.describe "Honeys API", type: :request do
     context 'when the honey is not found' do
       before { delete "/honeys/#{Faker::Number.number}", headers: headers }
       it 'returns "not found" status' do
-        expect(response).to have_http_status(:not_found) 
+        expect(response).to have_http_status(:not_found)
       end
     end
   end

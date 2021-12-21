@@ -32,6 +32,7 @@ Rails.application.routes.draw do
     # Dewers
     get 'dewers', to: 'dewers#index'
     post 'dewers', to: 'dewers#create'
+    delete 'dewers/:id', to: 'dewers#destroy'
 
     get 'todos/all', to: 'todos#all'
     get 'todos/complete', to: 'todos#complete'

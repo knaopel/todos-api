@@ -27,6 +27,17 @@ class V1::DewersController < ApplicationController
     end
   end
 
+  # DELETE /dewers/:id
+  def destroy
+    dewer_id = params[:id].to_i
+    if has_dewer?(dewer_id)
+      current_user.undewer(dewer_id)
+      head :no_content
+    else
+      json_response({ error: 'User not found' }, :not_found)
+    end
+  end
+
   private
 
   def set_user
