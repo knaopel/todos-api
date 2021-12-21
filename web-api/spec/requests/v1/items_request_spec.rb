@@ -1,9 +1,9 @@
 # spec/requests/items_spec.rb
 require 'rails_helper'
 
-RSpec.describe 'Items API' do
+RSpec.describe 'V1::Items API' do
   let(:user) { create(:user) }
-  let!(:todo) { create(:todo, created_by: user.id) }
+  let!(:todo) { create(:todo, user_id: user.id) }
   let!(:items) { create_list(:item, 20, todo_id: todo.id) }
   let(:todo_id) { todo.id }
   let(:id) { items.first.id }
@@ -69,7 +69,9 @@ RSpec.describe 'Items API' do
 
     context 'when request attributes are valid' do
       before do
-        post "/todos/#{todo_id}/items", params: valid_attributes, headers: headers
+        post "/todos/#{todo_id}/items",
+             params: valid_attributes,
+             headers: headers
       end
 
       it 'returns status code 201' do
@@ -95,7 +97,9 @@ RSpec.describe 'Items API' do
     let(:valid_attributes) { { name: 'Mozart' }.to_json }
 
     before do
-      put "/todos/#{todo_id}/items/#{id}", params: valid_attributes, headers:headers
+      put "/todos/#{todo_id}/items/#{id}",
+          params: valid_attributes,
+          headers: headers
     end
 
     context 'when item exists' do
@@ -124,7 +128,9 @@ RSpec.describe 'Items API' do
 
   # Test suite for DELETE /todos/:id
   describe 'DELETE /todos/:id' do
-    before { delete "/todos/#{todo_id}/items/#{id}", params: {}, headers: headers }
+    before do
+      delete "/todos/#{todo_id}/items/#{id}", params: {}, headers: headers
+    end
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)
