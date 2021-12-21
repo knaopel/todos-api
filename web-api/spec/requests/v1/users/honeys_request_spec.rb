@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Honeys API', type: :request do
+RSpec.describe 'V1::Honeys API', type: :request do
   let!(:user) { create(:user) }
   let(:honeys_count) { user.honeys_count }
   let(:headers) { valid_headers }
