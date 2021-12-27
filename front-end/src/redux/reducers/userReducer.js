@@ -20,7 +20,7 @@ export default function userReducer(state = initialState.user, action) {
         honeys: {
           items: [
             ...state.honeys.items,
-            ...action.honey
+            action.honey
           ]
         }
       };
@@ -32,7 +32,7 @@ export default function userReducer(state = initialState.user, action) {
         dewers: {
           items: [
             ...state.dewers.items,
-            ...action.dewer
+            action.dewer
           ]
         }
       };

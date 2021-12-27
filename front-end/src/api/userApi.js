@@ -17,6 +17,14 @@ export const signupUser = params => {
     .catch(handleError);
 };
 
+export const inviteUser = (email, honey_or_dewer, auth_token) => {
+  const data = { email, honey_or_dewer };
+  return axios
+    .post(`${baseUrl}/user/invite`, data, { headers: getHeaders(auth_token) })
+    .then(handleAxiosResponse)
+    .catch(handleError);
+};
+
 export const getLocalUser = () => {
   return new Promise(resolve => {
     const userStr = localStorage.getItem(KEY_NAME);

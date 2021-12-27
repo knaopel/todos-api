@@ -4,6 +4,7 @@ import * as honeysApi from '../../api/honeysApi';
 import * as dewersApi from '../../api/dewersApi';
 import { apiCallError, beginApiCall } from './apiStatusActions';
 
+
 // dispatches
 export function logoutComplete() {
   return { type: types.USER_LOGOUT_COMPLETE };
@@ -185,6 +186,26 @@ export const addHoney = (email, auth_token) => {
       .addHoney(email, auth_token)
       .then(honey => {
         dispatch(addHoneySuccess(honey));
+      })
+      .catch(error => {
+        dispatch(apiCallError(error));
+        throw error;
+      });
+  };
+};
+
+export const inviteUser = (email, honey_or_dewer, auth_token) => {
+  return dispatch => {
+    dispatch(beginApiCall());
+    return userApi
+      .inviteUser(email, honey_or_dewer, auth_token)
+      .then(resp => {
+        const { user } = resp;
+        if (honey_or_dewer === "honey") {
+          dispatch(addHoneySuccess(user));
+        } else {
+          dispatch(addDewerSuccess(user));
+        }
       })
       .catch(error => {
         dispatch(apiCallError(error));

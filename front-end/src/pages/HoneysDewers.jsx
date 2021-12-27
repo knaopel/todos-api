@@ -6,12 +6,10 @@ import { useNavigate } from 'react-router-dom';
 
 // app specific imports
 import { UserTable } from '../components';
-import { loadDewers, loadHoneys } from '../redux/actions/userActions';
+import { loadDewers, addDewer, loadHoneys, addHoney, inviteUser } from '../redux/actions/userActions';
 import * as userApi from '../api/userApi';
-// import { loadTodos } from '../redux/actions/todoActions';
-// import { CheckOutlined } from '@mui/icons-material';
 
-const HoneysDewers = ({ loading, user, loadDewers, loadHoneys }) => {
+const HoneysDewers = ({ loading, user, addDewer, loadDewers, loadHoneys, addHoney, inviteUser }) => {
   const [email, setEmail] = useState('');
   const [newUser, setNewUser] = useState(null);
   const [searchHoneyOpen, setSearchHoneyOpen] = useState(false);
@@ -81,6 +79,21 @@ const HoneysDewers = ({ loading, user, loadDewers, loadHoneys }) => {
   // Invitations
   const handleInviteUser = (scope) => {
     console.log(`${email} will be invited as a ${scope}`);
+    // switch (scope) {
+    // case 'dewer':
+    inviteUser(email, scope, user.auth_token)
+      .catch(error => {
+        console.log(error);
+      });
+    // break;
+    //   case 'honey':
+    //     inviteUser(email)
+    //       .catch(error => {
+    //         console.log(error);
+    //       });
+    //     break;
+    //   default:
+    // }
   };
 
   const handleInviteHoney = () => {
@@ -97,6 +110,20 @@ const HoneysDewers = ({ loading, user, loadDewers, loadHoneys }) => {
   // Add existing user
   const handleAddUser = (scope) => {
     console.log(`${email} will be added to ${scope}`);
+    switch (scope) {
+      case 'dewer':
+        addDewer(email)
+          .catch(error => {
+            console.log(error);
+          });
+        break;
+      case 'honey':
+        addHoney(email).catch(error => {
+          console.log(error);
+        });
+        break;
+      default:
+    }
   };
 
   const handleAddHoney = () => {
@@ -171,4 +198,12 @@ const mapStateToProps = ({ apiCallsInProgress, user }) => {
   };
 };
 
-export default connect(mapStateToProps, { loadHoneys, loadDewers })(HoneysDewers);
+const mapDispatchToProps = {
+  addDewer,
+  addHoney,
+  loadDewers,
+  loadHoneys,
+  inviteUser
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HoneysDewers);
