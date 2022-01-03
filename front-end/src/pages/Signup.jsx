@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { signupUser } from '../redux/actions/userActions';
-import { CredentialForm } from "../components";
+import { CredentialForm, dataMap } from "../components";
 import { connect } from 'react-redux';
 
 const Signup = ({ signupUser }) => {
@@ -24,7 +24,7 @@ const Signup = ({ signupUser }) => {
 
   return (
     <CredentialForm
-      isSignup={true}
+      data={dataMap.signup}
       isLoading={isLoading}
       processForm={handleSubmit}
     />

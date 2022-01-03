@@ -6,13 +6,12 @@ import store from './app/store';
 // import configureStore from './redux/configureStore';
 // const store = configureStore();
 
-// import { configureFakeBackend, store } from './helpers';
-// import { App2 } from './App2/App2';
-// import reportWebVitals from './reportWebVitals';
+if (process.env.NODE_ENV === 'test') {
+  const { worker } = require('./mocks/browser');
+  worker.start();
+}
 
 const store = configureStore();
-// setup fake backend
-// configureFakeBackend();
 
 ReactDOM.render(
   <ReduxProvider store={store}>

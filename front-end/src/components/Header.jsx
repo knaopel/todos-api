@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 // import { Menu as MenuIcon } from '@mui/icons-material';
 import {
   AppBar,
@@ -11,38 +12,35 @@ import {
   Typography,
 } from '@mui/material';
 import { connect } from 'react-redux';
+
+// app specific imports
+import { buildAvatarUrl } from '../util';
 import {
-  getLocalUser,
   loadUser,
   logoutUser,
 } from '../redux/actions/userActions';
-import md5 from 'md5';
 
-const Header = ({ user, getLocalUser, loadUser, logoutUser }) => {
+const Header = ({ user, loadUser, logoutUser }) => {
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [userLoading, setUserLoading] = useState(false);
 
   useEffect(() => {
-    if (!user?.auth_token) {
-      const fetchLocalUser = async () => {
-        await getLocalUser();
-      };
-      fetchLocalUser();
-    }
     if (user.auth_token && !user.name && !userLoading) {
       setUserLoading(true);
       loadUser(user.auth_token)
         .then(() => setUserLoading(false))
         .catch(error => {
           alert('Loading user failed.' + error);
+          if (error.request.status === 401) {
+            navigate('/login');
+          }
         });
     }
-  }, [user, getLocalUser, loadUser, userLoading]);
+  }, [user, loadUser, userLoading, navigate]);
 
-  const buildAvatarUrl = email => {
-    const formattedEmail = ('' + email).trim().toLowerCase();
-    const hash = md5(formattedEmail);
-    return `//www.gravatar.com/avatar/${hash}.jpg`;
+  const handleHomeClick = () => {
+    navigate('/');
   };
 
   const handleMenu = event => {
@@ -53,9 +51,15 @@ const Header = ({ user, getLocalUser, loadUser, logoutUser }) => {
     setAnchorEl(null);
   };
 
+  const handleNavigate = path => {
+    handleClose();
+    navigate(path);
+  };
+
   const handleLogout = () => {
     logoutUser().then(() => {
       handleClose();
+      navigate('/');
     });
   };
 
@@ -78,6 +82,8 @@ const Header = ({ user, getLocalUser, loadUser, logoutUser }) => {
           component='div'
           sx={{ flexGrow: 1 }}
           align='center'
+          onClick={handleHomeClick}
+          className='appName'
         >
           Honey Dew
         </Typography>
@@ -110,8 +116,8 @@ const Header = ({ user, getLocalUser, loadUser, logoutUser }) => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                {/* <MenuItem onClick={handleClose}>Profile</MenuItem> */}
-                {/* <MenuItem onClick={handleClose}>My Account</MenuItem> */}
+                <MenuItem onClick={() => handleNavigate('/profile')}>Profile</MenuItem>
+                <MenuItem onClick={() => handleNavigate('/honeys_dewers')}>Honeys/Dewers</MenuItem>
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
             </div>
@@ -129,7 +135,6 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-  getLocalUser,
   loadUser,
   logoutUser,
 };

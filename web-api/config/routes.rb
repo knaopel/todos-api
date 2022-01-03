@@ -8,9 +8,20 @@ Rails.application.routes.draw do
   end
 
   scope module: :v1, constraints: ApiVersion.new('v1', true) do
+    # user
+    post 'signup', to: 'users#create'
     get 'user', to: 'users#show'
     put 'user', to: 'users#update'
-    post 'user/exists', to: 'users/follows#check_follower', as: :exists
+    post 'user/invite' => 'users#invite'
+    post 'acceptinvitation' => 'users#accept_invitation'
+    post 'user/exists', to: 'users#check_user'
+
+    #authentication
+    post 'auth/login', to: 'authentication#authenticate'
+
+    # passwords
+    post 'forgot_password' => 'passwords#forgot'
+    post 'reset_password' => 'passwords#reset'
 
     # Honeys
     get 'honeys', to: 'honeys#index'
@@ -20,6 +31,8 @@ Rails.application.routes.draw do
 
     # Dewers
     get 'dewers', to: 'dewers#index'
+    post 'dewers', to: 'dewers#create'
+    delete 'dewers/:id', to: 'dewers#destroy'
 
     get 'todos/all', to: 'todos#all'
     get 'todos/complete', to: 'todos#complete'
@@ -27,12 +40,5 @@ Rails.application.routes.draw do
     resources :todos do
       resources :items
     end
-
   end
-
-  resources :authors
-  resources :courses      
-
-  post 'auth/login', to: 'authentication#authenticate'
-  post 'signup', to: 'users#create'
 end
