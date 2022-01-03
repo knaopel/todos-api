@@ -1,4 +1,4 @@
-import { getHeaders, handleAxiosResponse, handleError, handleResponse } from './apiUtils';
+import { getHeaders, handleAxiosResponse, handleError } from './apiUtils';
 import axios from 'axios';
 const baseUrl = process.env.REACT_APP_API_URL;
 const KEY_NAME = 'user';
@@ -13,6 +13,14 @@ export function login(email, password) {
 export const signupUser = params => {
   return axios
     .post(`${baseUrl}/signup`, params)
+    .then(handleAxiosResponse)
+    .catch(handleError);
+};
+
+export const inviteUser = (email, honey_or_dewer, auth_token) => {
+  const data = { email, honey_or_dewer };
+  return axios
+    .post(`${baseUrl}/user/invite`, data, { headers: getHeaders(auth_token) })
     .then(handleAxiosResponse)
     .catch(handleError);
 };
@@ -51,6 +59,13 @@ export const loadUser = auth_token => {
     .catch(handleError);
 };
 
+export const userExists = (email, auth_token) => {
+  return axios
+    .post(`${baseUrl}/user/exists`, { email }, { headers: getHeaders(auth_token) })
+    .then(handleAxiosResponse)
+    .catch(handleError);
+};
+
 export const saveUser = (user, auth_token) => {
   return axios
     .put(`${baseUrl}/user`, { headers: getHeaders(auth_token), data: user })
@@ -58,6 +73,9 @@ export const saveUser = (user, auth_token) => {
     .catch(handleError);
 };
 
-export function getTodos() {
-  return fetch(baseUrl).then(handleResponse).catch(handleError);
-}
+export const acceptInvitation = params => {
+  return axios
+    .post(`${baseUrl}/acceptinvitation`, params)
+    .then(handleAxiosResponse)
+    .catch(handleError);
+};

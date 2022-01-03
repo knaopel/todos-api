@@ -1,0 +1,8 @@
+Hi <%= @user.email %>,
+
+You are receiving this email because you have been invited to join the Honey Dew app as a <%= @honey_or_dewer %> to <%= @inviter.name %>.
+Please navigate to http://localhost:3000/acceptinvitation/<%= @user.password_reset_token %> to accept the invitation.
+
+Thank you,
+
+Honey Dew app

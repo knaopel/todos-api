@@ -10,7 +10,12 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { LoadingButton } from "@mui/lab";
 import { useState } from "react";
 
-const dataMap = {
+export const dataMap = {
+  acceptance: {
+    title: 'Accept Invitation',
+    link: null,
+    text: null
+  },
   signup: {
     title: "Sign Up",
     link: "/login",
@@ -23,11 +28,10 @@ const dataMap = {
   },
 };
 
-export const CredentialForm = ({ isLoading, processForm, isSignup }) => {
+export const CredentialForm = ({ isLoading, processForm, data = dataMap.login }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const data = isSignup ? dataMap.signup : dataMap.login;
 
   const handleChange = ({ target }) => {
     const { name, value } = target;
@@ -48,9 +52,12 @@ export const CredentialForm = ({ isLoading, processForm, isSignup }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    let params = { email, password };
-    if (isSignup) {
+    let params = { password };
+    if (data !== dataMap.login) {
       params.name = name;
+    }
+    if (data !== dataMap.acceptance) {
+      params.email = email;
     }
     processForm(params);
   };
@@ -72,7 +79,7 @@ export const CredentialForm = ({ isLoading, processForm, isSignup }) => {
       </Typography>
       <Box sx={{ mt: 3 }}>
         <Grid container spacing={2}>
-          {isSignup && (
+          {(data !== dataMap.login) && (
             <Grid item xs={12}>
               <TextField
                 autoComplete="name"
@@ -87,18 +94,21 @@ export const CredentialForm = ({ isLoading, processForm, isSignup }) => {
               />
             </Grid>
           )}
-          <Grid item xs={12}>
-            <TextField
-              required
-              fullWidth
-              name="email"
-              id="email"
-              label="Email"
-              autoComplete="email"
-              onChange={handleChange}
-              value={email}
-            />
-          </Grid>
+          {
+            (data !== dataMap.acceptance) &&
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                name="email"
+                id="email"
+                label="Email"
+                autoComplete="email"
+                onChange={handleChange}
+                value={email}
+              />
+            </Grid>
+          }
           <Grid item xs={12}>
             <TextField
               required
@@ -121,20 +131,20 @@ export const CredentialForm = ({ isLoading, processForm, isSignup }) => {
           sx={{ mt: 3, mb: 2 }}
           onClick={handleSubmit}
           disabled={
-            (isSignup && !Boolean(name.length)) ||
-            !Boolean(email.length) ||
+            ((data === dataMap.signup) && !Boolean(name.length)) ||
+            ((data !== dataMap.acceptance) && !Boolean(email.length)) ||
             !Boolean(password.length)
           }
         >
           {data.title}
         </LoadingButton>
-        <Grid container justifyContent="flex-end">
+        {data.link && <Grid container justifyContent="flex-end">
           <Grid item>
             <Link href={data.link} variant="body2">
               {data.text}
             </Link>
           </Grid>
-        </Grid>
+        </Grid>}
       </Box>
     </Box>
   );

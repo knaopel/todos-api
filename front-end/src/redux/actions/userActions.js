@@ -1,6 +1,9 @@
 import * as types from './actionTypes';
 import * as userApi from '../../api/userApi';
+import * as honeysApi from '../../api/honeysApi';
+import * as dewersApi from '../../api/dewersApi';
 import { apiCallError, beginApiCall } from './apiStatusActions';
+
 
 // dispatches
 export function logoutComplete() {
@@ -26,9 +29,29 @@ export const setLocalUserComplete = user => {
   return { type: types.USER_SET_LOCAL_COMPLETE, user };
 };
 
+export const acceptUserInvitationSuccess = user => {
+  return { type: types.USER_ACCEPT_INVITATION_SUCCESS, user };
+};
+
 export function loadUserSuccess(user) {
   return { type: types.USER_LOAD_SUCCESS, user };
 }
+
+export const loadHoneysSuccess = honeys => {
+  return { type: types.HONEYS_LOAD_SUCCESS, honeys };
+};
+
+const addHoneySuccess = honey => {
+  return { type: types.HONEY_ADD_SUCCESS, honey };
+};
+
+export const loadDewersSuccess = dewers => {
+  return { type: types.DEWERS_LOAD_SUCCESS, dewers };
+};
+
+const addDewerSuccess = dewer => {
+  return { type: types.DEWER_ADD_SUCCESS, dewer };
+};
 
 // actions
 export function loginUser(email, password) {
@@ -63,6 +86,23 @@ export function signupUser(params) {
       });
   };
 }
+
+export const acceptUserInvitation = params => {
+  return dispatch => {
+    dispatch(beginApiCall());
+    return userApi
+      .acceptInvitation(params)
+      .then(resp => {
+        const { user } = resp;
+        dispatch(acceptUserInvitationSuccess(user));
+        dispatch(setLocalUser(user));
+      })
+      .catch(error => {
+        dispatch(apiCallError(error));
+        throw error;
+      });
+  };
+};
 
 export function updateUser(user, auth_token) {
   const { email, name } = user;
@@ -123,3 +163,83 @@ export function loadUser(auth_token) {
       });
   };
 }
+
+export const loadHoneys = auth_token => {
+  return dispatch => {
+    dispatch(beginApiCall());
+    return honeysApi
+      .getHoneys(auth_token)
+      .then(honeys => {
+        dispatch(loadHoneysSuccess(honeys));
+      })
+      .catch(error => {
+        dispatch(apiCallError());
+        throw error;
+      });
+  };
+};
+
+export const addHoney = (email, auth_token) => {
+  return dispatch => {
+    dispatch(beginApiCall());
+    return honeysApi
+      .addHoney(email, auth_token)
+      .then(honey => {
+        dispatch(addHoneySuccess(honey));
+      })
+      .catch(error => {
+        dispatch(apiCallError(error));
+        throw error;
+      });
+  };
+};
+
+export const inviteUser = (email, honey_or_dewer, auth_token) => {
+  return dispatch => {
+    dispatch(beginApiCall());
+    return userApi
+      .inviteUser(email, honey_or_dewer, auth_token)
+      .then(resp => {
+        const { user } = resp;
+        if (honey_or_dewer === "honey") {
+          dispatch(addHoneySuccess(user));
+        } else {
+          dispatch(addDewerSuccess(user));
+        }
+      })
+      .catch(error => {
+        dispatch(apiCallError(error));
+        throw error;
+      });
+  };
+};
+
+export const loadDewers = auth_token => {
+  return dispatch => {
+    dispatch(beginApiCall());
+    return dewersApi
+      .getDewers(auth_token)
+      .then(dewers => {
+        dispatch(loadDewersSuccess(dewers));
+      })
+      .catch(error => {
+        dispatch(apiCallError());
+        throw error;
+      });
+  };
+};
+
+export const addDewer = (email, auth_token) => {
+  return dispatch => {
+    dispatch(beginApiCall());
+    return dewersApi
+      .addDewer(email, auth_token)
+      .then(dewer => {
+        dispatch(addDewerSuccess(dewer));
+      })
+      .catch(error => {
+        dispatch(apiCallError(error));
+        throw error;
+      });
+  };
+};
