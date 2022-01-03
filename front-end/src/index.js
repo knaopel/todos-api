@@ -2,7 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider as ReduxProvider } from 'react-redux';
 import App from './App';
-import configureStore from './redux/configureStore';
+import store from './app/store';
+// import configureStore from './redux/configureStore';
+// const store = configureStore();
 
 // import { configureFakeBackend, store } from './helpers';
 // import { App2 } from './App2/App2';
