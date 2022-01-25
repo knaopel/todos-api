@@ -1,21 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider as ReduxProvider } from 'react-redux';
-import App from './App';
+// import App from './App';
 import store from './app/store';
+import { App1 } from './App1';
 // import configureStore from './redux/configureStore';
 // const store = configureStore();
 
-if (process.env.NODE_ENV === 'test') {
+if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
   const { worker } = require('./mocks/browser');
   worker.start();
 }
 
-const store = configureStore();
-
 ReactDOM.render(
   <ReduxProvider store={store}>
-    <App />
+    {/* <App /> */}
+    <App1 />
   </ReduxProvider>,
   document.getElementById('app')
 );
