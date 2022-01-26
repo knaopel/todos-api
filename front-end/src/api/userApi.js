@@ -1,28 +1,36 @@
 import { getHeaders, handleAxiosResponse, handleError } from './apiUtils';
 import axios from 'axios';
 const baseUrl = process.env.REACT_APP_API_URL;
-const KEY_NAME = 'user';
+export const KEY_NAME = 'user';
 
-export function login(email, password) {
-  return axios
-    .post(`${baseUrl}/auth/login`, { email, password })
-    .then(handleAxiosResponse)
-    .catch(handleError);
-}
-
-export const signupUser = params => {
-  return axios
-    .post(`${baseUrl}/signup`, params)
-    .then(handleAxiosResponse)
-    .catch(handleError);
+export const login = async (email, password) => {
+  try {
+    const response = await axios.post(`${baseUrl}/auth/login`, { email, password });
+    return handleAxiosResponse(response);
+  } catch (err) {
+    return handleError(err);
+  }
 };
 
-export const inviteUser = (email, honey_or_dewer, auth_token) => {
+export const signupUser = async params => {
+  try {
+    const response = await axios
+      .post(`${baseUrl}/signup`, params);
+    return handleAxiosResponse(response);
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
+export const inviteUser = async (email, honey_or_dewer, auth_token) => {
   const data = { email, honey_or_dewer };
-  return axios
-    .post(`${baseUrl}/user/invite`, data, { headers: getHeaders(auth_token) })
-    .then(handleAxiosResponse)
-    .catch(handleError);
+  try {
+    const response = await axios
+      .post(`${baseUrl}/user/invite`, data, { headers: getHeaders(auth_token) });
+    return handleAxiosResponse(response);
+  } catch (error) {
+    return handleError(error);
+  }
 };
 
 export const getLocalUser = () => {
@@ -52,30 +60,46 @@ export const removeLocalUser = () => {
   });
 };
 
-export const loadUser = auth_token => {
-  return axios
-    .get(`${baseUrl}/user`, { headers: getHeaders(auth_token) })
-    .then(handleAxiosResponse)
-    .catch(handleError);
+export const loadUser = async auth_token => {
+  try {
+    const response = await axios
+      .get(`${baseUrl}/user`, { headers: getHeaders(auth_token) });
+    return handleAxiosResponse(response);
+  } catch (error) {
+    return handleError(error);
+  }
 };
 
-export const userExists = (email, auth_token) => {
-  return axios
-    .post(`${baseUrl}/user/exists`, { email }, { headers: getHeaders(auth_token) })
-    .then(handleAxiosResponse)
-    .catch(handleError);
+export const userExists = async (email, auth_token) => {
+  try {
+    const response = await axios
+      .post(
+        `${baseUrl}/user/exists`,
+        { email },
+        { headers: getHeaders(auth_token) }
+      );
+    return handleAxiosResponse(response);
+  } catch (error) {
+    return handleError(error);
+  }
 };
 
-export const saveUser = (user, auth_token) => {
-  return axios
-    .put(`${baseUrl}/user`, { headers: getHeaders(auth_token), data: user })
-    .then(handleAxiosResponse)
-    .catch(handleError);
+export const saveUser = async (user, auth_token) => {
+  try {
+    const response = await axios
+      .put(`${baseUrl}/user`, { headers: getHeaders(auth_token), data: user });
+    return handleAxiosResponse(response);
+  } catch (error) {
+    return handleError(error);
+  }
 };
 
-export const acceptInvitation = params => {
-  return axios
-    .post(`${baseUrl}/acceptinvitation`, params)
-    .then(handleAxiosResponse)
-    .catch(handleError);
+export const acceptInvitation = async params => {
+  try {
+    const response = await axios
+      .post(`${baseUrl}/acceptinvitation`, params);
+    return handleAxiosResponse(response);
+  } catch (error) {
+    return handleError(error);
+  }
 };
