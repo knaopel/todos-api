@@ -1,47 +1,53 @@
 import {
   createAsyncThunk,
   createEntityAdapter,
+  createSelector,
   createSlice,
 } from '@reduxjs/toolkit';
-import { client } from '../../api/client';
+
+import * as todosApi from '../../api/todoApi';
 
 const todosAdapter = createEntityAdapter({
   // sortComparer: (a, b) => b.date.localeCompare(a.date),
 });
 
-const initialState = todosAdapter.getInitialState({
+export const initialState = todosAdapter.getInitialState({
   status: 'idle',
   error: null,
 });
 
-export const fetchTodos = createAsyncThunk('todos/fetchTodos', async () => {
-  const response = await client.get('/todos', {
-    headers: { Authorization: 'mocked_auth_token' },
-  });
-  return response.data;
-});
+export const fetchTodos = createAsyncThunk(
+  'todos/fetchTodos',
+  async auth_token => {
+    return await todosApi.getTodos(auth_token);
+  }
+);
 
 export const addNewTodo = createAsyncThunk(
   'todos/addNewTodo',
-  async initialTodo => {
-    const response = await client.post('', initialTodo);
-    return response.data;
+  async (initialTodo, auth_token) => {
+    return await todosApi.saveTodo(initialTodo, auth_token);
+  }
+);
+
+export const updateTodo = createAsyncThunk(
+  'todos/updateTodo',
+  async (updatedTodo, auth_token) => {
+    return await todosApi.saveTodo(updatedTodo, auth_token);
+  }
+);
+
+export const deleteTodo = createAsyncThunk(
+  'todos/deleteTodo',
+  async (todoId, auth_token) => {
+    return await todosApi.deleteTodo(todoId, auth_token);
   }
 );
 
 const todosSlice = createSlice({
   name: 'todos',
   initialState,
-  reducers: {
-    todoUpdated(state, action) {
-      const { id, title, content } = action.payload;
-      const existingTodo = state.entities[id];
-      if (existingTodo) {
-        existingTodo.title = title;
-        existingTodo.content = content;
-      }
-    },
-  },
+  reducers: {},
   extraReducers(builder) {
     builder
       .addCase(fetchTodos.pending, (state, action) => {
@@ -55,7 +61,35 @@ const todosSlice = createSlice({
         state.status = 'failed';
         state.error = action.error.message;
       });
-    builder.addCase(addNewTodo.fulfilled, todosAdapter.addOne);
+    builder
+      .addCase(addNewTodo.pending, state => {
+        state.status = 'loading';
+        state.error = {};
+      })
+      .addCase(addNewTodo.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        todosAdapter.addOne(state, action.payload);
+      })
+      .addCase(addNewTodo.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error;
+      });
+    builder
+      .addCase(updateTodo.pending, state => {
+        state.status = 'loading';
+        state.error = {};
+      })
+      .addCase(updateTodo.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        todosAdapter.upsertOne(state, action.payload);
+      })
+      .addCase(updateTodo.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error;
+      });
+    builder.addCase(deleteTodo.fulfilled, (state, action) => {
+      todosAdapter.removeOne(state, action.payload);
+    });
   },
 });
 
@@ -64,7 +98,11 @@ export const { todoUpdated } = todosSlice.actions;
 export default todosSlice.reducer;
 
 export const {
-  selectAll: selectAllTodos,
+  selectAll: selectTodos,
   selectById: selectTodoById,
   selectIds: selectTodoIds,
 } = todosAdapter.getSelectors(state => state.todos);
+
+export const selectOpenTodos = createSelector(selectTodos, todos =>
+  todos.filter(todo => !todo.is_completed)
+);
