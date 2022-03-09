@@ -1,11 +1,11 @@
 import React from 'react';
-import { render as rtlRender } from '@testing-library/react'
+import { render } from '@testing-library/react'
 import { Provider } from 'react-redux'
 
 import rootStore from './app/store';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
-const render = (ui, { shouldUseRouter, store = rootStore,
+const customRender = (ui, { shouldUseRouter, store = rootStore,
   ...renderOptions } = {}) => {
   const Wrapper = ({ children }) => {
     if (shouldUseRouter) {
@@ -22,7 +22,7 @@ const render = (ui, { shouldUseRouter, store = rootStore,
     }
     return <Provider store={store}>{children}</Provider>
   }
-  return rtlRender(ui, { wrapper: Wrapper, ...renderOptions });
+  return render(ui, { wrapper: Wrapper, ...renderOptions });
 }
 
-export { render };
+export { customRender as render };
