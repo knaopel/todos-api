@@ -94,6 +94,9 @@ const usersSlice = createSlice({
 export const { userUpdated, signupUserLoading, signupUserSuccess } =
   usersSlice.actions;
 
+export const selectUser = state => state.user.entity.name;
+export const selectUserFetchStatus = state => state.user.status;
+
 export default usersSlice.reducer;
 
 // export const { selectAll, selectById } = usersAdapter.getSelectors(

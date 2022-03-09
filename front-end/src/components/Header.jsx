@@ -11,57 +11,59 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 
 // app specific imports
 import { buildAvatarUrl } from '../util';
-import {
-  loadUser,
-  logoutUser,
-} from '../redux/actions/userActions';
+// import {
+//   loadUser,
+//   logoutUser,
+// } from '../redux/actions/userActions';
+import { selectUser } from '../features/users/usersSlice';
 
-const Header = ({ user, loadUser, logoutUser }) => {
+const Header = () => {
+  const user = useSelector(selectUser);
   const navigate = useNavigate();
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [userLoading, setUserLoading] = useState(false);
+  // const [anchorEl, setAnchorEl] = useState(null);
+  // const [userLoading, setUserLoading] = useState(false);
 
-  useEffect(() => {
-    if (user.auth_token && !user.name && !userLoading) {
-      setUserLoading(true);
-      loadUser(user.auth_token)
-        .then(() => setUserLoading(false))
-        .catch(error => {
-          alert('Loading user failed.' + error);
-          if (error.request.status === 401) {
-            navigate('/login');
-          }
-        });
-    }
-  }, [user, loadUser, userLoading, navigate]);
+  // useEffect(() => {
+  //   if (user.auth_token && !user.name && !userLoading) {
+  //     setUserLoading(true);
+  //     loadUser(user.auth_token)
+  //       .then(() => setUserLoading(false))
+  //       .catch(error => {
+  //         alert('Loading user failed.' + error);
+  //         if (error.request.status === 401) {
+  //           navigate('/login');
+  //         }
+  //       });
+  //   }
+  // }, [user, loadUser, userLoading, navigate]);
 
   const handleHomeClick = () => {
     navigate('/');
   };
 
-  const handleMenu = event => {
-    setAnchorEl(event.currentTarget);
-  };
+  // const handleMenu = event => {
+  //   setAnchorEl(event.currentTarget);
+  // };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  // const handleClose = () => {
+  //   setAnchorEl(null);
+  // };
 
-  const handleNavigate = path => {
-    handleClose();
-    navigate(path);
-  };
+  // const handleNavigate = path => {
+  //   handleClose();
+  //   navigate(path);
+  // };
 
-  const handleLogout = () => {
-    logoutUser().then(() => {
-      handleClose();
-      navigate('/');
-    });
-  };
+  // const handleLogout = () => {
+  //   logoutUser().then(() => {
+  //     handleClose();
+  //     navigate('/');
+  //   });
+  // };
 
   return (
     <AppBar position='absolute'>
@@ -78,6 +80,7 @@ const Header = ({ user, loadUser, logoutUser }) => {
           </IconButton>
         )} */}
         <Typography
+        data-testid='app-header'
           variant='h6'
           component='div'
           sx={{ flexGrow: 1 }}
@@ -87,7 +90,7 @@ const Header = ({ user, loadUser, logoutUser }) => {
         >
           Honey Dew
         </Typography>
-        {user?.auth_token && (
+        {/* {user?.auth_token && (
           <>
             {userLoading ? (
               <CircularProgress />
@@ -122,21 +125,21 @@ const Header = ({ user, loadUser, logoutUser }) => {
               </Menu>
             </div>
           </>
-        )}
+        )} */}
       </Toolbar>
     </AppBar>
   );
 };
 
-const mapStateToProps = state => {
-  return {
-    user: state.user,
-  };
-};
+// const mapStateToProps = state => {
+//   return {
+//     user: state.user,
+//   };
+// };
 
-const mapDispatchToProps = {
-  loadUser,
-  logoutUser,
-};
+// const mapDispatchToProps = {
+//   loadUser,
+//   logoutUser,
+// };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default Header;

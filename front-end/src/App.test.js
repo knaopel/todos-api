@@ -1,19 +1,13 @@
-// import { render, screen } from '@testing-library/react';
-// import { Provider } from 'react-redux';
-// import { createStore } from 'redux';
-// import App from './App';
+import React from 'react';
+import App from './App';
+import { screen } from '@testing-library/react';
+import { render } from './test-utils';
 
-describe("App component", () => {
-  test('true',()=>{
-    expect(true).toBeTruthy()
+describe('App component', () => {
+  test('full app rendering & navigating', () => {
+    render(<App />);
+
+    // should show no user initially, and not be fetching a user
+    expect(screen.getByTestId('app-header')).toBeInTheDocument();
   });
-  // test('renders learn react link', () => {
-  //   render(
-  //     <Provider store={createStore()}>
-  //       <App />
-  //     </Provider>
-  //   );
-  //   const headerElement = screen.getByText(/honey dew/i);
-  //   expect(headerElement).toBeInTheDocument();
-  // });
 });
