@@ -5,6 +5,7 @@ import {
   fetchUser,
   initialState,
   loginUser,
+  setLocalUser,
   signupUser,
   updateUser,
 } from './usersSlice';
@@ -12,6 +13,7 @@ import store from '../../app/store';
 
 const baseUrl = process.env.REACT_APP_API_URL;
 const mock = new MockAdapter(axios);
+const TEST_KEY = 'user';
 
 const goodUser = {
   name: 'Amy Pond',
@@ -40,6 +42,23 @@ describe('UsersSlice Test Suite', () => {
       let state = store.getState().user;
       // assert
       expect(state.entity.auth_token).toEqual('fake_token');
+    });
+  });
+  describe('getLocalUser', () => {
+    it('should get user saved locally', () => {
+      // arrange
+      // act
+      // assert
+    });
+  });
+  describe('setLocalUser', () => {
+    it('should set user saved locally', async () => {
+      // arrange
+      // act
+      const result = await store.dispatch(setLocalUser(goodUser));
+      // assert
+      const savedUser = localStorage.getItem(TEST_KEY);
+      expect(JSON.parse(savedUser)).toEqual(goodUser);
     });
   });
   describe('login User', () => {

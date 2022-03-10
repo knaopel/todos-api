@@ -24,8 +24,8 @@ import { selectUser } from '../features/users/usersSlice';
 const Header = () => {
   const user = useSelector(selectUser);
   const navigate = useNavigate();
-  // const [anchorEl, setAnchorEl] = useState(null);
-  // const [userLoading, setUserLoading] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [userLoading, setUserLoading] = useState(false);
 
   // useEffect(() => {
   //   if (user.auth_token && !user.name && !userLoading) {
@@ -45,25 +45,25 @@ const Header = () => {
     navigate('/');
   };
 
-  // const handleMenu = event => {
-  //   setAnchorEl(event.currentTarget);
-  // };
+  const handleMenu = event => {
+    setAnchorEl(event.currentTarget);
+  };
 
-  // const handleClose = () => {
-  //   setAnchorEl(null);
-  // };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
-  // const handleNavigate = path => {
-  //   handleClose();
-  //   navigate(path);
-  // };
+  const handleNavigate = path => {
+    handleClose();
+    navigate(path);
+  };
 
-  // const handleLogout = () => {
-  //   logoutUser().then(() => {
-  //     handleClose();
-  //     navigate('/');
-  //   });
-  // };
+  const handleLogout = () => {
+    // logoutUser().then(() => {
+    //   handleClose();
+    //   navigate('/');
+    // });
+  };
 
   return (
     <AppBar position='absolute'>
@@ -90,7 +90,7 @@ const Header = () => {
         >
           Honey Dew
         </Typography>
-        {/* {user?.auth_token && (
+        {user?.auth_token && (
           <>
             {userLoading ? (
               <CircularProgress />
@@ -108,7 +108,7 @@ const Header = () => {
                 onClick={handleMenu}
                 color='inherit'
               >
-                <Avatar src={buildAvatarUrl(user?.email)} />
+                {/* <Avatar src={buildAvatarUrl(user?.email)} /> */}
               </IconButton>
               <Menu
                 id='menu-appbar'
@@ -125,7 +125,7 @@ const Header = () => {
               </Menu>
             </div>
           </>
-        )} */}
+        )}
       </Toolbar>
     </AppBar>
   );

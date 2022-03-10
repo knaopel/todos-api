@@ -46,7 +46,7 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-       <Box sx={{ display: 'flex', p: '1em' }}>
+       <Box sx={{ display: 'flex', p: '1em' }} data-testid="parent-box">
          <CssBaseline />
          <Router>
            <Header />

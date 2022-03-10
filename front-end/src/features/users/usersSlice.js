@@ -19,6 +19,14 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+export const setLocalUser = createAsyncThunk(
+  'user/setLocalUser',
+  async user =>{
+    const data = await userApi.setLocalUser(user);
+    return data;
+  }
+)
+
 export const fetchUser = createAsyncThunk(
   'user/fetchUser',
   async auth_token => {
@@ -94,7 +102,7 @@ const usersSlice = createSlice({
 export const { userUpdated, signupUserLoading, signupUserSuccess } =
   usersSlice.actions;
 
-export const selectUser = state => state.user.entity.name;
+export const selectUser = state => state.user.entity;
 export const selectUserFetchStatus = state => state.user.status;
 
 export default usersSlice.reducer;
