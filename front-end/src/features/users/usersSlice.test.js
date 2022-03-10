@@ -5,6 +5,7 @@ import {
   fetchUser,
   initialState,
   loginUser,
+  logoutUser,
   setLocalUser,
   signupUser,
   updateUser,
@@ -44,10 +45,25 @@ describe('UsersSlice Test Suite', () => {
       expect(state.entity.auth_token).toEqual('fake_token');
     });
   });
+  describe('logoutUser', () => {
+    it('should logout user', async () => {
+      mock.onPost(`${baseUrl}/auth/login`).reply(200, goodUser);
+      await store.dispatch(loginUser(userCredentials));
+      // console.log(store.getState().user);
+      expect(store.getState().user.entity).toEqual(goodUser);
+
+      await store.dispatch(logoutUser());
+      // console.log(store.getState().user);
+      expect(store.getState().user.entity).toEqual(initialState.entity);
+    });
+  });
   describe('getLocalUser', () => {
-    it('should get user saved locally', () => {
+    it('should get user saved locally', async () => {
+      // TODO: implementation
       // arrange
+      localStorage.setItem(TEST_KEY, JSON.stringify(goodUser));
       // act
+      // const result = await store.dispatch(getLocalUser);
       // assert
     });
   });
@@ -68,6 +84,7 @@ describe('UsersSlice Test Suite', () => {
 
       // act
       const result = await store.dispatch(loginUser(userCredentials));
+      // console.log(result);
       let state = store.getState().user;
       // assert
       expect(state.entity.auth_token).toEqual('fake_token');

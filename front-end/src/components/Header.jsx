@@ -60,8 +60,8 @@ const Header = () => {
 
   const handleLogout = () => {
     // logoutUser().then(() => {
-    //   handleClose();
-    //   navigate('/');
+      handleClose();
+      navigate('/');
     // });
   };
 

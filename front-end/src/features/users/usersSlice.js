@@ -11,6 +11,7 @@ export const initialState = {
   status: 'idle',
 };
 
+/* Async Thunks */
 export const loginUser = createAsyncThunk(
   'user/loginUser',
   async userCredentials => {
@@ -21,11 +22,11 @@ export const loginUser = createAsyncThunk(
 
 export const setLocalUser = createAsyncThunk(
   'user/setLocalUser',
-  async user =>{
+  async user => {
     const data = await userApi.setLocalUser(user);
     return data;
   }
-)
+);
 
 export const fetchUser = createAsyncThunk(
   'user/fetchUser',
@@ -54,6 +55,13 @@ const usersSlice = createSlice({
       state.entity.auth_token = action.payload.auth_token;
       state.status = 'fulfilled';
     },
+    logoutUserLoading(state, action) {
+      state.status = 'pending';
+    },
+    logoutUserSuccess(state, action) {
+      state.status = 'succeeded';
+      state.entity = initialState.entity;
+    },
   },
   extraReducers(builder) {
     builder
@@ -63,7 +71,7 @@ const usersSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.entity.auth_token = action.payload.auth_token;
+        state.entity = action.payload;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.status = 'failed';
@@ -99,21 +107,28 @@ const usersSlice = createSlice({
   },
 });
 
-export const { userUpdated, signupUserLoading, signupUserSuccess } =
-  usersSlice.actions;
+export const {
+  userUpdated,
+  signupUserLoading,
+  signupUserSuccess,
+  logoutUserLoading,
+  logoutUserSuccess,
+} = usersSlice.actions;
 
 export const selectUser = state => state.user.entity;
 export const selectUserFetchStatus = state => state.user.status;
 
 export default usersSlice.reducer;
 
-// export const { selectAll, selectById } = usersAdapter.getSelectors(
-//   state => state.users
-// );
-
-// Thunks
+/* Classic Thunks */
 export const signupUser = params => async dispatch => {
   dispatch(signupUserLoading());
   const data = await userApi.signupUser(params);
   dispatch(signupUserSuccess(data));
+};
+
+export const logoutUser = () => async dispatch => {
+  dispatch(logoutUserLoading());
+  await userApi.removeLocalUser();
+  dispatch(logoutUserSuccess());
 };
