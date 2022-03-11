@@ -11,35 +11,38 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
-import { connect, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 // app specific imports
 import { buildAvatarUrl } from '../util';
-// import {
-//   loadUser,
-//   logoutUser,
-// } from '../redux/actions/userActions';
-import { selectUser } from '../features/users/usersSlice';
+import { fetchUser, logoutUser, selectUser, selectUserFetchStatus } from '../features/users/usersSlice';
 
 const Header = () => {
+  const dispatch = useDispatch();
   const user = useSelector(selectUser);
+  const userFetchStatus = useSelector(selectUserFetchStatus);
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [userLoading, setUserLoading] = useState(false);
 
-  // useEffect(() => {
-  //   if (user.auth_token && !user.name && !userLoading) {
-  //     setUserLoading(true);
-  //     loadUser(user.auth_token)
-  //       .then(() => setUserLoading(false))
-  //       .catch(error => {
-  //         alert('Loading user failed.' + error);
-  //         if (error.request.status === 401) {
-  //           navigate('/login');
-  //         }
-  //       });
-  //   }
-  // }, [user, loadUser, userLoading, navigate]);
+  useEffect(() => {
+    if (user.auth_token) {
+      if (!user.name && !userLoading) {
+        setUserLoading(true);
+        dispatch(fetchUser(user.auth_token));
+      }
+      if (userFetchStatus === 'succeeded') {
+        setUserLoading(false);
+      }
+      if (userFetchStatus === 'failed') {
+        setUserLoading(false);
+        // alert('Loading user failed.' + error);
+        // if (error.request.status === 401) {
+        //   navigate('/login');
+        // }
+      }
+    }
+  }, [dispatch, user, userFetchStatus, userLoading, navigate]);
 
   const handleHomeClick = () => {
     navigate('/');
@@ -59,10 +62,9 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    // logoutUser().then(() => {
-      handleClose();
-      navigate('/');
-    // });
+    logoutUser();
+    handleClose();
+    navigate('/');
   };
 
   return (
@@ -80,7 +82,7 @@ const Header = () => {
           </IconButton>
         )} */}
         <Typography
-        data-testid='app-header'
+          data-testid='app-header'
           variant='h6'
           component='div'
           sx={{ flexGrow: 1 }}
@@ -108,7 +110,7 @@ const Header = () => {
                 onClick={handleMenu}
                 color='inherit'
               >
-                {/* <Avatar src={buildAvatarUrl(user?.email)} /> */}
+                <Avatar src={buildAvatarUrl(user?.email)} />
               </IconButton>
               <Menu
                 id='menu-appbar'
@@ -130,16 +132,5 @@ const Header = () => {
     </AppBar>
   );
 };
-
-// const mapStateToProps = state => {
-//   return {
-//     user: state.user,
-//   };
-// };
-
-// const mapDispatchToProps = {
-//   loadUser,
-//   logoutUser,
-// };
 
 export default Header;

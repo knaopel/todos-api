@@ -62,6 +62,13 @@ const usersSlice = createSlice({
       state.status = 'succeeded';
       state.entity = initialState.entity;
     },
+    fetchLocalUserLoading(state, action) {
+      state.status = 'pending';
+    },
+    fetchLocalUserSuccess(state, action) {
+      state.status = 'succeeded';
+      state.entity = action.payload;
+    },
   },
   extraReducers(builder) {
     builder
@@ -113,6 +120,8 @@ export const {
   signupUserSuccess,
   logoutUserLoading,
   logoutUserSuccess,
+  fetchLocalUserLoading,
+  fetchLocalUserSuccess,
 } = usersSlice.actions;
 
 export const selectUser = state => state.user.entity;
@@ -131,4 +140,10 @@ export const logoutUser = () => async dispatch => {
   dispatch(logoutUserLoading());
   await userApi.removeLocalUser();
   dispatch(logoutUserSuccess());
+};
+
+export const fetchLocalUser = () => async dispatch => {
+  dispatch(fetchLocalUserLoading());
+  const data = await userApi.getLocalUser();
+  dispatch(fetchLocalUserSuccess(data));
 };

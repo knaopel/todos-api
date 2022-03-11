@@ -1,17 +1,24 @@
 import React from 'react';
 import { fireEvent, screen } from '@testing-library/react';
 import configureStore from 'redux-mock-store';
+import md5 from 'md5';
 
 import { render } from '../test-utils';
 import { Header } from '.';
 import { initialState } from '../features/users/usersSlice';
 
 const mockedNavigate = jest.fn();
+// const mockedFetchUser = jest.fn();
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockedNavigate
-}))
+}));
+
+// jest.mock('../features/users/usersSlice', () => ({
+//   ...jest.requireActual('../features/users/usersSlice'),
+//   fetchUser: () => mockedFetchUser
+// }));
 
 describe('Header Test Suite', () => {
   beforeEach(() => {
@@ -29,15 +36,27 @@ describe('Header Test Suite', () => {
     expect(mockedNavigate).toHaveBeenCalled();
   });
   describe('user present', () => {
-    describe('user menu', () => {
-      beforeEach(() => {
-        const mockStore = configureStore([]);
-        const userState = { ...initialState, entity: { email: 'fake@fake.it', auth_token: 'fake_token' } }
-        const store = mockStore({
-          user: userState
-        });
-        render(<Header />, { shouldUseRouter: true, store });
+    let store;
+    beforeEach(() => {
+      const mockStore = configureStore([]);
+      const userState = { ...initialState, entity: { email: 'fake@fake.it', auth_token: 'fake_token' } }
+      store = mockStore({
+        user: userState
       });
+      render(<Header />, { shouldUseRouter: true, store });
+    });
+    // it('fetchUser should get called to load details', () => {
+    //   // arrange
+    //   expect(mockedFetchUser).toHaveBeenCalledWith(store.getState().user.entity.email);
+    // })
+    it('Avatar should be present and have expected img', () => {
+      // arrange
+      const hash = md5('fake@fake.it');
+      // act
+      // assert
+      expect(screen.queryByRole('img', { src: `//www.gravatar.com/avatar/${hash}.jpg` })).toBeInTheDocument();
+    })
+    describe('user menu', () => {
       it('should show user menu button', () => {
         const userIconBtn = screen.getByRole('button', { 'aira-label': 'account of current user' });
         expect(userIconBtn).toBeInTheDocument();

@@ -2,6 +2,7 @@ import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 
 import {
+  fetchLocalUser,
   fetchUser,
   initialState,
   loginUser,
@@ -157,5 +158,15 @@ describe('UsersSlice Test Suite', () => {
       // assert
       expect(state.status).toEqual('failed');
     });
+  });
+  it('should get local user', async () => {
+    // arrange
+    const mockUser = { email: 'fake@fake.it', auth_token: 'fake_token' };
+    localStorage.setItem('user', JSON.stringify(mockUser));
+    // act
+    await store.dispatch(fetchLocalUser());
+    const state = store.getState();
+    // assert
+    expect(state.user.entity).toEqual(mockUser);
   });
 });
