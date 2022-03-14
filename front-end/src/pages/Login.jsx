@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { connect } from 'react-redux';
 import { useNavigate } from "react-router";
-import { loginUser } from '../redux/actions/userActions';
 import { CredentialForm } from "../components";
 
 const Login = ({ loginUser }) => {
@@ -11,8 +9,8 @@ const Login = ({ loginUser }) => {
   const handleSubmit = async (param) => {
     setLoading(true);
     try {
-      await loginUser(param.email, param.password);
-      setLoading(false);
+      // await loginUser(param.email, param.password);
+      // setLoading(false);
       navigate("/");
     } catch {
       setLoading(false);
@@ -22,7 +20,7 @@ const Login = ({ loginUser }) => {
   return <CredentialForm processForm={handleSubmit} isLoading={loading} />;
 };
 
-const mapDispatchToProps = {
-  loginUser
-};
-export default connect(null, mapDispatchToProps)(Login);
+// const mapDispatchToProps = {
+//   loginUser
+// };
+export default Login;

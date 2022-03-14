@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { Card, CardContent, CardHeader, Grid, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 // app specific imports
 import { UserTable } from '../components';
-import { loadDewers, addDewer, loadHoneys, addHoney, inviteUser } from '../redux/actions/userActions';
 import * as userApi from '../api/userApi';
 
 const HoneysDewers = ({ loading, user, addDewer, loadDewers, loadHoneys, addHoney, inviteUser }) => {
@@ -20,22 +18,22 @@ const HoneysDewers = ({ loading, user, addDewer, loadDewers, loadHoneys, addHone
 
   useEffect(() => {
     if (user.auth_token && !user?.honeys?.isLoaded && !loading) {
-      loadHoneys(user.auth_token)
-        .catch(error => {
-          if (error.response.status === 401) {
-            navigate('/login');
-          }
-        });
+      // loadHoneys(user.auth_token)
+      //   .catch(error => {
+      //     if (error.response.status === 401) {
+      //       navigate('/login');
+      //     }
+      //   });
     }
     if (user.auth_token && !user?.dewers?.isLoaded && !loading) {
-      loadDewers(user.auth_token)
-        .catch(error => {
-          if (error.response.status === 401) {
-            navigate('/login');
-          }
-        });
+      // loadDewers(user.auth_token)
+      //   .catch(error => {
+      //     if (error.response.status === 401) {
+      //       navigate('/login');
+      //     }
+      //   });
     }
-  }, [user, loading, loadHoneys, loadDewers, navigate]);
+  }, [user, loading, navigate]);
 
   const handleDialogToggle = (value, setter) => {
     setter(!value);
@@ -81,10 +79,10 @@ const HoneysDewers = ({ loading, user, addDewer, loadDewers, loadHoneys, addHone
     console.log(`${email} will be invited as a ${scope}`);
     // switch (scope) {
     // case 'dewer':
-    inviteUser(email, scope, user.auth_token)
-      .catch(error => {
-        console.log(error);
-      });
+    // inviteUser(email, scope, user.auth_token)
+    //   .catch(error => {
+    //     console.log(error);
+    //   });
     // break;
     //   case 'honey':
     //     inviteUser(email)
@@ -191,19 +189,19 @@ HoneysDewers.propTypes = {
   loading: PropTypes.bool.isRequired
 };
 
-const mapStateToProps = ({ apiCallsInProgress, user }) => {
-  return {
-    user,
-    loading: apiCallsInProgress > 0
-  };
-};
+// const mapStateToProps = ({ apiCallsInProgress, user }) => {
+//   return {
+//     user,
+//     loading: apiCallsInProgress > 0
+//   };
+// };
 
-const mapDispatchToProps = {
-  addDewer,
-  addHoney,
-  loadDewers,
-  loadHoneys,
-  inviteUser
-};
+// const mapDispatchToProps = {
+//   addDewer,
+//   addHoney,
+//   loadDewers,
+//   loadHoneys,
+//   inviteUser
+// };
 
-export default connect(mapStateToProps, mapDispatchToProps)(HoneysDewers);
+export default HoneysDewers;

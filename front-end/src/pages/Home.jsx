@@ -6,25 +6,23 @@ import {
 } from "@mui/material";
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { connect } from 'react-redux';
 
 import { PublicHome, Todos } from "../components";
-import { completeTodo, loadTodos } from '../redux/actions/todoActions';
 
 const Home = ({ user, todos, isLoading, loadTodos, completeTodo }) => {
   const navigate = useNavigate();
   useEffect(() => {
     if (user.auth_token && !todos.isLoaded && !todos.isLoading) {
-      loadTodos(user.auth_token).catch(err => {
-        if (err.response.status === 401) {
-          navigate('/login');
-        }
-      });
+      // loadTodos(user.auth_token).catch(err => {
+      //   if (err.response.status === 401) {
+      //     navigate('/login');
+      //   }
+      // });
     }
   }, [navigate, user, todos, loadTodos, isLoading]);
 
   const handleComplete = (todo) => {
-    return completeTodo(todo, user.auth_token);
+    // return completeTodo(todo, user.auth_token);
   };
 
   if (isLoading === true) {
@@ -46,12 +44,12 @@ const Home = ({ user, todos, isLoading, loadTodos, completeTodo }) => {
   );
 };
 
-const mapStateToProps = state => {
-  return {
-    user: state.user,
-    todos: state.todos,
-    isLoading: state.apiCallsInProgress > 0
-  };
-};
+// const mapStateToProps = state => {
+//   return {
+//     user: state.user,
+//     todos: state.todos,
+//     isLoading: state.apiCallsInProgress > 0
+//   };
+// };
 
-export default connect(mapStateToProps, { completeTodo, loadTodos })(Home);
+export default Home;
