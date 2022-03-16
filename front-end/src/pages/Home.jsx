@@ -5,21 +5,29 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 import { PublicHome, Todos } from "../components";
+import { selectOpenTodos, selectTodosStatus } from "../features/todos/todosSlice";
+import {thunkStatus as status} from '../util';
 
-const Home = ({ user, todos, isLoading, loadTodos, completeTodo }) => {
+const Home = ({ user, isLoading }) => {
   const navigate = useNavigate();
-  useEffect(() => {
-    if (user.auth_token && !todos.isLoaded && !todos.isLoading) {
-      // loadTodos(user.auth_token).catch(err => {
-      //   if (err.response.status === 401) {
-      //     navigate('/login');
-      //   }
-      // });
-    }
-  }, [navigate, user, todos, loadTodos, isLoading]);
+  const todos = useSelector(selectOpenTodos);
+  const todosStatus = useSelector(selectTodosStatus);
+  const todosLoading = todosStatus === status.pending;
+  const todosSucceeded = todosStatus === status.succeeded;
+  // useEffect(() => {
+  //   debugger;
+  //   if (user.auth_token && !todosSucceeded && !todosLoading) {
+  //     // loadTodos(user.auth_token).catch(err => {
+  //     //   if (err.response.status === 401) {
+  //     //     navigate('/login');
+  //     //   }
+  //     // });
+  //   }
+  // }, [navigate, user, todos, isLoading]);
 
   const handleComplete = (todo) => {
     // return completeTodo(todo, user.auth_token);
@@ -33,7 +41,7 @@ const Home = ({ user, todos, isLoading, loadTodos, completeTodo }) => {
   }
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Todos data={todos?.items} completeTodo={handleComplete} />
+      {/* <Todos data={todos?.items} completeTodo={handleComplete} /> */}
       <Grid container spacing={2}>
         <Grid item>
           <Link to="/todos/new">Add A new HoneyDew</Link>

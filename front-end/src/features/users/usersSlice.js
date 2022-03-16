@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import * as userApi from '../../api/userApi';
+import { thunkStatus as status } from '../../util';
 
 export const initialState = {
   entity: {
@@ -49,66 +50,71 @@ const usersSlice = createSlice({
   initialState,
   reducers: {
     signupUserLoading(state, action) {
-      state.status = 'pending';
+      state.status = status.pending;
     },
     signupUserSuccess(state, action) {
       state.entity.auth_token = action.payload.auth_token;
-      state.status = 'fulfilled';
+      state.status = status.succeeded;
     },
     logoutUserLoading(state, action) {
-      state.status = 'pending';
+      state.status = status.pending;
     },
     logoutUserSuccess(state, action) {
-      state.status = 'succeeded';
+      state.status = status.succeeded;
       state.entity = initialState.entity;
     },
     fetchLocalUserLoading(state, action) {
-      state.status = 'pending';
+      state.status = status.pending;
     },
     fetchLocalUserSuccess(state, action) {
-      state.status = 'succeeded';
-      state.entity = action.payload;
+      if (action.payload) {
+        state.status = status.succeeded;
+        state.entity = action.payload;
+      } else {
+        state.status = status.failed;
+        state.error = { message: 'No local user found.' };
+      }
     },
   },
   extraReducers(builder) {
     builder
       .addCase(loginUser.pending, (state, action) => {
-        state.status = 'loading';
+        state.status = status.pending;
         state.error = {};
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        state.status = 'succeeded';
+        state.status = status.succeeded;
         state.entity = action.payload;
       })
       .addCase(loginUser.rejected, (state, action) => {
-        state.status = 'failed';
+        state.status = status.failed;
         state.entity.auth_token = null;
         state.error = action.error.message;
       });
     builder
       .addCase(fetchUser.pending, (state, action) => {
-        state.status = 'loading';
+        state.status = status.pending;
         state.error = {};
       })
       .addCase(fetchUser.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.entity = action.payload;
+        state.status = status.succeeded;
+        state.entity = { ...state.entity, ...action.payload };
       })
       .addCase(fetchUser.rejected, (state, action) => {
-        state.status = 'failed';
+        state.status = status.failed;
         state.error = action.error;
       });
     builder
       .addCase(updateUser.pending, state => {
-        state.status = 'loading';
+        state.status = status.pending;
         state.error = {};
       })
       .addCase(updateUser.fulfilled, (state, action) => {
-        state.status = 'succeeded';
+        state.status = status.succeeded;
         state.entity = action.payload;
       })
       .addCase(updateUser.rejected, (state, action) => {
-        state.status = 'failed';
+        state.status = status.failed;
         state.error = action.error;
       });
   },

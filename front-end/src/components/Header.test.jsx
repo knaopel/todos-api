@@ -35,81 +35,81 @@ describe('Header Test Suite', () => {
     // assert
     expect(mockedNavigate).toHaveBeenCalled();
   });
-  describe('user present', () => {
-    let store;
-    beforeEach(() => {
-      const mockStore = configureStore([]);
-      const userState = { ...initialState, entity: { email: 'fake@fake.it', auth_token: 'fake_token' } }
-      store = mockStore({
-        user: userState
-      });
-      render(<Header />, { shouldUseRouter: true, store });
-    });
-    // it('fetchUser should get called to load details', () => {
+  // describe('user present', () => {
+  //   let store;
+  //   beforeEach(() => {
+  //     const mockStore = configureStore([]);
+  //     const userState = { ...initialState, entity: { email: 'fake@fake.it', auth_token: 'fake_token' } }
+  //     store = mockStore({
+  //       user: userState
+  //     });
+  //     render(<Header />, { shouldUseRouter: true, store });
+  //   });
+  //   // it('fetchUser should get called to load details', () => {
+  //   //   // arrange
+  //   //   expect(mockedFetchUser).toHaveBeenCalledWith(store.getState().user.entity.email);
+  //   // })
+    // it('Avatar should be present and have expected img', () => {
     //   // arrange
-    //   expect(mockedFetchUser).toHaveBeenCalledWith(store.getState().user.entity.email);
+    //   const hash = md5('fake@fake.it');
+    //   // act
+    //   // assert
+    //   expect(screen.queryByRole('img', { src: `//www.gravatar.com/avatar/${hash}.jpg` })).toBeInTheDocument();
     // })
-    it('Avatar should be present and have expected img', () => {
-      // arrange
-      const hash = md5('fake@fake.it');
-      // act
-      // assert
-      expect(screen.queryByRole('img', { src: `//www.gravatar.com/avatar/${hash}.jpg` })).toBeInTheDocument();
-    })
-    describe('user menu', () => {
-      it('should show user menu button', () => {
-        const userIconBtn = screen.getByRole('button', { 'aira-label': 'account of current user' });
-        expect(userIconBtn).toBeInTheDocument();
-      });
-      it('should open menu on click', () => {
-        // arrange
-        const userIconBtn = screen.getByRole('button', { 'aira-label': 'account of current user' });
-        // act
-        fireEvent.click(userIconBtn);
-        // assert
-        expect(screen.getByText(/profile/i)).toBeInTheDocument();
-        expect(screen.getByText(/honeys\/dewers/i)).toBeInTheDocument();
-        expect(screen.getByText(/logout/i)).toBeInTheDocument();
-      });
-      it('should fire handleNavigate on profile menu item click', () => {
-        // arrange
-        const userIconBtn = screen.getByRole('button', { 'aira-label': 'account of current user' });
-        // act
-        fireEvent.click(userIconBtn);
-        const userProfileBtn = screen.getByText(/profile/i);
-        fireEvent.click(userProfileBtn);
-        // assert
-        expect(mockedNavigate).toHaveBeenCalledWith('/profile');
-      });
-      it('should fire handleNavigate on Honeys/Dewers menu item click', () => {
-        // arrange
-        const userIconBtn = screen.getByRole('button', { 'aira-label': 'account of current user' });
-        // act
-        fireEvent.click(userIconBtn);
-        const userHoneysBtn = screen.getByText(/honeys\/dewers/i);
-        fireEvent.click(userHoneysBtn);
-        // assert
-        expect(mockedNavigate).toHaveBeenCalledWith('/honeys_dewers');
-      });
-      it('should fire handleLogout on Logout menu item click', () => {
-        // arrange
-        const userIconBtn = screen.getByRole('button', { 'aira-label': 'account of current user' });
-        // act
-        fireEvent.click(userIconBtn);
-        const userLogoutBtn = screen.getByText(/logout/i);
-        fireEvent.click(userLogoutBtn);
-        // assert
-        expect(mockedNavigate).toHaveBeenCalledWith('/');
-      });
-    });
-  });
-  describe('no user', () => {
-    it('should not show user menu', () => {
-      const mockStore = configureStore([]);
-      const store = mockStore({ user: initialState });
-      render(<Header />, { store });
+    // describe('user menu', () => {
+      // it('should show user menu button', () => {
+      //   const userIconBtn = screen.getByRole('button', { 'aira-label': 'account of current user' });
+      //   expect(userIconBtn).toBeInTheDocument();
+      // });
+  //     it('should open menu on click', () => {
+  //       // arrange
+  //       const userIconBtn = screen.getByRole('button', { 'aira-label': 'account of current user' });
+  //       // act
+  //       fireEvent.click(userIconBtn);
+  //       // assert
+  //       expect(screen.getByText(/profile/i)).toBeInTheDocument();
+  //       expect(screen.getByText(/honeys\/dewers/i)).toBeInTheDocument();
+  //       expect(screen.getByText(/logout/i)).toBeInTheDocument();
+  //     });
+  //     it('should fire handleNavigate on profile menu item click', () => {
+  //       // arrange
+  //       const userIconBtn = screen.getByRole('button', { 'aira-label': 'account of current user' });
+  //       // act
+  //       fireEvent.click(userIconBtn);
+  //       const userProfileBtn = screen.getByText(/profile/i);
+  //       fireEvent.click(userProfileBtn);
+  //       // assert
+  //       expect(mockedNavigate).toHaveBeenCalledWith('/profile');
+  //     });
+  //     it('should fire handleNavigate on Honeys/Dewers menu item click', () => {
+  //       // arrange
+  //       const userIconBtn = screen.getByRole('button', { 'aira-label': 'account of current user' });
+  //       // act
+  //       fireEvent.click(userIconBtn);
+  //       const userHoneysBtn = screen.getByText(/honeys\/dewers/i);
+  //       fireEvent.click(userHoneysBtn);
+  //       // assert
+  //       expect(mockedNavigate).toHaveBeenCalledWith('/honeys_dewers');
+  //     });
+  //     it('should fire handleLogout on Logout menu item click', () => {
+  //       // arrange
+  //       const userIconBtn = screen.getByRole('button', { 'aira-label': 'account of current user' });
+  //       // act
+  //       fireEvent.click(userIconBtn);
+  //       const userLogoutBtn = screen.getByText(/logout/i);
+  //       fireEvent.click(userLogoutBtn);
+  //       // assert
+  //       expect(mockedNavigate).toHaveBeenCalledWith('/');
+  //     });
+    // });
+  // });
+  // describe('no user', () => {
+  //   it('should not show user menu', () => {
+  //     const mockStore = configureStore([]);
+  //     const store = mockStore({ user: initialState });
+  //     render(<Header />, { store });
 
-      expect(screen.queryByRole('button', { 'aria-label': 'account of current user' })).not.toBeInTheDocument();
-    });
-  });
+  //     expect(screen.queryByRole('button', { 'aria-label': 'account of current user' })).not.toBeInTheDocument();
+  //   });
+  // });
 });

@@ -14,35 +14,36 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 
 // app specific imports
-import { buildAvatarUrl } from '../util';
-import { fetchUser, logoutUser, selectUser, selectUserFetchStatus } from '../features/users/usersSlice';
+import { buildAvatarUrl, thunkStatus } from '../util';
+import { fetchLocalUser, fetchUser, logoutUser, selectUser, selectUserFetchStatus } from '../features/users/usersSlice';
 
 const Header = () => {
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
   const userFetchStatus = useSelector(selectUserFetchStatus);
+  const userLoading = userFetchStatus === thunkStatus.pending;
+  const userFailed = userFetchStatus === thunkStatus.failed;
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [userLoading, setUserLoading] = useState(false);
 
   useEffect(() => {
     if (user.auth_token) {
       if (!user.name && !userLoading) {
-        setUserLoading(true);
         dispatch(fetchUser(user.auth_token));
       }
-      if (userFetchStatus === 'succeeded') {
-        setUserLoading(false);
+      if (userFailed) {
+        alert('Loading user failed.' + user.error);
+        if (user.error.request.status === 401) {
+          navigate('/login');
+        }
       }
-      if (userFetchStatus === 'failed') {
-        setUserLoading(false);
-        // alert('Loading user failed.' + error);
-        // if (error.request.status === 401) {
-        //   navigate('/login');
-        // }
+    } else {
+      // no token loaded; try to get the token from local
+      if (!userFailed && !userLoading) {
+        dispatch(fetchLocalUser());
       }
     }
-  }, [dispatch, user, userFetchStatus, userLoading, navigate]);
+  }, [dispatch, user, userFetchStatus, navigate]);
 
   const handleHomeClick = () => {
     navigate('/');
@@ -62,7 +63,7 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    logoutUser();
+    dispatch(logoutUser());
     handleClose();
     navigate('/');
   };

@@ -9,27 +9,38 @@ export const handlers = [
   }),
   rest.post('/auth/login', (rer, res, ctx) => {
     sessionStorage.setItem('is-authenticated', 'true');
-    return res(ctx.status(200));
+    return res(ctx.status(200), ctx.json({ auth_token: AUTH_TOKEN }));
   }),
   rest.get('/user', (req, res, ctx) => {
-    const isAuthenticated = sessionStorage.getItem('is-authenticated');
+    const auth_token = req.headers.get('authorization')
+    const isAuthenticated = Boolean(auth_token);
 
-    if (!isAuthenticated) {
+    if (isAuthenticated) {
+      if(auth_token==='kurt_token'){
+        return res(
+          ctx.status(200),
+          ctx.json({
+            name: 'Kurt Opel',
+            email: 'kurt@kurtopel.com',
+          })
+        );       
+      }
       return res(
-        ctx.status(403),
+        ctx.status(200),
         ctx.json({
-          errorMessage: 'Not Authorized',
+          name: 'Test User',
+          email: 'test@user.io',
         })
       );
     }
 
     return res(
-      ctx.status(200),
+      ctx.status(403),
       ctx.json({
-        name: 'Test User',
-        email: 'test@user.io',
+        errorMessage: 'Not Authorized',
       })
     );
+
   }),
   rest.get('/todos', (req, res, ctx) => {
     if (

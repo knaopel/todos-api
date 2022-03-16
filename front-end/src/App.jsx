@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Box, CssBaseline, ThemeProvider, Toolbar } from '@mui/material';
-import { Login, Home, Signup, Todo, HoneysDewers, AcceptInvitation } from './pages';
+import { Login, Home, Signup, Todo, HoneysDewers } from './pages';
 import { Copyright, Header } from './components';
 
 import { theme } from './util';
@@ -12,9 +12,9 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Profile from './pages/Profile';
-import { fetchLocalUser, selectUser, selectUserFetchStatus } from './features/users/usersSlice';
+import { selectUser } from './features/users/usersSlice';
 
 // const App = () => {
 //   const dispatch = useDispatch();
@@ -36,20 +36,9 @@ import { fetchLocalUser, selectUser, selectUserFetchStatus } from './features/us
 // export default App;
 
 const App = () => {
-  const dispatch = useDispatch();
   const user = useSelector(selectUser);
-  const userFetchStatus = useSelector(selectUserFetchStatus);
-  const userLoading = userFetchStatus === 'pending';
-  // const userFailed = userFetchStatus === 'failed';
 
-  useEffect(() => {
-    if (!user.auth_token && !userLoading) {
-      console.log('need to get user', user);
-      dispatch(fetchLocalUser());
-    }
-  }, [dispatch, user, userLoading]);
-
-  return (
+ return (
     <ThemeProvider theme={theme}>
       <Box sx={{ display: 'flex', p: '1em' }} data-testid="parent-box">
         <CssBaseline />
@@ -58,10 +47,10 @@ const App = () => {
           <Box component='main' sx={{ flexGrow: 1 }}>
             <Toolbar />
             <Routes>
-              <Route exact path='/' element={<Home />} />
+              <Route exact path='/' element={<Home user={user} />} />
               <Route exact path='login' element={<Login />} />
               <Route exact path='signup' element={<Signup />} />
-              <Route path="accept-invitation/:token" element={<AcceptInvitation />} />
+              {/* <Route path="accept-invitation/:token" element={<AcceptInvitation />} /> */}
               {user.auth_token &&
                 <>
                   <Route path='todos'>
@@ -82,9 +71,4 @@ const App = () => {
   );
 };
 
-// const mapStateToProps = state => {
-//   return {
-//     user: state.user
-//   };
-// };
 export default App;

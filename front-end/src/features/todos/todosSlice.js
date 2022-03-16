@@ -106,3 +106,5 @@ export const {
 export const selectOpenTodos = createSelector(selectTodos, todos =>
   todos.filter(todo => !todo.is_completed)
 );
+
+export const selectTodosStatus = state => state.todos.status;
