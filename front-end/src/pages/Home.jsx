@@ -10,10 +10,12 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { PublicHome, Todos } from "../components";
 import { selectOpenTodos, selectTodosStatus } from "../features/todos/todosSlice";
-import {thunkStatus as status} from '../util';
+import { selectUser } from "../features/users/usersSlice";
+import { thunkStatus as status } from '../util';
 
-const Home = ({ user, isLoading }) => {
+const Home = ({ isLoading }) => {
   const navigate = useNavigate();
+  const user = useSelector(selectUser);
   const todos = useSelector(selectOpenTodos);
   const todosStatus = useSelector(selectTodosStatus);
   const todosLoading = todosStatus === status.pending;

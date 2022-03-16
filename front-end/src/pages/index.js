@@ -1,8 +1,9 @@
 import AcceptInvitation from './AcceptInvitation';
-import Home from "./Home";
+import Home from './Home';
 import HoneysDewers from './HoneysDewers';
-import Login from "./Login";
-import Todo from "./Todo";
-import Signup from "./Signup";
+import Login from './Login';
+import Profile from './Profile';
+import Signup from './Signup';
+import Todo from './Todo';
 
-export { AcceptInvitation, Home, HoneysDewers, Login, Todo, Signup };
+export { AcceptInvitation, Home, HoneysDewers, Login, Profile, Todo, Signup };

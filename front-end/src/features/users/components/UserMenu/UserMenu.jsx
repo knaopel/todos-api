@@ -4,7 +4,7 @@ import {
   CircularProgress,
 } from '@mui/material';
 
-import { fetchUser, selectUser, selectUserFetchStatus } from './usersSlice';
+import { fetchUser, selectUser, selectUserFetchStatus } from '../../usersSlice';
 
 const UserMenu = () => {
   const userStatus = useSelector(selectUserFetchStatus);
@@ -22,7 +22,7 @@ const UserMenu = () => {
       //         }
       //       });
     }
-  }, [user]);
+  }, [user, userStatus]);
   if (userStatus === 'loading') {
     return <CircularProgress />
   }

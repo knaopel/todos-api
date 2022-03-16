@@ -112,7 +112,7 @@ describe('userApi tests', () => {
     });
   });
   describe('remove local User', () => {
-    it('removes user from local storage', async () => {
+    it('removes user from local storage', () => {
       // arrange
       const userData = {
         name: 'Gandolf',
@@ -123,11 +123,10 @@ describe('userApi tests', () => {
       localStorage.setItem(userApi.KEY_NAME, userStr);
       const storedUser = JSON.parse(localStorage.getItem(userApi.KEY_NAME));
       // act
-      const successMsg = await userApi.removeLocalUser();
+      userApi.removeLocalUser();
       const resultUser = JSON.parse(localStorage.getItem(userApi.KEY_NAME));
       // assert
       expect(storedUser).toEqual(userData);
-      expect(successMsg).toEqual('local user removed');
       expect(resultUser).toBeNull();
     });
   });

@@ -43,7 +43,7 @@ const Header = () => {
         dispatch(fetchLocalUser());
       }
     }
-  }, [dispatch, user, userFetchStatus, navigate]);
+  }, [dispatch, user, userFetchStatus, navigate, userLoading, userFailed]);
 
   const handleHomeClick = () => {
     navigate('/');
