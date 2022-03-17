@@ -1,0 +1,1 @@
+export const selectUserFetchStatus = state => state.user.status;

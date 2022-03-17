@@ -1,7 +1,8 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import store from '../../../app/store';
-import { initialState, logoutUser, signupUser } from '../usersSlice';
+import { initialState, logoutUser } from '../usersSlice';
+import { signupUser } from './signupUserReducer';
 
 const baseUrl = process.env.REACT_APP_API_URL;
 const mock = new MockAdapter(axios);
@@ -10,7 +11,7 @@ describe('signupUserReducer test suite', () => {
   beforeEach(() => {
     store.dispatch(logoutUser());
   });
-  test('sets store after login', async () => {
+  test('sets store after signup', async () => {
     // arrange
     mock.onPost(`${baseUrl}/signup`).reply(201, { auth_token: 'fake_token' });
     const userParams = {
