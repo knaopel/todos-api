@@ -10,7 +10,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { PublicHome, Todos } from "../components";
 import { selectOpenTodos, selectTodosStatus } from "../features/todos/todosSlice";
-import { selectUser } from "../features/users/usersSlice";
+import { selectUser } from "../features/users/selectors";
 import { thunkStatus as status } from '../util';
 
 const Home = ({ isLoading }) => {

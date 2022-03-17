@@ -15,7 +15,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 // app specific imports
 import { buildAvatarUrl, thunkStatus } from '../util';
-import { fetchLocalUser, fetchUser, logoutUser, selectUser, selectUserFetchStatus } from '../features/users/usersSlice';
+import { fetchLocalUser, logoutUser, selectUser, selectUserFetchStatus } from '../features/users/usersSlice';
+import { fetchUser } from '../features/users/reducers';
 
 const Header = () => {
   const dispatch = useDispatch();

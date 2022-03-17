@@ -16,6 +16,7 @@ export const initialState = {
   },
   error: {},
   status: 'idle',
+  isLocal: false,
 };
 
 const usersSlice = createSlice({
@@ -35,7 +36,7 @@ const usersSlice = createSlice({
 
 export const { userUpdated, logoutUser, fetchLocalUser } = usersSlice.actions;
 
-// export const selectUser = state => state.user.entity;
-// export const selectUserFetchStatus = state => state.user.status;
-
 export default usersSlice.reducer;
+
+export * from './reducers';
+export * from './selectors';

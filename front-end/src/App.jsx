@@ -12,7 +12,6 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
 const App = () => {
-  // const user = useSelector(selectUser);
   return (
     <ThemeProvider theme={theme}>
       <ParentBox />

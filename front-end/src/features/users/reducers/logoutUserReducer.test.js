@@ -14,6 +14,7 @@ test('logoutUserReducer test', () => {
   store.dispatch(fetchLocalUser());
   let state = store.getState().user;
   expect(state.entity).toEqual(fakeUser);
+  expect(state.isLocal).toBe(true);
 
   // act
   store.dispatch(logoutUser());

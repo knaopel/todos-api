@@ -21,7 +21,7 @@ describe('fetchLocalUserReducer test suite', () => {
     expect(state.entity.auth_token).toBe(expectedUser.auth_token);
     expect(state.entity.email).toBe(expectedUser.email);
   });
-  test('sets status to "failed" when there is no local user', () => {
+  test('sets isLocal to "false" when there is no local user', () => {
     // arrange
     let state = store.getState().user;
     expect(state.entity.auth_token).toBeNull();
@@ -34,6 +34,6 @@ describe('fetchLocalUserReducer test suite', () => {
     expect(state.entity.name).toBe('');
     expect(state.entity.email).toBe('');
     expect(state.entity.auth_token).toBeNull();
-    expect(state.status).toBe('failed');
+    expect(state.isLocal).toBe(false);
   });
 });
