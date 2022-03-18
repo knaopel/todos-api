@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider as ReduxProvider } from 'react-redux';
-import App from './App';
+import { App } from './app/components';
 import store from './app/store';
 
 if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
