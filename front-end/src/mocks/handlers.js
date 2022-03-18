@@ -7,7 +7,9 @@ export const handlers = [
       ctx.json({ message: 'Account created', auth_token: AUTH_TOKEN })
     );
   }),
-  rest.post('/auth/login', (rer, res, ctx) => {
+  rest.post('/auth/login', (req, res, ctx) => {
+    console.log(req.body);
+    // if(req.body.email)
     sessionStorage.setItem('is-authenticated', 'true');
     return res(ctx.status(200), ctx.json({ auth_token: AUTH_TOKEN }));
   }),

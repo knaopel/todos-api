@@ -13,7 +13,7 @@ import { selectOpenTodos, selectTodosStatus } from "../features/todos/todosSlice
 import { selectUser } from "../features/users/selectors";
 import { thunkStatus as status } from '../util';
 
-const Home = ({ isLoading }) => {
+export const Home = ({ isLoading }) => {
   const navigate = useNavigate();
   const user = useSelector(selectUser);
   const todos = useSelector(selectOpenTodos);
@@ -53,13 +53,3 @@ const Home = ({ isLoading }) => {
     </Box>
   );
 };
-
-// const mapStateToProps = state => {
-//   return {
-//     user: state.user,
-//     todos: state.todos,
-//     isLoading: state.apiCallsInProgress > 0
-//   };
-// };
-
-export default Home;

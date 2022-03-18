@@ -1,26 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { CredentialForm } from "../components";
+import { selectUserFetchStatus, loginUser } from "../features/users/usersSlice";
+import { thunkStatus } from "../util";
 
-const Login = ({ loginUser }) => {
+export const Login = () => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const userStatus = useSelector(selectUserFetchStatus);
+  const loading = userStatus === thunkStatus.pending;
+
+  // useEffect(() => {
+  //   if (userStatus === thunkStatus.succeeded) {
+  //     navigate("/");
+  //   }
+  // })
 
   const handleSubmit = async (param) => {
-    setLoading(true);
-    try {
-      // await loginUser(param.email, param.password);
-      // setLoading(false);
-      navigate("/");
-    } catch {
-      setLoading(false);
-    }
+    await dispatch(loginUser(param));
+    console.log(param);
+    navigate('/');
   };
 
   return <CredentialForm processForm={handleSubmit} isLoading={loading} />;
 };
-
-// const mapDispatchToProps = {
-//   loginUser
-// };
-export default Login;
