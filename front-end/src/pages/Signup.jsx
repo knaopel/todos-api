@@ -1,24 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router";
-import { signupUser } from '../features/users/usersSlice';
+import { selectUser, selectUserFetchStatus, signupUser } from '../features/users/usersSlice';
 import { CredentialForm, dataMap } from "../components";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { thunkStatus } from "../util";
 
 const Signup = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const user = useSelector(selectUser);
+  const userFetchStatus = useSelector(selectUserFetchStatus);
+  const isLoading = userFetchStatus === thunkStatus.pending;
+  const hasFailed = userFetchStatus === thunkStatus.failed;
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const handleSubmit = (params) => {
-    try {
-      setIsLoading(true);
-      dispatch(signupUser(params));
-      setIsLoading(false);
+  useEffect(() => {
+    if (!isLoading && user.auth_token) {
       navigate('/');
-    } catch (err) {
-      setIsLoading(false);
-      console.log(err);
+    } else if (hasFailed) {
+      // TODO: feedback to user
+      console.log('log the error', user.error)
     }
+  }, [hasFailed, isLoading, navigate, user])
+
+  const handleSubmit = (params) => {
+    dispatch(signupUser(params));
   };
 
   return (

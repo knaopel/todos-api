@@ -2,6 +2,9 @@ import { rest } from 'msw';
 const AUTH_TOKEN = 'mocked_auth_token';
 export const handlers = [
   rest.post('/signup', (req, res, ctx) => {
+    if (req.body.email === 'bad') {
+      return res(ctx.status(401), ctx.json({ message: 'bad request' }));
+    }
     return res(
       ctx.status(201),
       ctx.json({ message: 'Account created', auth_token: AUTH_TOKEN })
