@@ -8,14 +8,14 @@ import Main from '../Main/Main'
 
 const Router = () => {
   const user = useSelector(selectUser);
-  const [hasLocalUser, setHasLocalUser] = useState(true); // assume there is a local user
+  const [checkedForLocalUser, setCheckedForLocalUser] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
-    if (hasLocalUser && !user.auth_token) {
+    if (!checkedForLocalUser && !user.auth_token) {
       dispatch(fetchLocalUser())
-      setHasLocalUser(user.status !== 'failed');
+      setCheckedForLocalUser(true);
     }
-  }, [dispatch, hasLocalUser, user]);
+  }, [checkedForLocalUser, dispatch, user]);
 
   return (
     <BrowserRouter>

@@ -15,8 +15,75 @@ import { useDispatch, useSelector } from 'react-redux';
 
 // app specific imports
 import { buildAvatarUrl, thunkStatus } from '../util';
-import { fetchLocalUser, logoutUser, selectUser, selectUserFetchStatus } from '../features/users/usersSlice';
-import { fetchUser } from '../features/users/reducers';
+import { fetchUser, logoutUser, selectUser, selectUserFetchStatus } from '../features/users/usersSlice';
+
+const Title = ({ handleHomeClick }) => {
+  return (
+    <Typography
+      data-testid='app-header'
+      variant='h6'
+      component='div'
+      sx={{ flexGrow: 1 }}
+      align='center'
+      onClick={handleHomeClick}
+      className='appName'
+    >
+      Honey Dew
+    </Typography>
+  )
+};
+
+const AvatarButton = ({ handleMenu, email }) => {
+  return (
+    <IconButton
+      size='large'
+      aria-label='account of current user'
+      aria-controls='menu-appbar'
+      aria-haspopup='true'
+      onClick={handleMenu}
+      color='inherit'
+    >
+      <Avatar src={buildAvatarUrl(email)} />
+    </IconButton>
+  )
+}
+
+const ProfileMenu = ({ anchorEl, handleClose, handleNavigate, handleLogout }) => {
+  return (
+    <Menu
+      id='menu-appbar'
+      anchorEl={anchorEl}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      keepMounted
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      open={Boolean(anchorEl)}
+      onClose={handleClose}
+    >
+      <MenuItem onClick={() => handleNavigate('/profile')}>Profile</MenuItem>
+      <MenuItem onClick={() => handleNavigate('/honeys_dewers')}>Honeys/Dewers</MenuItem>
+      <MenuItem onClick={handleLogout}>Logout</MenuItem>
+    </Menu>
+  )
+}
+
+
+const ProfileBar ({ userLoading, email, handleMenu, handleClose, anchorEl, handleLogout, handleNavigate }) => {
+  return (
+    <>
+      {userLoading ? (
+        <CircularProgress />
+      ) : (
+        <Typography variant='body1' component='div'>
+          {email}
+        </Typography>
+      )}
+      <div>
+        <AvatarButton handleMenu={handleMenu} email={email} />
+        <ProfileMenu anchorEl={anchorEl} handleClose={handleClose} handleLogout={handleLogout} handleNavigate={handleNavigate} />
+      </div>
+    </>
+  )
+}
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -38,17 +105,12 @@ const Header = () => {
           navigate('/login');
         }
       }
-    } else {
-      // no token loaded; try to get the token from local
-      if (!userFailed && !userLoading) {
-        dispatch(fetchLocalUser());
-      }
     }
   }, [dispatch, user, userFetchStatus, navigate, userLoading, userFailed]);
 
   const handleHomeClick = () => {
     navigate('/');
-  };
+  }
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -83,52 +145,9 @@ const Header = () => {
             <MenuIcon />
           </IconButton>
         )} */}
-        <Typography
-          data-testid='app-header'
-          variant='h6'
-          component='div'
-          sx={{ flexGrow: 1 }}
-          align='center'
-          onClick={handleHomeClick}
-          className='appName'
-        >
-          Honey Dew
-        </Typography>
+        <Title handleHomeClick={handleHomeClick} />
         {user?.auth_token && (
-          <>
-            {userLoading ? (
-              <CircularProgress />
-            ) : (
-              <Typography variant='body1' component='div'>
-                {user?.email}
-              </Typography>
-            )}
-            <div>
-              <IconButton
-                size='large'
-                aria-label='account of current user'
-                aria-controls='menu-appbar'
-                aria-haspopup='true'
-                onClick={handleMenu}
-                color='inherit'
-              >
-                <Avatar src={buildAvatarUrl(user?.email)} />
-              </IconButton>
-              <Menu
-                id='menu-appbar'
-                anchorEl={anchorEl}
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                keepMounted
-                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={() => handleNavigate('/profile')}>Profile</MenuItem>
-                <MenuItem onClick={() => handleNavigate('/honeys_dewers')}>Honeys/Dewers</MenuItem>
-                <MenuItem onClick={handleLogout}>Logout</MenuItem>
-              </Menu>
-            </div>
-          </>
+          
         )}
       </Toolbar>
     </AppBar>
