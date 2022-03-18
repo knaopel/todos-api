@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
-import { Header } from '../../../components'
+import { Header } from '../Header/Header'
 import { selectUser } from '../../../features/users/selectors'
 import { fetchLocalUser } from '../../../features/users/usersSlice'
 import Main from '../Main/Main'
