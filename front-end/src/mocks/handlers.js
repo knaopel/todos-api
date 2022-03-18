@@ -8,24 +8,25 @@ export const handlers = [
     );
   }),
   rest.post('/auth/login', (req, res, ctx) => {
-    console.log(req.body);
-    // if(req.body.email)
+    if (req.body.email === 'bad') {
+      return res(ctx.status(401), ctx.json({ message: 'unauthorized' }));
+    }
     sessionStorage.setItem('is-authenticated', 'true');
     return res(ctx.status(200), ctx.json({ auth_token: AUTH_TOKEN }));
   }),
   rest.get('/user', (req, res, ctx) => {
-    const auth_token = req.headers.get('authorization')
+    const auth_token = req.headers.get('authorization');
     const isAuthenticated = Boolean(auth_token);
 
     if (isAuthenticated) {
-      if(auth_token==='kurt_token'){
+      if (auth_token === 'kurt_token') {
         return res(
           ctx.status(200),
           ctx.json({
             name: 'Kurt Opel',
             email: 'kurt@kurtopel.com',
           })
-        );       
+        );
       }
       return res(
         ctx.status(200),
@@ -42,7 +43,6 @@ export const handlers = [
         errorMessage: 'Not Authorized',
       })
     );
-
   }),
   rest.get('/todos', (req, res, ctx) => {
     if (
