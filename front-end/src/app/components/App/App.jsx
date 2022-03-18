@@ -1,10 +1,10 @@
 import React from 'react';
 import { ThemeProvider } from '@mui/material';
 
-import { theme } from './util';
+import { theme } from '../../../util';
 
 import './App.css';
-import ParentBox from './app/components/ParentBox/ParentBox';
+import ParentBox from '../ParentBox/ParentBox';
 
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';

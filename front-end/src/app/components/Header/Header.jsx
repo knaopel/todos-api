@@ -14,8 +14,8 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 
 // app specific imports
-import { buildAvatarUrl, thunkStatus } from '../util';
-import { fetchUser, logoutUser, selectUser, selectUserFetchStatus } from '../features/users/usersSlice';
+import { buildAvatarUrl, thunkStatus } from '../../../util';
+import { fetchUser, logoutUser, selectUser, selectUserFetchStatus } from '../../../features/users/usersSlice';
 
 const Title = ({ handleHomeClick }) => {
   return (
@@ -67,23 +67,23 @@ const ProfileMenu = ({ anchorEl, handleClose, handleNavigate, handleLogout }) =>
 }
 
 
-const ProfileBar ({ userLoading, email, handleMenu, handleClose, anchorEl, handleLogout, handleNavigate }) => {
-  return (
-    <>
-      {userLoading ? (
-        <CircularProgress />
-      ) : (
-        <Typography variant='body1' component='div'>
-          {email}
-        </Typography>
-      )}
-      <div>
-        <AvatarButton handleMenu={handleMenu} email={email} />
-        <ProfileMenu anchorEl={anchorEl} handleClose={handleClose} handleLogout={handleLogout} handleNavigate={handleNavigate} />
-      </div>
-    </>
-  )
-}
+// const ProfileBar ({ userLoading=false, email='', handleMenu, handleClose, anchorEl, handleLogout, handleNavigate }) => {
+//   return (
+//     <>
+//       {userLoading ? (
+//         <CircularProgress />
+//       ) : (
+//         <Typography variant='body1' component='div'>
+//           {email}
+//         </Typography>
+//       )}
+//       <div>
+//         <AvatarButton handleMenu={handleMenu} email={email} />
+//         <ProfileMenu anchorEl={anchorEl} handleClose={handleClose} handleLogout={handleLogout} handleNavigate={handleNavigate} />
+//       </div>
+//     </>
+//   )
+// }
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -147,7 +147,19 @@ const Header = () => {
         )} */}
         <Title handleHomeClick={handleHomeClick} />
         {user?.auth_token && (
-          
+          <>
+          {userLoading ? (
+            <CircularProgress />
+          ) : (
+            <Typography variant='body1' component='div'>
+              {user?.email}
+            </Typography>
+          )}
+          <div>
+            <AvatarButton handleMenu={handleMenu} email={user?.email} />
+            <ProfileMenu anchorEl={anchorEl} handleClose={handleClose} handleLogout={handleLogout} handleNavigate={handleNavigate} />
+          </div>
+        </>
         )}
       </Toolbar>
     </AppBar>

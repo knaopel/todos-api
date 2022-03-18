@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
-import { Header } from '../Header/Header'
-import { selectUser } from '../../../features/users/selectors'
-import { fetchLocalUser } from '../../../features/users/usersSlice'
+import { fetchLocalUser,selectUser } from '../../../features/users/usersSlice'
+
+import Header from '../Header/Header'
 import Main from '../Main/Main'
 
 const Router = () => {
