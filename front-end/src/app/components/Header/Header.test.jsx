@@ -1,11 +1,6 @@
 import React from 'react';
 import { fireEvent, screen } from '@testing-library/react';
 import configureStore from 'redux-mock-store';
-import md5 from 'md5';
-
-import { render } from '../test-utils';
-import { Header } from '.';
-import { initialState } from '../features/users/usersSlice';
 
 const mockedNavigate = jest.fn();
 // const mockedFetchUser = jest.fn();
