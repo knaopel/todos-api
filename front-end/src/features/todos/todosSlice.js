@@ -6,8 +6,9 @@ import {
 } from '@reduxjs/toolkit';
 
 import * as todosApi from '../../api/todoApi';
+import { fetchTodosBuilder } from './reducers';
 
-const todosAdapter = createEntityAdapter({
+export const todosAdapter = createEntityAdapter({
   // sortComparer: (a, b) => b.date.localeCompare(a.date),
 });
 
@@ -16,12 +17,12 @@ export const initialState = todosAdapter.getInitialState({
   error: null,
 });
 
-export const fetchTodos = createAsyncThunk(
-  'todos/fetchTodos',
-  async auth_token => {
-    return await todosApi.getTodos(auth_token);
-  }
-);
+// export const fetchTodos = createAsyncThunk(
+//   'todos/fetchTodos',
+//   async auth_token => {
+//     return await todosApi.getTodos(auth_token);
+//   }
+// );
 
 export const addNewTodo = createAsyncThunk(
   'todos/addNewTodo',
@@ -49,18 +50,19 @@ const todosSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers(builder) {
-    builder
-      .addCase(fetchTodos.pending, (state, action) => {
-        state.status = 'loading';
-      })
-      .addCase(fetchTodos.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        todosAdapter.upsertMany(state, action.payload);
-      })
-      .addCase(fetchTodos.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message;
-      });
+    fetchTodosBuilder(builder);
+    // builder
+    //   .addCase(fetchTodos.pending, (state, action) => {
+    //     state.status = 'loading';
+    //   })
+    //   .addCase(fetchTodos.fulfilled, (state, action) => {
+    //     state.status = 'succeeded';
+    //     todosAdapter.upsertMany(state, action.payload);
+    //   })
+    //   .addCase(fetchTodos.rejected, (state, action) => {
+    //     state.status = 'failed';
+    //     state.error = action.error.message;
+    //   });
     builder
       .addCase(addNewTodo.pending, state => {
         state.status = 'loading';
@@ -108,3 +110,5 @@ export const selectOpenTodos = createSelector(selectTodos, todos =>
 );
 
 export const selectTodosStatus = state => state.todos.status;
+
+export * from './reducers';

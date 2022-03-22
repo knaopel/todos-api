@@ -37,7 +37,7 @@ describe('Home Page Test Suite', () => {
     const state = store.getState().user;
     expect(state.entity).toEqual(mockUser);
     expect(screen.queryByRole('link', /Add A new HoneyDew/)).toBeInTheDocument();
-    expect(screen.queryByText('Todos')).toBeInTheDocument();
+    // expect(screen.queryByText('Todos')).toBeInTheDocument();
   });
   // test('submitting form calls signupUser', () => {
   //   // arrange
