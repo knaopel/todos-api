@@ -6,7 +6,7 @@ import {
 } from '@reduxjs/toolkit';
 
 import * as todosApi from '../../api/todoApi';
-import { fetchTodosBuilder } from './reducers';
+import { addNewTodoBuilder, fetchTodosBuilder } from './reducers';
 
 export const todosAdapter = createEntityAdapter({
   // sortComparer: (a, b) => b.date.localeCompare(a.date),
@@ -16,20 +16,6 @@ export const initialState = todosAdapter.getInitialState({
   status: 'idle',
   error: null,
 });
-
-// export const fetchTodos = createAsyncThunk(
-//   'todos/fetchTodos',
-//   async auth_token => {
-//     return await todosApi.getTodos(auth_token);
-//   }
-// );
-
-export const addNewTodo = createAsyncThunk(
-  'todos/addNewTodo',
-  async (initialTodo, auth_token) => {
-    return await todosApi.saveTodo(initialTodo, auth_token);
-  }
-);
 
 export const updateTodo = createAsyncThunk(
   'todos/updateTodo',
@@ -51,31 +37,7 @@ const todosSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     fetchTodosBuilder(builder);
-    // builder
-    //   .addCase(fetchTodos.pending, (state, action) => {
-    //     state.status = 'loading';
-    //   })
-    //   .addCase(fetchTodos.fulfilled, (state, action) => {
-    //     state.status = 'succeeded';
-    //     todosAdapter.upsertMany(state, action.payload);
-    //   })
-    //   .addCase(fetchTodos.rejected, (state, action) => {
-    //     state.status = 'failed';
-    //     state.error = action.error.message;
-    //   });
-    builder
-      .addCase(addNewTodo.pending, state => {
-        state.status = 'loading';
-        state.error = {};
-      })
-      .addCase(addNewTodo.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        todosAdapter.addOne(state, action.payload);
-      })
-      .addCase(addNewTodo.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error;
-      });
+    addNewTodoBuilder(builder);
     builder
       .addCase(updateTodo.pending, state => {
         state.status = 'loading';
