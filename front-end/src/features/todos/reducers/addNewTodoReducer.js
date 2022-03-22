@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import * as todosApi from '../../../api/todoApi';
 import { todosAdapter } from '../todosSlice'
+import {thunkStatus as status} from '../../../util/thunkStatus'
 
 const addNewTodoReducer = createAsyncThunk(
   'todos/addNewTodo',
@@ -12,15 +13,15 @@ const addNewTodoReducer = createAsyncThunk(
 export const addNewTodoBuilder = builder =>{
       builder
       .addCase(addNewTodoReducer.pending, state => {
-        state.status = 'loading';
+        state.status = status.pending;
         state.error = {};
       })
       .addCase(addNewTodoReducer.fulfilled, (state, action) => {
-        state.status = 'succeeded';
+        state.status = status.succeeded;
         todosAdapter.addOne(state, action.payload);
       })
       .addCase(addNewTodoReducer.rejected, (state, action) => {
-        state.status = 'failed';
+        state.status = status.failed;
         state.error = action.error;
       });
 }
