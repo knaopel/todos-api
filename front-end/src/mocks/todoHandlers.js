@@ -8,8 +8,8 @@ const createTodo = id => {
   return {
     id,
     user_id: 1,
-    title: faker.lorem.sentance(),
-    body: faker.lorem.paragrph(),
+    title: faker.lorem.sentence(),
+    body: faker.lorem.paragraph(),
     is_complete: false,
   };
 };
