@@ -38,7 +38,7 @@ const AppToolbar = () => {
 
   useEffect(() => {
     if (user.auth_token) {
-      if (!user.name && !userFetchStatus === thunkStatus.pending) {
+      if (!user.name && userFetchStatus !== thunkStatus.pending) {
         dispatch(fetchUser(user.auth_token));
       }
       if (userFetchStatus === thunkStatus.failed) {

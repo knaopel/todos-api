@@ -1,5 +1,6 @@
 import React from 'react';
 import { ThemeProvider } from '@mui/material';
+import { SnackbarProvider } from 'notistack';
 
 import { theme } from '../../../util';
 
@@ -14,7 +15,9 @@ import '@fontsource/roboto/700.css';
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
-      <ParentBox />
+      <SnackbarProvider maxSnack={4}>
+        <ParentBox />
+      </SnackbarProvider>
     </ThemeProvider>
   );
 };

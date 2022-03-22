@@ -16,6 +16,7 @@ export const signupUserBuilder = builder => {
       state.error = {};
     })
     .addCase(signupUserReducer.fulfilled, (state, action) => {
+      userApi.setLocalUser(action.payload);
       state.status = status.succeeded;
       state.entity = action.payload;
     })

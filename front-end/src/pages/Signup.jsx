@@ -4,6 +4,7 @@ import { selectUser, selectUserFetchStatus, signupUser } from '../features/users
 import { CredentialForm, dataMap } from "../components";
 import { useDispatch, useSelector } from "react-redux";
 import { thunkStatus } from "../util";
+import { useSnackbar } from "notistack";
 
 const Signup = () => {
   const user = useSelector(selectUser);
@@ -12,15 +13,15 @@ const Signup = () => {
   const hasFailed = userFetchStatus === thunkStatus.failed;
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     if (!isLoading && user.auth_token) {
       navigate('/');
     } else if (hasFailed) {
-      // TODO: feedback to user
-      console.log('log the error', user.error)
+      enqueueSnackbar('Signup failed!', { variant: 'error' });
     }
-  }, [hasFailed, isLoading, navigate, user])
+  }, [enqueueSnackbar, hasFailed, isLoading, navigate, user])
 
   const handleSubmit = (params) => {
     dispatch(signupUser(params));
