@@ -7,6 +7,7 @@ import {
 
 import * as todosApi from '../../api/todoApi';
 import { addNewTodoBuilder, fetchTodosBuilder, updateTodoBuilder } from './reducers';
+import { deleteTodoBuilder } from './reducers/deleteTodoReducer';
 
 export const todosAdapter = createEntityAdapter({
   // sortComparer: (a, b) => b.date.localeCompare(a.date),
@@ -33,9 +34,7 @@ const todosSlice = createSlice({
     fetchTodosBuilder(builder);
     addNewTodoBuilder(builder);
     updateTodoBuilder(builder);
-    builder.addCase(deleteTodo.fulfilled, (state, action) => {
-      todosAdapter.removeOne(state, action.payload);
-    });
+    deleteTodoBuilder(builder);
   },
 });
 
