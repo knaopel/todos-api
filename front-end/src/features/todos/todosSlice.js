@@ -6,7 +6,7 @@ import {
 } from '@reduxjs/toolkit';
 
 import * as todosApi from '../../api/todoApi';
-import { addNewTodoBuilder, fetchTodosBuilder } from './reducers';
+import { addNewTodoBuilder, fetchTodosBuilder, updateTodoBuilder } from './reducers';
 
 export const todosAdapter = createEntityAdapter({
   // sortComparer: (a, b) => b.date.localeCompare(a.date),
@@ -17,12 +17,6 @@ export const initialState = todosAdapter.getInitialState({
   error: null,
 });
 
-export const updateTodo = createAsyncThunk(
-  'todos/updateTodo',
-  async (updatedTodo, auth_token) => {
-    return await todosApi.saveTodo(updatedTodo, auth_token);
-  }
-);
 
 export const deleteTodo = createAsyncThunk(
   'todos/deleteTodo',
@@ -38,19 +32,7 @@ const todosSlice = createSlice({
   extraReducers(builder) {
     fetchTodosBuilder(builder);
     addNewTodoBuilder(builder);
-    builder
-      .addCase(updateTodo.pending, state => {
-        state.status = 'loading';
-        state.error = {};
-      })
-      .addCase(updateTodo.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        todosAdapter.upsertOne(state, action.payload);
-      })
-      .addCase(updateTodo.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error;
-      });
+    updateTodoBuilder(builder);
     builder.addCase(deleteTodo.fulfilled, (state, action) => {
       todosAdapter.removeOne(state, action.payload);
     });
